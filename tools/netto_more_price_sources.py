@@ -16,6 +16,8 @@ URLS=[
  ("permanent_reductions",BASE+"/ueber-netto/Preissenkung.chtm"),
  ("food",BASE+"/lebensmittel/c-N01"),
  ("muesli",BASE+"/cornflakes-muesli/c-N011501"),
+ ("search_on_site",BASE+"/INTERSHOP/web/WFS/Plus-NettoDE-Site/de_DE/-/EUR/ViewMMPParametricSearch-SimpleOfferSearch?SearchTerm=Haferflocken"),
+ ("search_browse",BASE+"/INTERSHOP/web/WFS/Plus-NettoDE-Site/de_DE/-/EUR/ViewMMPParametricSearch-Browse?SearchTerm=Haferflocken"),
  ("search_legacy",BASE+"/search?q=Haferflocken"),
  ("search_intershop",BASE+"/search?query=Haferflocken"),
 ]
@@ -48,6 +50,7 @@ def inspect(name,url):
   d["price_marker_counts"]={x:len(re.findall(x,doc,re.I)) for x in ["priceCurrency","product-price","product-tile","price__value","productPrice","searchString","SearchSuggest","preissenkung","data-ff-id"]}
   d["offers_markers"]=len(re.findall(r'"@type"\s*:\s*"Offer"',doc))
   d["product_links_count"]=len(set(x["href"] for x in p.links if re.search(r"/p-\d{6,15}",x["href"])))
+  d["product_link_samples"]=[urljoin(url,x["href"]) for x in p.links if re.search(r"/p-\d{6,15}",x["href"])][:10]
   d["result"]="ANALYZED"
  except urllib.error.HTTPError as e:d.update({"http":e.code,"result":"HTTP_ERROR"})
  except Exception as e:d.update({"error":type(e).__name__,"result":"ERROR"})
