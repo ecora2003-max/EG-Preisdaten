@@ -1,0 +1,26 @@
+name: Netto ordinary Chromium read-only public page
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_standard_chrome.py
+      - .github/workflows/netto-standard-chrome.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Load public Netto pages in standard installed Chrome
+        run: python3 tools/netto_standard_chrome.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-regular-chrome-result
+          path: results/netto_standard_chrome.json
+          retention-days: 7
