@@ -52,7 +52,7 @@ try:
                             for sku,prod in list(amap.items())[:3]:
                                 if isinstance(prod,dict):
                                     item={"product_key":sku,"keys":list(prod)[:45]}
-                                    for field in ("name","title","productName","price","priceValue",
+                                    for field in ("currentPrice","promotionPrices","name","title","productName","price","priceValue",
                                                   "priceNew","sellingSize","quantity","unit",
                                                   "productTitle","subHeadline","headline"):
                                         if field in prod:item[field]=str(prod[field])[:140]
