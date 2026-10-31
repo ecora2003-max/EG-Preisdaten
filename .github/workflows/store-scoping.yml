@@ -1,0 +1,27 @@
+name: Store-specific offer applicability (read-only)
+on:
+  push:
+    branches: [main]
+    paths: 
+      - 'tools/store_scoping_probe.py'
+      - '.github/workflows/store-scoping.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compare market offer catalogues
+        run: python3 tools/store_scoping_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: store-applicability-results
+          path: results/store_scoping_20261031.json
+          if-no-files-found: warn
+          retention-days: 7
