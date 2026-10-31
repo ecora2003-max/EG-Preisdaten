@@ -151,7 +151,9 @@ def run():
             if len(rows) == 0:
                 out["warnings"].append("PREMATURE_EMPTY_PAGE")
                 break
-            next_offset += len(rows)
+            if len(rows) < LIMIT and next_offset + LIMIT < total:
+                out["warnings"].append("SHORT_PAGE_AT_OFFSET_" + str(next_offset))
+            next_offset += LIMIT
             if next_offset >= total:
                 break
             if len(rows) > LIMIT:
@@ -185,7 +187,8 @@ def run():
         )
         out["price_fields"] = dict(counters)
         out["all_pages_reached_reported_total"] = (
-            len(seen) == totals[0] == next_offset
+            len(seen) == totals[0]
+            and next_offset >= totals[0]
             and min(totals) == max(totals)
             and not out["warnings"]
         )
