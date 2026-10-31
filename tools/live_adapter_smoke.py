@@ -16,7 +16,7 @@ from urllib.robotparser import RobotFileParser
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from adapters.retailer_offers import (
-    penny_store,penny_offers,penny_merge_categories,kaufland_offers,aldi_nord_next,lidl_flyer,Scope,
+    penny_store,penny_offers,penny_merge_categories,kaufland_offers,aldi_nord_next,lidl_flyer,lidl_store_offers,Scope,
     netto_status,edeka_offers
 )
 UA="Ernaehrungsgedaechtnis-Research/0.4 (read-only integration test)"
@@ -84,18 +84,23 @@ def check_aldi():
             "sample":offers[0].to_dict()}
 
 def check_lidl():
-    slug="aktionsprospekt-02-11-2026-07-11-2026-fbfd28"
-    url="https://endpoints.leaflets.schwarz/v4/flyer?"+urlencode({"flyer_identifier":slug,"client":"lidl"})
-    obj=json.loads(fetch("Lidl leaflet",url))
-    offers=lidl_flyer(obj,expected_start="2026-11-02")
+    store_key="DE7434"
+    stores=json.loads(fetch("Lidl public stores","https://stores.lidlplus.com/api/v4/DE"))
+    store=next((x for x in stores if x.get("storeKey")==store_key),None)
+    assert store is not None, "selected Lidl store must exist"
+    endpoint="https://offers.lidlplus.com/app/api/v4/DE/"+store_key+"/offers"
+    obj=json.loads(fetch("Lidl direct store offers",endpoint,
+                headers={"X-Client-Version":"17.0.5","X-Client-Platform":"android"}))
+    offers=lidl_store_offers(obj,store_key=store_key)
     assert len(offers)>0
-    assert all(x.scope==Scope.UNVERIFIED for x in offers)
-    return {"entries_not_store_verified":len(offers),"first_entry":offers[0].to_dict()}
+    assert all(x.scope==Scope.STORE and x.scope_id==store_key for x in offers)
+    return {"store_key":store_key,"store":store.get("name"),"total_raw_offers":obj.get("totalOffers"),
+            "normalized_store_shelf_prices":len(offers),"sample":offers[0].to_dict()}
 
 run("PENNY actual Berlin region and next-week products",check_penny)
 run("Kaufland actual store article intersection",check_kaufland)
 run("ALDI Nord actual Next.js next-week offers",check_aldi)
-run("Lidl actual November leaflet entries",check_lidl)
+run("Lidl direct actual store offers",check_lidl)
 report={"checked_at_utc":datetime.now(timezone.utc).isoformat(),"results":results,
         "failed":failed,"note":"A PASS means schema compatibility, not legal data reuse rights or market stock."}
 Path("results").mkdir(exist_ok=True)
