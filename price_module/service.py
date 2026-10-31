@@ -9,7 +9,7 @@ import json
 import re
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, parse_qsl
 from typing import Any
 
 VERSION = "0.1.0"
@@ -93,9 +93,17 @@ def _time(v: Any) -> str:
 def _host_authorized(url: Any, retailer: str, fixture: bool) -> str | None:
     if url is None and fixture:return None
     if not isinstance(url,str):raise DataError("INVALID_SOURCE","Source URL is required")
-    u=urlsplit(url)
-    if u.scheme!="https" or not u.hostname or u.username or u.password or u.port not in (None,443):
+    if len(url)>4096:raise DataError("INVALID_SOURCE","Source URL too long")
+    try:
+        u=urlsplit(url)
+        port=u.port
+    except ValueError:raise DataError("INVALID_SOURCE","Malformed source URL")
+    if u.scheme!="https" or not u.hostname or u.username or u.password or port not in (None,443):
         raise DataError("INVALID_SOURCE","Only anonymous official HTTPS URLs accepted")
+    sensitive={"token","access_token","auth","authorization","session","apikey",
+               "api_key","password","cookie","secret","signature","bearer"}
+    if any(k.casefold() in sensitive for k,_ in parse_qsl(u.query,keep_blank_values=True)):
+        raise DataError("INVALID_SOURCE","Source URL contains credential-like query keys")
     if not any(u.hostname==host or u.hostname.endswith("."+host) for host in _REGISTRY[retailer][4]):
         raise DataError("INVALID_SOURCE","Source does not belong to selected retailer")
     return url
@@ -206,6 +214,7 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
                      sourcePriceKind="CURRENT_DISPLAYED",
                      hasDiscount=x.has_discount,hasConditionalOffer=x.has_lidl_plus_offer,
                      priceWithoutDeposit=x.price_without_deposit_eur,
+                     advertisedUnitPrice=x.advertised_unit_price_text,
                      referenceOldPrice=x.previous_display_price_eur,
                      conditionalPrices=([{"priceCents":cents(x.lidl_plus_price_eur),
                        "access":"LIDL_PLUS","evidence":"lidlPlusOffer.price",
@@ -215,6 +224,8 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
         items,meta=aldi_nord_catalogue_from_html(body)
         return [dict(id=x.product_id,label=x.name,brand=x.brand,pack=x.pack,
                      price=x.displayed_price_eur,scope="CHAIN_WIDE_REPORTED",
+                     reportedBaseUnitPrices=[{"basis":unit,"priceEur":str(value)}
+                                             for unit,value in x.unit_prices if unit in ("kg","l")],
                      sourcePriceKind="CURRENT_DISPLAYED") for x in items],{
                          "received":meta["received_hits"],"parsed":meta["priced_hits"],
                          "reportedTotal":meta["advertised_hits"],
@@ -296,6 +307,15 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
         if type(x) is not int or x<0 or x>100_000_000:
             raise DataError("INVALID_PRICE","Reference price must be integer nonnegative cents")
         reference_old=x
+    reported_base=row.get("reportedBaseUnitPrices",[])
+    if not isinstance(reported_base,list):
+        raise DataError("INVALID_QUANTITY","Reported base prices need list form")
+    for base in reported_base:
+        if not isinstance(base,dict) or base.get("basis") not in ("kg","l") or not isinstance(base.get("priceEur"),str):
+            raise DataError("INVALID_QUANTITY","Unexpected base price shape")
+        try:n=Decimal(base["priceEur"])
+        except InvalidOperation:raise DataError("INVALID_QUANTITY","Invalid base price")
+        if not n.is_finite() or n<0:raise DataError("INVALID_QUANTITY","Invalid base price")
     conditional_prices=row.get("conditionalPrices",[])
     if not isinstance(conditional_prices,list):raise DataError("INVALID_CONDITION","Conditional prices list required")
     normalized_conditions=[]
@@ -333,6 +353,7 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
                        "eg-preisdaten:referenceOldText":row.get("referenceOldText"),
                        "eg-preisdaten:advertisedBenefitText":row.get("advertisedBenefitText"),
                        "eg-preisdaten:advertisedUnitPrice":row.get("advertisedUnitPrice"),
+                       "eg-preisdaten:reportedBaseUnitPrices":reported_base,
                        "eg-preisdaten:priceWithoutDepositCents":cents(row.get("priceWithoutDeposit"))}}
 
 class PriceService:

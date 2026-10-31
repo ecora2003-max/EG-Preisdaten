@@ -24,6 +24,7 @@ class StoreItem:
     has_discount: bool
     has_lidl_plus_offer: bool
     lidl_plus_price_eur: Decimal | None
+    advertised_unit_price_text: str | None
     price_checked_date: str
     price_kind: str = "DISPLAYED_CURRENT_STORE_PRICE"
     def to_dict(self):
@@ -67,6 +68,7 @@ def _item(row:Mapping[str,Any],store_key:str,day:str)->StoreItem | None:
         has_discount=bool(p.get("discount")) or old is not None,
         has_lidl_plus_offer=bool(p.get("lidlPlusOffer")),
         lidl_plus_price_eur=plus_price,
+        advertised_unit_price_text=row.get("pricePerUnit") if isinstance(row.get("pricePerUnit"),str) else None,
         price_checked_date=day
     )
 

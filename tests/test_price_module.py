@@ -530,5 +530,42 @@ class ModuleTests(unittest.TestCase):
         values=[x["payload"]["article"]["gtin"] for x in self.service.search_offers(REQUEST,[valid])["observations"]]
         self.assertEqual(values,["4000540200300",None])
 
+
+    def test_aldi_nord_base_price_retains_exact_unit_without_synthetic_conversion(self):
+        p={"objectID":"A","name":"Hafer","currentPrice":{"priceValue":0.99,
+           "basePrice":[{"basePriceScale":"kg","basePriceValue":1.98}]}}
+        body={"props":{"pageProps":{"algoliaState":{"initialResults":{
+              "an_prd_de_de_products2":{"results":[{"nbHits":1,"nbPages":1,"page":0,"hits":[p]}]}}}}}}
+        ds=source("ALDI_NORD","REGULAR",'<script id="__NEXT_DATA__">'+json.dumps(body)+'</script>',
+            "https://www.aldi-nord.de/sortiment/kategorie",contentType="text/html")
+        out=self.service.search_catalog_prices({**REQUEST,"retailerIds":["ALDI_NORD"]},[ds])
+        self.assertFalse(out["errors"])
+        self.assertEqual(out["observations"][0]["payload"]["eg-preisdaten:reportedBaseUnitPrices"],
+                         [{"basis":"kg","priceEur":"1.98"}])
+
+    def test_source_urls_with_credential_fields_rejected_without_logging_them(self):
+        ds=source("REWE","REGULAR",{"products":[]},
+                  "https://www.rewe.de/api/stationary-product-search/products?token=DO_NOT_LOG",
+                  storeId="840174")
+        out=self.service.search_catalog_prices({**REQUEST,"retailerIds":["REWE"]},[ds])
+        self.assertEqual(out["errors"][0]["code"],"INVALID_SOURCE")
+        self.assertNotIn("DO_NOT_LOG",json.dumps(out))
+        ds["sourceUrl"]="https://www.rewe.de:bad/api/stationary-product-search/products"
+        out=self.service.search_catalog_prices({**REQUEST,"retailerIds":["REWE"]},[ds])
+        self.assertEqual(out["errors"][0]["code"],"INVALID_SOURCE")
+
+    def test_rewe_discount_not_unproven_sale(self):
+        ds=source("REWE","REGULAR",{"products":[{"id":"X","title":"Hafer",
+            "pricing":{"current":119,"regular":139,"refund":0}}]},
+            "https://www.rewe.de/api/stationary-product-search/products",
+            storeId="840174")
+        out=self.service.search_catalog_prices({**REQUEST,"retailerIds":["REWE"]},[ds])
+        self.assertEqual(len(out["observations"]),2)
+        by_type={x["payload"]["priceKind"]:x["payload"] for x in out["observations"]}
+        self.assertEqual(by_type["CURRENT_DISPLAYED"]["priceCents"],119)
+        self.assertIs(by_type["CURRENT_DISPLAYED"]["eg-preisdaten:hasDiscount"],True)
+        self.assertEqual(by_type["LISTED_REGULAR"]["priceCents"],139)
+        self.assertNotIn("SALE",by_type)
+
 if __name__=="__main__":
     unittest.main()
