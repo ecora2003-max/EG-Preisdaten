@@ -1250,6 +1250,52 @@
           }
         ]
       }
+    },
+    {
+      "name": "historical-hindsight-snapshot-postdates-shopping-day",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 20
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T23:30:00Z",
+          "body": [
+            {
+              "id": "OCT",
+              "label": "Haferflocken 500 g",
+              "price": "0.99",
+              "pack": "500 g",
+              "fromDate": "2026-10-30",
+              "untilDate": "2026-11-02"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [],
+        "coverageStatuses": [
+          "PARSED_PARTIAL"
+        ],
+        "observations": [
+          {
+            "priceCents": 99,
+            "priceKind": "SALE",
+            "validFrom": "2026-10-30",
+            "validUntil": "2026-11-02",
+            "eg-preisdaten:targetDateStatus": "OBSERVED_AFTER_TARGET_DATE"
+          }
+        ]
+      }
     }
   ],
   "retailerCapabilityPolicyVersion": "1.0.1"
