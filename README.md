@@ -3,6 +3,18 @@
 > **Verbindliche Einweisung für den zuständigen Entwicklungs-Chat:** [AGENTS.md](AGENTS.md) · [Entwicklungsauftrag](docs/DEVELOPMENT_MANDATE.md) · [Abnahmetests und Fertigstellung](docs/ACCEPTANCE.md) · [Integrationsschnittstellen](docs/INTEGRATION.md) · [Status](docs/STATUS.md). Gemeinsame Verträge: [EG-Architecture](https://github.com/ecora2003-max/EG-Architecture). **Nur dieses Modulrepo bearbeiten; Architektur und private Haupt-App ausschließlich lesen. Tests nach jeder fachlichen Änderung verpflichtend.**
 
 
+## Aktueller Referenzkern (31.10.2026)
+
+[Pure Python Preis-Snapshot-API](price_module/service.py) · [synthetische CLI-Eingabe](examples/synthetic-price-query.json) · [Codex-Integrationsanleitung](docs/INTEGRATION.md) · [Abnahmestand](docs/STATUS.md).
+
+```sh
+python3 -m pip install -r requirements-dev.lock
+python3 -m unittest discover -s tests -v
+python3 -m price_module < examples/synthetic-price-query.json
+```
+
+**CI [70/70 Offline-Tests erfolgreich](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220291373), zuletzt geprüfter Code `b201eed8cd9b`.** Der Kern ist unabhängig ausführbar und schemavalidiert. Externe Händlerdaten werden ohne dokumentierte Rechte **nicht** zur produktiven App-Anzeige freigegeben; wissenschaftliche Live-Einzelnachweise bleiben von dauerhaft zulässiger Nutzung getrennt. Kein Gesamt-Vollsortiment und keine Android-Integration behauptet.
+
 Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsprotokolle für eine spätere Integration in die Android-App. Es ist **keine fertig veröffentlichbare Händlerdatenplattform**.
 
 ## Live-Ergebnisse vom 31. Oktober 2026

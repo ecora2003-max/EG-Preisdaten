@@ -56,3 +56,29 @@ Bei vollständiger geprüfter **einer** Lidl-Kategorie kann `coverage.complete=t
 5. Identische positive/negative Fixtures nach Kotlin portieren, App JVM-/Migrations-/Regressions- und echte Gerätetests absolvieren. `INTEGRATED` erst durch Codex nach Prüfung.
 
 **Präziser Ist-Stand:** Python-Referenz und Offline-CLI funktionieren und wurden in [CI](TEST_REPORT.md) nachgewiesen, keine direkte Android-Bibliothek und kein für produktive Nutzung freigegebener Live-Feed. [Quellenrechte](SOURCES.md) und [Status](STATUS.md) sind explizite Freigabegates.
+
+## Erweiterte Port- und Qualitätsangaben (Code `b201eed8cd9b5ab5de0db54cfa1cefd43727f234`)
+
+`request.storeSelections` ist eine optional pro Händler gebundene Map, z. B.
+```json
+{"LIDL":{"storeId":"DE7434"},"PENNY":{"storeId":"MARKET-1","regionId":"R1"}}
+```
+Ein fehlender Zusammenhang zwischen Filiale und regionalem Feed führt zu `OUT_OF_SCOPE` bzw. `NO_MATCHING_SCOPE`, nicht zu einer vermeintlich gültigen Filialpreisbehauptung. Kettenweite Daten bleiben nur als `CHAIN_WIDE_REPORTED` sichtbar; fehlender Store-Filter ist **keine** Marktbestätigung. `retailerArticleId` kann schon vor einem Ergebnislimit gefiltert werden, auch über `lookup_price`. `matchedCount` und `outputTruncated` unterscheiden vollständig normalisierte Eingabedaten von der begrenzten Antwort.
+
+Zusätzliches, ausdrücklich **namespaced** Datenmaterial innerhalb des Preis-Payloads:
+- `eg-preisdaten:conditionalPrices` ist eine Liste getrennter `{priceCents,access,evidence,termsVerified:false}`-Belege für z. B. Lidl Plus/Netto App. Sie sind **keine** bedingungslos nutzbaren Vergleichspreise; **nicht** automatisch in `priceCents` einsetzen.
+- `eg-preisdaten:advertisedBenefitText` bewahrt PENNY-Fußnotenpreise, auch wenn wegen Zusatzzeichen keine sichere Cent-Berechnung möglich ist. `conditional` kennzeichnet ungeklärte Bedingungen.
+- `eg-preisdaten:referenceOldPriceCents` und `eg-preisdaten:referenceOldText` bewahren beobachtete Streichpreisreferenzen, ohne echte historische Kassenpreise zu behaupten.
+- `eg-preisdaten:reportedBaseUnitPrices` enthält Quellangaben `{basis:"kg"|"l",priceEur:"…"}`, **kein nachgerechnetes Grundpreisversprechen**; `eg-preisdaten:advertisedUnitPrice` hält ansonsten nur die unveränderte Quelltextangabe. Packungsmenge und Grundpreisreferenz müssen getrennt bleiben.
+- `eg-preisdaten:priceWithoutDepositCents`, `eg-preisdaten:hasDiscount`, `eg-preisdaten:hasConditionalOffer` und `eg-preisdaten:targetDateStatus` ergänzen Quellen- und Gültigkeitswarnungen.
+
+Quellenstatus `UNVERIFIED`/`RESTRICTED` bleibt ein Produktiv-Gate; `usageMode=APP_DISPLAY` blockiert entsprechende echten Snapshots mit `RIGHTS_NOT_CLEARED`. `transportError` ist `TIMEOUT`, `NETWORK`, `TLS` oder `CANCELLED` mit eigenem Fehlercode; HTTP 403/429/204 und fehlerhafte Struktur bleiben separat. URL-Quellen mit Kennwort-/Token-Parametern werden nicht angenommen.
+
+Für reproduzierbare Regressionen:
+```sh
+python3 -m pip install -r requirements-dev.lock
+python3 -m unittest discover -s tests -v
+python3 -m price_module < examples/synthetic-price-query.json
+```
+
+Letztes CI: [70/70 Tests #41220291373](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220291373).
