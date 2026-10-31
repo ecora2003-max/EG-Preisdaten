@@ -1,6 +1,7 @@
 import json
 from urllib.request import Request,urlopen
 from urllib.robotparser import RobotFileParser
+from urllib.error import HTTPError
 from urllib.parse import urlencode
 from pathlib import Path
 ua="Ernaehrungsgedaechnis-Research/0.3 (read-only)"
