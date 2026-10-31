@@ -1,0 +1,24 @@
+name: Lidl individual product actual prices across two stores
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/lidl_product_two_stores.py
+      - .github/workflows/lidl-product-stores.yml
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/lidl_product_two_stores.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lidl-single-product-2-stores
+          path: results/lidl_one_product_two_stores.json
+          retention-days: 7
