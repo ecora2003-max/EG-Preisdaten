@@ -1,31 +1,43 @@
-# Supermarkt-Angebote · API- und Filialgeltungstests
+# Ernährungsgedächtnis – verifizierte Angebotsadapter
 
-Unabhängiges Forschungs- und Testrepository für die Angebotsdaten-Anbindung von **Ernährungsgedächtnis**. Keine Änderungen an der eigentlichen Android-App.
+Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsprotokolle für eine spätere Integration in die Android-App. Es ist **keine fertig veröffentlichbare Händlerdatenplattform**.
 
-## Wichtigste Ergebnisse (31.10.2026)
+## Live-Ergebnisse vom 31. Oktober 2026
 
-- **PENNY:** 193 normalisierte Angebotsobjekte aus 12 verifizierten Kategorien, offizielle Berliner Verkaufsregion zugeordnet.
-- **Kaufland:** 511 gültige Angebotsobjekte für die konkret ausgewählte Filiale DE5220, offizielle Artikel-Gültigkeitsliste und Filial-Cookie kombiniert.
-- **ALDI Nord:** 276 Produktangebote der nächsten Woche samt Preisen und Datumsangaben, **ohne** bestätigte Filialzuordnung.
-- **Lidl:** 191 mit dem kommenden Prospekt verknüpfte Produktobjekte, **ohne** gesicherte Lebensmittel-/Filialgültigkeit.
-- **EDEKA und Netto Marken-Discount:** Code-Dokumentation und Filialkonzepte recherchiert, aber noch kein für unseren Runner verifizierter, freigegebener vollständiger Angebotsfeed.
+| Händler | Live-Testergebnis | Zuordnung | Status |
+|---|---:|---|---|
+| **PENNY** | 193 preislich auswertbare Angebotsdatensätze aus 12 Kategorien für KW 45 | Angebotsregion der konkreten Filiale | Schema + regionaler Adapter erfolgreich getestet |
+| **Kaufland** | 511 Angebotsdatensätze für Filiale DE5220 und KW 45 | Offizielle `klNr`-Gültigkeitsliste der Filiale | Filialadapter erfolgreich getestet |
+| **ALDI Nord** | 276 Aktionsdatensätze mit Preisen für die Folgewoche | Kettenweit; lokale Ausnahmen unbekannt | Kettenadapter erfolgreich getestet |
+| **Lidl** | 65 Einzel-Aktionspreise aus 78 Angeboten der Filiale DE7434 | **Konkrete Filiale bestätigt** über `storeKey` | Filialadapter erfolgreich getestet |
+| **EDEKA** | 256 Angebote Berlin, 40 Hamburg, 28 nationale Ersatzangebote | Offizielle Markt-ID und `national=false` | **Technisch getestet, automatisierte Nutzung bis zu Freigabe gesperrt** |
+| **Netto Marken-Discount** | Allgemeine Prospektseite erreichbar; Filialseite 403 / gewöhnlicher Chrome „Access Denied“ | Filiale nicht maschinenlesbar bestätigt | **Nicht produktionsfähig; keine Schutzumgehung** |
 
-**[Vollständiger geprüfter Implementierungsstand](reports/implementierungsstand-2026-10-31.md)**
+**Kritisch:** Funktionierende HTTP-Endpunkte bzw. erfolgreiche Integrationstests sind **keine Lizenz**, Angebotsdaten automatisiert in einer eigenen App oder Datenbank zu verwenden. Ein API-Client muss die Nutzungsbedingungen und gegebenenfalls Lizenzvereinbarungen des jeweiligen Anbieters erfüllen.
 
-## Testcode
+**EDEKA:** [Aktuelle Website-Nutzungsbedingungen](https://www.edeka.de/services/nutzungsbedingungen/) verbieten ausdrücklich automatisierte Extraktion und Datenbankübernahme ohne vorherige Zustimmung. Alle drei EDEKA-Live-Forschungsskripte wurden daher mit einem `EDEKA_PERMISSION_CONFIRMED=1`-Gate gesichert. Ohne externe Freigabe wird **nicht** erneut automatisiert abgefragt. Dieser Gate ist nur ein technischer Schutz, nicht der Nachweis einer Erlaubnis.
 
-- [Datentypen und normalisierte Parser](adapters/retailer_offers.py)
-- [Offline-Adaptertests](tests/test_retailer_offers.py)
-- [Live-Integrationstest](tools/live_adapter_smoke.py)
-- [Testübersicht auf GitHub Actions](https://github.com/ecora2003-max/Try/actions)
+**Netto:** Ein Filialseitenabruf aus GitHub Actions wurde blockiert; eine normale Browseransicht bestätigte die Sperre. Keine Benutzeragent-Vortäuschung, Sessionübernahme, Browser-Stealth oder Umgehung implementieren. Für automatisierten Betrieb ist eine freigegebene Datenquelle nötig; alternativ nur vom Nutzer bereitgestellte Informationen mit kenntlich gemachter Unsicherheit importieren.
 
-Manuell lokal mit Python 3.11+ (nur Standardbibliothek):
+## Projektdateien
+
+- [Python-Parser und Angebotsmodell](adapters/retailer_offers.py) mit `STORE_CONFIRMED`, `REGION_CONFIRMED`, `CHAIN_WIDE_REPORTED`, `UNKNOWN`.
+- [Offline-Vertragstests](tests/test_retailer_offers.py)
+- [Live-Kompatibilitätstest für PENNY, Kaufland, ALDI Nord und Lidl](tools/live_adapter_smoke.py)
+- [Erweiterte technische Bewertung](reports/implementierungsstand-2026-10-31.md)
+- [Testübersicht mit JSON-Artefakten](https://github.com/ecora2003-max/Try/actions)
+
+## Bestätigte automatisierte Tests
+
+- [PENNY, Kaufland, ALDI Nord und **direktes Lidl** – Live ALL PASS](https://github.com/ecora2003-max/Try/actions/runs/41183799427)
+- [EDEKA Berlin, Hamburg, national – historischer erfolgreich abgeschlossener Forschungslauf](https://github.com/ecora2003-max/Try/actions/runs/41183681778). **Nicht erneut ohne Freigabe ausführen.**
+- [Lidl Berlin vs. Hannover – sechs abweichende Filialaktionen](https://github.com/ecora2003-max/Try/actions/runs/41183580801)
+- [Netto ohne Browser-Bypass – offizielle Filialseite zeigt Access Denied](https://github.com/ecora2003-max/Try/actions/runs/41183768242)
+
+Lokal nur mit Python-Standardbibliothek:
 
 ```bash
 python3 -m unittest discover -s tests -v
-python3 tools/live_adapter_smoke.py
 ```
 
-Der zweite Befehl stellt wenige lesende Live-Anfragen; lokale Netzwerkzugänglichkeit und veröffentlichte Crawlerregeln müssen dies erlauben. **HTTP 200 bedeutet keine Nutzungs- oder Weiterverwertungsfreigabe.**
-
-Das Ergebnis `scope` unterscheidet `STORE_CONFIRMED`, `REGION_CONFIRMED`, `CHAIN_WIDE_REPORTED` und `UNKNOWN`. Damit wird kein Angebot fälschlich als garantiert in einer konkreten Filiale gültig ausgegeben.
+Die eingebundenen Feldparsers sind Referenzcode. Die Original-Android-App im separaten Repository wurde nicht geändert. Alle Beispiele gelten für den jeweiligen Testzeitpunkt; Wochenend- und Vorschauangebote sind nicht identisch.
