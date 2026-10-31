@@ -88,6 +88,7 @@ def parse_branch_offers(page_html:str, source_url:str)->tuple[list[NettoBranchOf
     candidate_tiles=root.select(".tc-store-product-tile")
     records=[]
     warnings=[]
+    mismatch_details=[]
     seen=set()
     for tile in candidate_tiles:
         ffid=tile.get("data-ff-id")
@@ -114,6 +115,11 @@ def parse_branch_offers(page_html:str, source_url:str)->tuple[list[NettoBranchOf
         linked_name=only("Name")
         if not (sku==ffid and price is not None and shown==price and valid_to and linked_name==product_name):
             warnings.append("PRICE_NAME_OR_SKU_MISMATCH")
+            mismatch_details.append({"ff_id":ffid, "name":product_name[:80],
+              "sku_equal":sku==ffid, "price_from_link":str(price) if price is not None else None,
+              "price_visible":str(shown) if shown is not None else None,
+              "name_from_link":linked_name[:80] if linked_name else None,
+              "has_valid_to":bool(valid_to)})
             continue
         try:datetime.strptime(valid_to,"%Y-%m-%d %H:%M:%S")
         except ValueError:
@@ -142,5 +148,6 @@ def parse_branch_offers(page_html:str, source_url:str)->tuple[list[NettoBranchOf
         "candidate_tiles":len(candidate_tiles),
         "verified_sale_price_tiles":len(records),
         "warnings":warnings,
+        "mismatch_details":mismatch_details,
         "all_offer_prices_have_local_valid_to":bool(records) and all(x.valid_to_local for x in records),
         "limitations":"Only published branch-offer tiles; region/store applicability and regular shelf price unknown; app price conditional."}
