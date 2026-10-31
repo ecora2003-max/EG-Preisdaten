@@ -1,0 +1,27 @@
+name: Netto POS correct host resolution
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_mpos_base_host_resolve.py
+      - .github/workflows/netto-mpos-host-resolve.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Inspect current Netto MPOS base-host wiring
+        run: python3 tools/netto_mpos_base_host_resolve.py
+      - name: Publish sanitized evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: netto-mpos-host-evidence
+          path: results/netto_mpos_base_host_20261031.json
+          retention-days: 7
