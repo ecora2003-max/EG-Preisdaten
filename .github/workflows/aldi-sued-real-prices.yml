@@ -1,0 +1,24 @@
+name: Actual ALDI Sued shelf-price catalogue – one-shot
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_sued_real_catalogue.py
+      - .github/workflows/aldi-sued-real-prices.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/aldi_sued_real_catalogue.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-sued-store-price-query
+          path: results/aldi_sued_real_catalogue.json
+          retention-days: 7
