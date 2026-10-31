@@ -1,0 +1,25 @@
+name: EDEKA Netto basic public HTTP check
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/edeka_netto_basic_http.py'
+      - '.github/workflows/edeka-netto-basic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/edeka_netto_basic_http.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: edeka-netto-plain-GET
+          path: results/edeka_netto_basic_http.json
+          retention-days: 7
