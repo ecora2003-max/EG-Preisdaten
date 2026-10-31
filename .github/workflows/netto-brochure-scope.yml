@@ -1,0 +1,26 @@
+name: Netto public brochure store-scope diagnostic
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/netto_public_brochure_store_scope.py'
+      - '.github/workflows/netto-brochure-scope.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test publicly documented Netto store-selection URLs
+        run: python3 tools/netto_public_brochure_store_scope.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-brochure-scope-test
+          path: results/netto_public_brochure_store_scope.json
+          retention-days: 7
