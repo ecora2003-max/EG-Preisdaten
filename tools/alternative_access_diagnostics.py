@@ -65,10 +65,11 @@ catalog=probe("Lidl public stores","https://stores.lidlplus.com/api/v4/DE",parse
 if catalog:
     try:
         lst=json.loads(catalog)
-        in_berlin=[x for x in lst if isinstance(x,dict) and str(x.get("locality","")).casefold()=="berlin" and x.get("storeKey")]
-        sample=in_berlin[0]
+        in_berlin=[x for x in lst if isinstance(x,dict) and "berlin" in str(x.get("locality","")).casefold() and x.get("storeKey")]
+        sample=in_berlin[0] if in_berlin else next((x for x in lst if isinstance(x,dict) and x.get("storeKey")),None)
+        if sample is None: raise ValueError("No storeKeys in Lidl response")
         key=str(sample["storeKey"])
-        checks.append({"source":"Lidl selected Berlin store", "name":sample.get("name"),"storeKey":key,"postalCode":sample.get("postalCode")})
+        checks.append({"source":"Lidl selected store", "name":sample.get("name"),"storeKey":key,"postalCode":sample.get("postalCode"),"locality":sample.get("locality"),"berlin_matches":len(in_berlin)})
         path="https://offers.lidlplus.com/app/api/v4/DE/"+key+"/offers"
         # Explicit app compatibility headers as published by community clients,
         # transparent research UA, no cookies, OAuth tokens, or browser fingerprinting.
