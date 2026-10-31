@@ -762,5 +762,22 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(p["article"]["quantity"]["basis"],"DRAINED")
         self.assertEqual(p["eg-preisdaten:basePriceCheck"],"NOT_COMPARABLE")
 
+    def test_fixture_rights_bypass_requires_synthetic_provenance(self):
+        for changes in (
+            {"origin":"official-retailer"},
+            {"sourceUrl":"https://www.lidl.de/angebote"},
+            {"format":"retailer-snapshot"},
+        ):
+            with self.subTest(changes=changes):
+                ds=fixture([r()],**changes)
+                out=self.service.search_offers({**REQUEST,"usageMode":"APP_DISPLAY"},[ds])
+                self.assertEqual(out["observations"],[])
+                self.assertEqual(out["errors"][0]["code"],"INVALID_FIXTURE")
+        allowed=self.service.search_offers(
+            {**REQUEST,"usageMode":"APP_DISPLAY"},[fixture([r()])])
+        self.assertEqual(len(allowed["observations"]),1)
+        self.assertEqual(allowed["observations"][0]["payload"]["source"]["origin"],
+                         "synthetic-fixture")
+
 if __name__=="__main__":
     unittest.main()

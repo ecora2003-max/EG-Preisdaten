@@ -507,15 +507,21 @@ class PriceService:
                     if status==429:raise DataError("RATE_LIMITED","429 source throttled")
                     if status==204:raise DataError("NO_CONTENT","204 without price payload")
                     if type(status) is not int or status!=200:raise DataError("UPSTREAM_ERROR","Unexpected HTTP status")
-                    if mode=="APP_DISPLAY" and ds.get("fixture") is not True and _REGISTRY[retailer][3]!="PERMITTED":
-                        raise DataError("RIGHTS_NOT_CLEARED","External retailer data lack verified reuse permission")
-                    if ds.get("fixture") is not True:
-                        _host_authorized(ds.get("sourceUrl"),retailer,False)
-                    elif ds.get("format")!="synthetic-fixture":
-                        raise DataError("INVALID_FIXTURE","Fixture bypass requires synthetic-fixture format")
-                    when=_time(ds.get("observedAt"))
                     if not isinstance(ds.get("origin"),str) or not ds["origin"].strip():
                         raise DataError("INVALID_SOURCE","Nonempty source origin is required")
+                    # A caller cannot label a real retailer snapshot as a demo to
+                    # bypass the APP_DISPLAY rights gate. The fixture path requires
+                    # explicitly synthetic provenance and no official source URL.
+                    if ds.get("fixture") is True:
+                        if (ds.get("format")!="synthetic-fixture"
+                                or ds["origin"]!="synthetic-fixture"
+                                or ds.get("sourceUrl") is not None):
+                            raise DataError("INVALID_FIXTURE","Synthetic fixture provenance is inconsistent")
+                    else:
+                        if mode=="APP_DISPLAY" and _REGISTRY[retailer][3]!="PERMITTED":
+                            raise DataError("RIGHTS_NOT_CLEARED","External retailer data lack verified reuse permission")
+                        _host_authorized(ds.get("sourceUrl"),retailer,False)
+                    when=_time(ds.get("observedAt"))
                     if ds.get("contentType") not in (None,"application/json","text/html"):
                         raise DataError("INVALID_CONTENT_TYPE","Unexpected content type")
                     if ds.get("contentType")=="text/html" and not (retailer=="ALDI_NORD" and channel=="REGULAR" or retailer=="NETTO_MD"):

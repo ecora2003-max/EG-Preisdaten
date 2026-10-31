@@ -929,6 +929,83 @@
           }
         ]
       }
+    },
+    {
+      "name": "fake-synthetic-origin-cannot-bypass-rights",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100,
+        "usageMode": "APP_DISPLAY"
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "official-retailer",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "fake",
+              "label": "Milch",
+              "price": "1.25"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "INVALID_FIXTURE"
+        ],
+        "coverageStatuses": [
+          "ERROR"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "fake-synthetic-official-url-cannot-bypass-rights",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100,
+        "usageMode": "APP_DISPLAY"
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "fake",
+              "label": "Milch",
+              "price": "1.25"
+            }
+          ],
+          "sourceUrl": "https://www.lidl.de/angebote"
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "INVALID_FIXTURE"
+        ],
+        "coverageStatuses": [
+          "ERROR"
+        ],
+        "observations": []
+      }
     }
   ]
 }
