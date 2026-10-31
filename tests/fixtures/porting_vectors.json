@@ -1006,6 +1006,251 @@
         ],
         "observations": []
       }
+    },
+    {
+      "name": "adr016-no-regular-lookup-penny",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "PENNY"
+        ],
+        "query": "Hafer",
+        "maxResults": 20
+      },
+      "datasets": [
+        {
+          "channel": "REGULAR",
+          "format": "synthetic-fixture",
+          "fixture": true,
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "R-1",
+              "label": "Hafer",
+              "price": "1.59",
+              "pack": "500 g"
+            }
+          ],
+          "retailerId": "PENNY"
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "CAPABILITY_NOT_ALLOWED"
+        ],
+        "coverageStatuses": [
+          "POLICY_DENIED"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "adr016-no-regular-lookup-kaufland",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "KAUFLAND"
+        ],
+        "query": "Hafer",
+        "maxResults": 20
+      },
+      "datasets": [
+        {
+          "channel": "REGULAR",
+          "format": "synthetic-fixture",
+          "fixture": true,
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "R-1",
+              "label": "Hafer",
+              "price": "1.59",
+              "pack": "500 g"
+            }
+          ],
+          "retailerId": "KAUFLAND"
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "CAPABILITY_NOT_ALLOWED"
+        ],
+        "coverageStatuses": [
+          "POLICY_DENIED"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "adr016-no-regular-lookup-edeka",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "EDEKA"
+        ],
+        "query": "Hafer",
+        "maxResults": 20
+      },
+      "datasets": [
+        {
+          "channel": "REGULAR",
+          "format": "synthetic-fixture",
+          "fixture": true,
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "R-1",
+              "label": "Hafer",
+              "price": "1.59",
+              "pack": "500 g"
+            }
+          ],
+          "retailerId": "EDEKA"
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "CAPABILITY_NOT_ALLOWED"
+        ],
+        "coverageStatuses": [
+          "POLICY_DENIED"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "adr016-no-regular-lookup-netto_md",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "NETTO_MD"
+        ],
+        "query": "Hafer",
+        "maxResults": 20
+      },
+      "datasets": [
+        {
+          "channel": "REGULAR",
+          "format": "synthetic-fixture",
+          "fixture": true,
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "R-1",
+              "label": "Hafer",
+              "price": "1.59",
+              "pack": "500 g"
+            }
+          ],
+          "retailerId": "NETTO_MD"
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "CAPABILITY_NOT_ALLOWED"
+        ],
+        "coverageStatuses": [
+          "POLICY_DENIED"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "adr016-mixed-prices-only-four-allowed",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL",
+          "PENNY"
+        ],
+        "maxResults": 20
+      },
+      "datasets": [
+        {
+          "channel": "REGULAR",
+          "format": "synthetic-fixture",
+          "fixture": true,
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "R-1",
+              "label": "Hafer",
+              "price": "1.59",
+              "pack": "500 g"
+            }
+          ],
+          "retailerId": "LIDL"
+        },
+        {
+          "channel": "SALE",
+          "format": "synthetic-fixture",
+          "fixture": true,
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "O-1",
+              "label": "Hafer",
+              "price": "1.49",
+              "pack": "500 g"
+            }
+          ],
+          "retailerId": "PENNY"
+        },
+        {
+          "channel": "REGULAR",
+          "format": "synthetic-fixture",
+          "fixture": true,
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "R-1",
+              "label": "Hafer",
+              "price": "1.59",
+              "pack": "500 g"
+            }
+          ],
+          "retailerId": "PENNY"
+        }
+      ],
+      "expect": {
+        "matchedCount": 2,
+        "errorCodes": [
+          "CAPABILITY_NOT_ALLOWED"
+        ],
+        "coverageStatuses": [
+          "PARSED_PARTIAL",
+          "PARSED_PARTIAL",
+          "POLICY_DENIED"
+        ],
+        "observations": [
+          {
+            "scope": {
+              "retailerId": "LIDL"
+            },
+            "priceKind": "CURRENT_DISPLAYED",
+            "priceCents": 159
+          },
+          {
+            "scope": {
+              "retailerId": "PENNY"
+            },
+            "priceKind": "SALE",
+            "priceCents": 149
+          }
+        ]
+      }
     }
-  ]
+  ],
+  "retailerCapabilityPolicyVersion": "1.0.1"
 }

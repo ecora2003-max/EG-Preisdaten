@@ -35,6 +35,7 @@ class KotlinPortingParityTests(unittest.TestCase):
     def test_all_offline_parity_vectors(self):
         doc = json.loads(VECTORS.read_text(encoding="utf-8"))
         self.assertEqual(doc["contractVersion"], "1.0.0-draft")
+        self.assertEqual(doc["retailerCapabilityPolicyVersion"], "1.0.1")
         schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
         validator = Draft202012Validator(schema, format_checker=FormatChecker())
         names = [case["name"] for case in doc["cases"]]
@@ -49,6 +50,7 @@ class KotlinPortingParityTests(unittest.TestCase):
                 self.assertEqual((request, datasets), original, "input mutation")
                 expected = case["expect"]
                 self.assertEqual(result["contractVersion"], doc["contractVersion"])
+                self.assertEqual(result["capabilityPolicyVersion"], doc["retailerCapabilityPolicyVersion"])
                 self.assertEqual(result["matchedCount"], expected["matchedCount"])
                 self.assertEqual([e["code"] for e in result["errors"]], expected["errorCodes"])
                 self.assertEqual(len(result["observations"]), len(expected["observations"]))
