@@ -1,0 +1,24 @@
+name: Penny Kaufland public non-promo price search verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/penny_kaufland_normal_search.py
+      - .github/workflows/penny-kaufland-search.yml
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/penny_kaufland_normal_search.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: penny-kaufland-public-search
+          path: results/penny_kaufland_normal_search.json
+          retention-days: 7
