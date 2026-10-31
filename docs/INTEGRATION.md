@@ -90,3 +90,5 @@ Zusätzlich zu `query` (case-insensitive Name) und `retailerArticleId` akzeptier
 ### Exakter Grundpreis-Quellcheck (`8e935b4844d5`)
 
 `eg-preisdaten:basePriceCheck` ist einer der Werte `NO_REPORTED_BASE_PRICE`, `PRICE_UNKNOWN`, `DEPOSIT_UNCERTAIN`, `NOT_COMPARABLE`, `CONSISTENT_WITH_DISPLAYED_QUANTITY` oder `MISMATCH`. Nur für explizit kompatible Masse/Volumen-Basis (`kg`→`g`, `l`→`ml`) wird der angezeigte Preis mit `Decimal(priceCents)×1000/amount` verglichen, eine Cent-Rundungsabweichung ist erlaubt. **Dies bestätigt weder die gelieferte Packmenge noch Kassenpreistreue**; bei Pfand gilt der Test nicht als beweissicher. Verbrauchermengen und Kaufpreise werden nicht verändert. [Test #41220671906](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220671906).
+
+**Aktuelle Codex-Portierungscheckliste:** [PORTING_TEST_MATRIX.md](PORTING_TEST_MATRIX.md). Letzter Offline-Regressionstest: [77/77 bestanden, Lauf #41220821950](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220821950), Code `fe580013c619c366ec749ac98e1a630a91a86231`.
