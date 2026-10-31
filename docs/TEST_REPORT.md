@@ -32,3 +32,7 @@ Neue fachliche Invarianten: bedingte und unbedingte Preise nicht vertauschen; Re
 ## Folgelauf: Grundpreis-Konsistenz, Commit `8e935b4844d55261c393f0d3bef338cb3fc66437`
 
 [GitHub Actions #41220671906](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220671906): **74/74 Tests PASS**, Kompilierung und CLI PASS. Zwei neue Tests: unveränderte Grundpreis-Quellenwerte werden bei nachweisbar kompatiblen Einheiten mit exakter Decimal-Arithmetik und 1-Cent-Toleranz gegen den beobachteten Verkaufspreis geprüft; widersprüchliche Beträge werden als `MISMATCH` markiert, ohne Preiswerte zu erfinden. Fehlen Preis/Menge/kompatible Basis oder ist Pfand bekannt, wird das Ergebnis bewusst nicht als konsistent behauptet. Ungültige Grundpreisfelder führen zu atomarer Ablehnung. Kein neuer Live-GET.
+
+## 31.10.2026 – defensive Eingabevalidierung
+
+Code-Commit `fe580013c619c366ec749ac98e1a630a91a86231`. [CI-Lauf #41220821950](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220821950): **77/77 Offline-Tests bestanden**, Compile und synthetische CLI bestanden. Neue Tests für ungültige Artikel-/Markenfelder, fehlerhafte IDs, ungültige Anfragen, Herkunft und Scope sowie extreme Packmengen. Bei beschädigten Datensätzen erfolgt vollständiger Rollback der betroffenen Quelle. Keine neuen Live-GET-Tests und keine produktive Nutzungsrechtsfreigabe.
