@@ -1,0 +1,192 @@
+"""Offline contract, provider, negative and bridge tests. No network or user data."""
+import copy
+import json
+from pathlib import Path
+import unittest
+from price_module import PriceService, provider_registry, parse_quantity, cents, resolve_stores
+from price_module.service import DataError
+try:
+    from jsonschema import Draft202012Validator, FormatChecker
+except ImportError:
+    Draft202012Validator = None
+
+DAY="2026-10-31"
+TIME="2026-10-31T12:00:00+01:00"
+REQUEST={"shoppingDate":DAY,"retailerIds":["LIDL"],"maxResults":100}
+SYNTHETIC={"retailerId":"LIDL","channel":"SALE","fixture":True,
+           "format":"synthetic-fixture","origin":"synthetic-fixture",
+           "observedAt":TIME,"body":[]}
+
+def fixture(rows,retailer="LIDL",channel="SALE",**kwargs):
+    d={**SYNTHETIC,"retailerId":retailer,"channel":channel,"body":rows}
+    d.update(kwargs)
+    return d
+
+def r(label="Milch",price="1.25",**changes):
+    return {"id":"s1","label":label,"price":price,"pack":"2 x 500 g",
+            "fromDate":DAY,"untilDate":"2026-11-05",**changes}
+
+def source(retailer,channel,body,url,**kwargs):
+    d={"retailerId":retailer,"channel":channel,"body":body,"sourceUrl":url,
+       "origin":"official-retailer","observedAt":TIME,"contentType":"application/json"}
+    d.update(kwargs)
+    return d
+
+class ModuleTests(unittest.TestCase):
+    def setUp(self):
+        self.service=PriceService()
+
+    def test_eight_providers_distinct_and_rights_not_granted(self):
+        reg=provider_registry()
+        self.assertEqual(len(reg),8)
+        self.assertEqual(reg["NETTO_MD"]["rights"],"UNVERIFIED")
+        self.assertEqual(reg["EDEKA"]["rights"],"RESTRICTED")
+        self.assertFalse(any(x["dataMayBeRedistributed"] for x in reg.values()))
+
+    def test_all_eight_synthetic_current_future_expired(self):
+        for chain in provider_registry():
+            req={**REQUEST,"retailerIds":[chain],"windowEnd":"2026-11-10"}
+            ds=fixture([r(id="current",fromDate=DAY,untilDate=DAY),
+                        r(id="future",fromDate="2026-11-03",untilDate="2026-11-07"),
+                        r(id="expired",fromDate="2026-10-01",untilDate="2026-10-02")],retailer=chain)
+            output=self.service.search_offers(req,[ds])
+            self.assertEqual(len(output["observations"]),2,chain)
+            self.assertEqual(output["errors"],[])
+            self.assertFalse(output["coverage"][0]["complete"])
+
+    def test_contract_schema_valid_unknown_and_zero_and_invalid_source(self):
+        self.assertIsNotNone(Draft202012Validator,"CI requires jsonschema dependency")
+        schema=json.loads(Path("tests/fixtures/architecture-contract.schema.json").read_text())
+        v=Draft202012Validator(schema,format_checker=FormatChecker())
+        result=self.service.search(REQUEST,[fixture([r(price=None),r(id="s2",price="0.00")])],"SALE")
+        messages=result["observations"]
+        self.assertEqual([x["payload"]["priceCents"] for x in messages],[None,0])
+        for doc in messages:
+            self.assertFalse(list(v.iter_errors(doc)))
+        invalid=copy.deepcopy(messages[0])
+        invalid["payload"]["priceCents"]=-1
+        self.assertTrue(list(v.iter_errors(invalid)))
+        invalid=copy.deepcopy(messages[0])
+        invalid["payload"]["scope"]={"retailerId":"LIDL","scopeType":"STORE_CONFIRMED"}
+        self.assertTrue(list(v.iter_errors(invalid)))
+        invalid=copy.deepcopy(messages[0])
+        invalid["payload"]["source"]["rightsStatus"]="ALLOWED_BY_HTTP_200"
+        self.assertTrue(list(v.iter_errors(invalid)))
+        for message in json.loads(Path("tests/fixtures/architecture-examples.json").read_text()):
+            self.assertFalse(list(v.iter_errors(message)))
+
+    def test_decimal_money_and_quantity_no_guess(self):
+        self.assertEqual(cents("1,99"),199)
+        self.assertEqual(cents("0"),0)
+        self.assertIsNone(cents(None))
+        for p in (True,1.123,-1,"NaN",1.2):
+            with self.assertRaises(DataError):cents(p)
+        self.assertEqual(parse_quantity("500-g-Packung")["amount"],500)
+        self.assertEqual(parse_quantity("2×500 g")["amount"],1000)
+        self.assertEqual(parse_quantity("2×500 g")["quantityPerPackage"],500)
+        self.assertEqual(parse_quantity("0,75 l")["amount"],750)
+        self.assertEqual(parse_quantity("4 Stück")["unit"],"piece")
+        self.assertIsNone(parse_quantity("2 x 1 Stück"))
+        self.assertIsNone(parse_quantity("eine Packung"))
+        self.assertIsNone(parse_quantity("3,1234 kg"))
+
+    def test_scope_requires_verifiable_exact_binding(self):
+        raw=fixture([r(scope="STORE_CONFIRMED",scopeId="DE1")],storeId="DE1")
+        unknown=self.service.search(REQUEST,[raw])["observations"][0]["payload"]["scope"]
+        self.assertEqual(unknown["scopeType"],"UNKNOWN")
+        raw["scopeProof"]={"storeId":"DE1","sourceRef":"official-store-selection"}
+        confirmed=self.service.search(REQUEST,[raw])["observations"][0]["payload"]["scope"]
+        self.assertEqual(confirmed["storeId"],"DE1")
+        raw["storeId"]="DE2"
+        switched=self.service.search(REQUEST,[raw])["observations"][0]["payload"]["scope"]
+        self.assertEqual(switched["scopeType"],"UNKNOWN")
+        a=resolve_stores("LIDL",[{"retailerId":"LIDL","storeId":"DE1",
+                                   "sourceRef":"official"}],"DE1")
+        self.assertEqual(a[0]["storeId"],"DE1")
+        self.assertEqual(resolve_stores("REWE",[{"retailerId":"LIDL","storeId":"DE1",
+                                                 "sourceRef":"official"}],"DE1"),[])
+
+    def test_source_restrictions_and_http_errors(self):
+        bad=source("LIDL","REGULAR",{"products":[]},"https://attacker.example/prices",mode="category")
+        result=self.service.search(REQUEST,[bad])
+        self.assertEqual(result["errors"][0]["code"],"INVALID_SOURCE")
+        for status,expected in ((403,"SOURCE_BLOCKED"),(429,"RATE_LIMITED"),
+                                (204,"NO_CONTENT"),(502,"UPSTREAM_ERROR")):
+            d=fixture([r()],httpStatus=status)
+            self.assertEqual(self.service.search(REQUEST,[d])["errors"][0]["code"],expected)
+        ds=fixture([r()],contentType="text/html")
+        self.assertEqual(self.service.search(REQUEST,[ds])["errors"][0]["code"],"INVALID_CONTENT_TYPE")
+        ds=fixture([r()],observedAt="2026-10-31T12:00:00")
+        self.assertEqual(self.service.search(REQUEST,[ds])["errors"][0]["code"],"INVALID_TIMESTAMP")
+        ds=fixture([r()],origin="")
+        self.assertEqual(self.service.search(REQUEST,[ds])["errors"][0]["code"],"INVALID_SOURCE")
+
+    def test_unknown_fields_and_invalid_conditions(self):
+        d=fixture([r(conditions=["only with app"],deposit="0.25")])
+        result=self.service.search(REQUEST,[d])["observations"][0]["payload"]
+        self.assertEqual(result["depositCents"],25)
+        self.assertEqual(result["conditional"],["only with app"])
+        bad=fixture([r(conditions=[123])])
+        self.assertEqual(self.service.search(REQUEST,[bad])["errors"][0]["code"],"INVALID_CONDITION")
+        bad=fixture([r(fromDate="2026-11-10",untilDate="2026-10-10")])
+        self.assertEqual(self.service.search(REQUEST,[bad])["errors"][0]["code"],"INVALID_DATE")
+        bad=fixture([r(price="1.001")])
+        self.assertEqual(self.service.search(REQUEST,[bad])["errors"][0]["code"],"INVALID_PRICE")
+
+    def test_no_side_effect_on_snapshots(self):
+        before=fixture([r()])
+        saved=copy.deepcopy(before)
+        self.service.search_offers(REQUEST,[before])
+        self.service.search_catalog_prices(REQUEST,[before])
+        self.service.lookup_price(REQUEST,[before],"s1")
+        self.service.get_coverage(REQUEST,[before])
+        self.assertEqual(before,saved)
+
+    def test_rewe_stationary_two_stores_and_reference_price(self):
+        body={"products":[{"id":"001","title":"Milch","brand":"Demo",
+                           "pricing":{"current":115,"regular":129,"refund":25}}]}
+        one=source("REWE","REGULAR",body,
+                   "https://www.rewe.de/api/stationary-product-search/products",
+                   storeId="840174",scopeProof={"storeId":"840174","sourceRef":"official-market-search"})
+        two=copy.deepcopy(one)
+        two["storeId"]="831002"
+        two["scopeProof"]={"storeId":"831002","sourceRef":"official-market-search"}
+        two["body"]["products"][0]["pricing"]["current"]=125
+        req={**REQUEST,"retailerIds":["REWE"]}
+        result=self.service.search_catalog_prices(req,[one,two])
+        prices=[v["payload"]["priceCents"] for v in result["observations"] if v["payload"]["priceKind"]=="CURRENT_DISPLAYED"]
+        self.assertEqual(prices,[115,125])
+        self.assertEqual(len(result["observations"]),4)
+        self.assertTrue(all(x["payload"]["scope"]["scopeType"]=="STORE_CONFIRMED" for x in result["observations"]))
+
+    def test_lidl_price_catalogue_and_incomplete_category(self):
+        body={"totalProducts":3,"products":[{"id":"1_DE","title":"Milch","brand":"Demo",
+               "price":{"price":0.85,"oldPrice":1.09}}]}
+        ds=source("LIDL","REGULAR",body,
+                  "https://product-catalog.lidlplus.com/api/app/v1/DE/store/DE7434/categories/milk/products",
+                  storeId="DE7434",scopeProof={"storeId":"DE7434","sourceRef":"official-stores"},
+                  mode="category",snapshotDate=DAY,limit=2,offset=0)
+        result=self.service.search_catalog_prices(REQUEST,[ds])
+        self.assertEqual(result["observations"][0]["payload"]["priceCents"],85)
+        self.assertFalse(result["coverage"][0]["complete"])
+
+    def test_aldi_sued_refuses_claim_of_entire_catalogue(self):
+        body={"data":[{"sku":"1","name":"Demo","price":{"amountRelevant":199,"currencyCode":"EUR"}}],
+              "meta":{"pagination":{"totalCount":3538}}}
+        ds=source("ALDI_SUED","REGULAR",body,"https://api.aldi-sued.de/v3/product-search",
+                  storeId="B384",scopeProof={"storeId":"B384","sourceRef":"servicepoint-selected"})
+        res=self.service.search_catalog_prices({**REQUEST,"retailerIds":["ALDI_SUED"]},[ds])
+        self.assertEqual(res["observations"][0]["payload"]["priceCents"],199)
+        self.assertFalse(res["coverage"][0]["complete"])
+        self.assertEqual(res["coverage"][0]["reportedTotal"],3538)
+
+    def test_reject_html_as_api_json_and_missing_schema(self):
+        ds=source("REWE","REGULAR","<html>oops</html>",
+                  "https://www.rewe.de/api/stationary-product-search/products",
+                  storeId="840174")
+        res=self.service.search_catalog_prices({**REQUEST,"retailerIds":["REWE"]},[ds])
+        self.assertEqual(res["errors"][0]["code"],"SCHEMA_CHANGED")
+        self.assertEqual(res["coverage"][0]["status"],"ERROR")
+
+if __name__=="__main__":
+    unittest.main()

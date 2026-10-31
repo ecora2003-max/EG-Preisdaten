@@ -1,0 +1,50 @@
+{
+  "request": {
+    "shoppingDate": "2026-10-31",
+    "windowEnd": "2026-11-07",
+    "retailerIds": [
+      "LIDL",
+      "REWE"
+    ],
+    "maxResults": 15
+  },
+  "kind": "BOTH",
+  "datasets": [
+    {
+      "retailerId": "LIDL",
+      "channel": "SALE",
+      "fixture": true,
+      "format": "synthetic-fixture",
+      "origin": "synthetic-fixture",
+      "observedAt": "2026-10-31T12:00:00+01:00",
+      "body": [
+        {
+          "id": "SYNTH-L-01",
+          "label": "Synthetische Haferflocken",
+          "price": "0.99",
+          "pack": "2×500 g",
+          "fromDate": "2026-11-02",
+          "untilDate": "2026-11-07",
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "retailerId": "REWE",
+      "channel": "REGULAR",
+      "fixture": true,
+      "format": "synthetic-fixture",
+      "origin": "synthetic-fixture",
+      "observedAt": "2026-10-31T12:00:00+01:00",
+      "body": [
+        {
+          "id": "SYNTH-R-01",
+          "label": "Synthetische Haferflocken",
+          "priceCents": 129,
+          "pack": "500 g",
+          "sourcePriceKind": "CURRENT_DISPLAYED"
+        }
+      ]
+    }
+  ]
+}

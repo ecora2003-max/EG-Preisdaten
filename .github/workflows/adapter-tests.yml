@@ -4,7 +4,11 @@ on:
     branches: [main]
     paths:
       - 'adapters/**'
+      - 'catalogues/**'
+      - 'price_module/**'
       - 'tests/**'
+      - 'examples/**'
+      - 'requirements-dev.txt'
       - '.github/workflows/adapter-tests.yml'
   workflow_dispatch:
 permissions:
@@ -12,12 +16,21 @@ permissions:
 jobs:
   contracts:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install offline test dependencies
+        run: pip install -r requirements-dev.txt
       - name: Compile Python sources
-        run: python3 -m compileall -q adapters tests
-      - name: Offline contract tests
+        run: python3 -m compileall -q adapters catalogues price_module tests
+      - name: Offline contract and regression tests
         run: python3 -m unittest discover -s tests -v
+      - name: Reproducible synthetic CLI demonstration
+        run: python3 -m price_module < examples/synthetic-price-query.json > /tmp/price-module-synthetic.json
+      - name: Check emitted envelope
+        run: python3 -c "import json; x=json.load(open('/tmp/price-module-synthetic.json')); assert len(x['observations'])==2"
