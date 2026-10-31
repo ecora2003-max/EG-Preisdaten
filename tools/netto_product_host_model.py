@@ -28,13 +28,14 @@ def analyze(java):
     getter_names=sorted(set(re.findall(r'\b(?:get|is)([A-Z][A-Za-z0-9]{1,45})\s*\(',java)))
     method_types=[]
     for line in raw_lines:
-        if any(tag in line for tag in ("productSearch(", "getResult()", "getPrice()", "baseUrl(", "createService(", "getBaseUrl()","Retrofit.Builder","ProductAPIApi.class")):
+        if any(tag in line for tag in ("productSearch(", "getResult()", "getContent()", "getMessage()", "getPrice()", "getDefaultBasePath()", "baseUrl(", "createService(", "getBaseUrl()","Retrofit.Builder","ProductAPIApi.class")):
             # whitelist structural method signatures; suppress raw code expressions
             text=line.strip()
             if len(text)>240 or BAD_RE.search(text):continue
             if "https:" in text or "http:" in text:continue
             method_types.append(text[:200])
-    # Only publicly named hosts; never capture URL paths/arguments.
+    # Only hostname portion of absolute URLs, not query strings or path tokens.
+    public_hosts=sorted(set(v.lower().split("://",1)[-1] for v in HOST_RE.findall(java) if "." in v and not BAD_RE.search(v)))[:40]
     hosts=sorted(set(
         v.lower().replace("https://","").replace("http://","")
         for v in HOST_RE.findall(java) if "netto" in v.lower()
@@ -42,6 +43,7 @@ def analyze(java):
     return {"getter_names":getter_names[:65],
       "annotated_json_fields":annotated_fields[:70],
       "nonsecret_signature_lines":method_types[:32],
+      "all_public_hostname_literals":public_hosts,
       "netto_public_hostname_literals":hosts[:20]}
 
 def main():
