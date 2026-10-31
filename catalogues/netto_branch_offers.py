@@ -51,6 +51,8 @@ def _visible_euros(tag):
     if tag is None:return None
     s=tag.get_text("",strip=True)
     s=s.replace("*","").replace("\xa0","").replace(" ","")
+    # Netto renders exactly-euro amounts as "1.–" instead of "1.00".
+    if re.fullmatch(r"\d{1,4}[.,][–—-]",s):return _money(s[:-1]+"00")
     if not re.fullmatch(r"\d{1,4}[.,]\d\d",s):return None
     return _money(s)
 
