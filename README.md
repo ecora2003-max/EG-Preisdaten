@@ -77,3 +77,7 @@ Die eingebundenen Feldparsers sind Referenzcode. Die Original-Android-App im sep
 ## 31.10.2026 – Gesamter Preiskatalog: ALDI Nord, REWE, ALDI Süd
 
 [**Messbericht mit Live-Tests, Lücken und echten Pagination-Gegenproben**](reports/gesamter-preiskatalog-aldi-nord-rewe-aldi-sued-2026-10-31.md). **ALDI Nord:** 174 vollständig geladene Sortimentslisten, 1.781 verschiedene IDs; 8 von 3.706 Listeneinträgen ohne Preis, 2.307 Produktseiten in offizieller Sitemap. **REWE stationär:** stets 12 identische IDs pro Suchbegriff; getestete Pagination keine Sortimentsiteration. **ALDI Süd:** 3.537 bepreiste IDs in 60er-Seiten und 3.549 in 48er-Seiten bei gemeldetem `totalCount=3.538`; API-Seiten abrufbar, strenge 100%-Vollständigkeit nicht gesichert. Alle Änderungen ausschließlich in `Try`.
+
+## Netto: gezielte Produktsuche mit EAN und POS-Preismodell (31.10.2026)
+
+[**Statische API-/Live-Test-Dokumentation**](reports/netto-produktsuche-filialpreise-status-2026-10-31.md). Netto-Marken-Discount-APK: `GET rest/api/v2/productSearch?searchString&storeId` → `Product[]` mit Name/EAN/Artikel-ID **ohne Preis**. Separat `GET api/v1/mpos/{storeId}/itemInfo?itemEAN` → Antworttyp `ItemInfo[]` mit `ValidPrice.Amount` und `ValidPrice.Currency`. Der echte Server-Host und ein erfolgreicher Filialpreis-Abruf sind weiterhin nicht nachgewiesen; öffentliche Host-Kandidaten lieferten bisher nur HTML oder wurden technisch nicht angefragt. **Kein produktiver Preisadapter**, nur Testrepository `Try` verändert.
