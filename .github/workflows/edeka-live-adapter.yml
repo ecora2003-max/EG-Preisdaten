@@ -1,0 +1,26 @@
+name: EDEKA live regional and market offer adapter
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/edeka_live_adapter.py
+      - .github/workflows/edeka-live-adapter.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate Berlin and Hamburg real EDEKA offers
+        run: python3 tools/edeka_live_adapter.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: edeka-live-market-adapter
+          path: results/edeka_live_adapter.json
+          retention-days: 7
