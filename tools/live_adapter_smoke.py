@@ -16,7 +16,7 @@ from urllib.robotparser import RobotFileParser
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from adapters.retailer_offers import (
-    penny_store,penny_offers,kaufland_offers,aldi_nord_next,lidl_flyer,Scope,
+    penny_store,penny_offers,penny_merge_categories,kaufland_offers,aldi_nord_next,lidl_flyer,Scope,
     netto_status,edeka_offers
 )
 UA="Ernaehrungsgedaechtnis-Research/0.4 (read-only integration test)"
@@ -53,11 +53,17 @@ def check_penny():
     markets=json.loads(fetch("Penny markets","https://www.penny.de/.rest/market"))
     b=next(s for s in markets if s.get("city")=="Berlin" and s.get("nextWeekSellingRegion"))
     lookup=penny_store(markets,str(b["wwIdent"]),week="next")
-    url="https://www.penny.de/.rest/offers/by-category/2026-45/top-angebote?"+urlencode({"region":lookup["region"]})
-    offers=penny_offers(json.loads(fetch("Penny offers",url)),region=lookup["region"],week_start="2026-11-02")
+    confirmed_categories=("top-angebote","kuehlregal","getraenke","weitere-angebote",
+                          "obst-und-gemuese","fleisch-und-wurst","drogerie-und-haushalt",
+                          "suessigkeiten-und-snacks","penny-ready","puda","best-moments","pflanzen")
+    category_payloads={}
+    for category in confirmed_categories:
+        url="https://www.penny.de/.rest/offers/by-category/2026-45/"+category+"?"+urlencode({"region":lookup["region"]})
+        category_payloads[category]=json.loads(fetch("Penny offers "+category,url))
+    offers=penny_merge_categories(category_payloads,region=lookup["region"],week_start="2026-11-02")
     assert len(offers)>0
     assert all(x.scope==Scope.REGION and x.scope_id==lookup["region"] for x in offers)
-    return {"offers":len(offers),"store_id":lookup["store_id"],"region":lookup["region"],
+    return {"offers":len(offers),"categories":len(category_payloads),"raw_tiles":sum(len(c.get("offerTiles",[])) for c in category_payloads.values()),"store_id":lookup["store_id"],"region":lookup["region"],
             "sample":offers[0].to_dict()}
 
 def check_kaufland():
