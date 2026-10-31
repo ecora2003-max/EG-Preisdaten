@@ -71,7 +71,11 @@ def parse_quantity(text: Any) -> dict[str, Any] | None:
     if n<=0 or n>1000 or total<=0 or total>1_000_000_000 or total!=total.to_integral_value():return None
     normalized="g" if unit in ("kg","g") else "ml" if unit in ("l","ml") else "piece"
     if normalized=="piece" and n>1: return None # ambiguous '2x3 Stück' pack format
-    out={"amount":int(total),"unit":normalized,"basis":"PIECE" if normalized=="piece" else "NET",
+    drained=bool(re.search(r"\babtropfgewicht\b|\babgetropft\b|\bdrained\b|\batg\b",s))
+    gross=bool(re.search(r"\bbruttogewicht\b|\bbrutto\b|\bgross weight\b",s))
+    if drained and gross:return None
+    basis="PIECE" if normalized=="piece" else "DRAINED" if drained else "GROSS" if gross else "NET"
+    out={"amount":int(total),"unit":normalized,"basis":basis,
          "confirmed":False,"notes":"Parsed from supplier display text; not independently verified"}
     if n>1:out.update(packageCount=n,quantityPerPackage=int(value))
     return out
@@ -265,7 +269,7 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
     ):
         raise DataError("INVALID_ID","FoodType ID must remain source-verified")
     retailer=ds["retailerId"]
-    for key in ("brand","advertisedUnitPrice","referenceOldText","advertisedBenefitText"):
+    for key in ("brand","pack","advertisedUnitPrice","referenceOldText","advertisedBenefitText"):
         if row.get(key) is not None and not isinstance(row[key],str):
             raise DataError("INVALID_FIELD",f"{key} must be a string or null")
     raw_id=row.get("id")
@@ -368,7 +372,8 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
         "sourceScopeId":sid,"storeId":ds.get("storeId"),"regionId":ds.get("regionId"),
         "retailerArticleId":str(raw_id) if raw_id is not None else None,
         "label":name,"foodTypeId":row.get("foodTypeId"),"brand":row.get("brand"),
-        "gtin":_gtin(row.get("gtin")),"quantity":qty,"kind":kind_out,
+        "gtin":_gtin(row.get("gtin")),"quantity":qty,
+        "advertisedPackageText":row.get("pack"),"kind":kind_out,
         "priceCents":value,"depositCents":dep,"validFrom":start,"validUntil":end,
         "conditions":condition,"conditionalPrices":normalized_conditions,
         "reportedBaseUnitPrices":reported_base,"referenceOldPriceCents":reference_old,
@@ -410,6 +415,7 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
                        "eg-preisdaten:referenceOldPriceCents":reference_old,
                        "eg-preisdaten:referenceOldText":row.get("referenceOldText"),
                        "eg-preisdaten:advertisedBenefitText":row.get("advertisedBenefitText"),
+                       "eg-preisdaten:advertisedPackageText":row.get("pack"),
                        "eg-preisdaten:advertisedUnitPrice":row.get("advertisedUnitPrice"),
                        "eg-preisdaten:reportedBaseUnitPrices":reported_base,
                        "eg-preisdaten:basePriceCheck":base_price_check,

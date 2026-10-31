@@ -732,5 +732,35 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(out["errors"][0]["code"],"INVALID_FIELD")
         self.assertEqual(out["observations"],[])
 
+
+    def test_drained_and_gross_are_not_net_weight(self):
+        drained=parse_quantity("350 g Abtropfgewicht")
+        self.assertEqual((drained["amount"],drained["basis"]),(350,"DRAINED"))
+        gross=parse_quantity("500 g brutto")
+        self.assertEqual((gross["amount"],gross["basis"]),(500,"GROSS"))
+        self.assertIsNone(parse_quantity("500 g brutto Abtropfgewicht"))
+        self.assertEqual(parse_quantity("500 g")["basis"],"NET")
+        self.assertEqual(parse_quantity("6 Stück")["basis"],"PIECE")
+
+    def test_identical_normalized_quantity_but_distinct_advertised_pack_text_kept(self):
+        ds=fixture([r(id="same",pack="500 g"),
+                    r(id="same",pack="500 g Abtropfgewicht"),
+                    r(id="same",pack="500 g brutto")])
+        result=self.service.search_offers(REQUEST,[ds])
+        self.assertFalse(result["errors"])
+        self.assertEqual(len(result["observations"]),3)
+        by_basis={x["payload"]["article"]["quantity"]["basis"]:x["payload"]
+                  for x in result["observations"]}
+        self.assertEqual(set(by_basis),{"NET","DRAINED","GROSS"})
+        self.assertEqual(by_basis["DRAINED"]["eg-preisdaten:advertisedPackageText"],
+                         "500 g Abtropfgewicht")
+
+    def test_drained_unit_price_is_not_naively_checked_as_net(self):
+        ds=fixture([r(pack="350 g Abtropfgewicht",price="1.40",
+                      reportedBaseUnitPrices=[{"basis":"kg","priceEur":"4.00"}])])
+        p=self.service.search_offers(REQUEST,[ds])["observations"][0]["payload"]
+        self.assertEqual(p["article"]["quantity"]["basis"],"DRAINED")
+        self.assertEqual(p["eg-preisdaten:basePriceCheck"],"NOT_COMPARABLE")
+
 if __name__=="__main__":
     unittest.main()
