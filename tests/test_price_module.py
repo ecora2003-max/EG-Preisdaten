@@ -843,5 +843,34 @@ class ModuleTests(unittest.TestCase):
             {**REQUEST,"retailerIds":["EDEKA"],"usageMode":"APP_DISPLAY"},[source_offer])
         self.assertEqual(app["errors"][0]["code"],"RIGHTS_NOT_CLEARED")
 
+
+    def test_targeted_product_price_query_requires_explicit_small_target(self):
+        for ids in (["ALDI_NORD"],["ALDI_SUED"],["REWE"],["LIDL"]):
+            req={**REQUEST,"retailerIds":ids}
+            with self.subTest(retailer=ids[0]):
+                ds=fixture([r(id="sku1",label="Milch"),r(id="sku2",label="Bohnen")],
+                           retailer=ids[0],channel="REGULAR")
+                found=self.service.search_product_prices({**req,"retailerArticleId":"sku2"},[ds])
+                self.assertEqual(len(found["observations"]),1)
+                self.assertEqual(found["observations"][0]["payload"]["article"]["retailerArticleId"],"sku2")
+                self.assertEqual(found["capabilityPolicyVersion"],"1.0.1")
+                self.assertFalse(found["outputTruncated"])
+                with self.assertRaises(DataError) as x:
+                    self.service.search_product_prices(req,[ds])
+                self.assertEqual(x.exception.code,"TARGET_REQUIRED")
+                with self.assertRaises(DataError) as x:
+                    self.service.search_product_prices({**req,"query":"Bohnen","maxResults":1000},[ds])
+                self.assertEqual(x.exception.code,"TARGET_LIMIT_EXCEEDED")
+
+    def test_targeted_query_excludes_all_four_offer_only_retailers(self):
+        for retailer in ("PENNY","KAUFLAND","EDEKA","NETTO_MD"):
+            with self.subTest(retailer=retailer):
+                req={**REQUEST,"retailerIds":[retailer],"query":"Milch"}
+                ds=fixture([r()],retailer=retailer,channel="REGULAR")
+                out=self.service.search_product_prices(req,[ds])
+                self.assertEqual(out["observations"],[])
+                self.assertEqual(out["errors"][0]["code"],"CAPABILITY_NOT_ALLOWED")
+                self.assertEqual(out["coverage"][0]["status"],"POLICY_DENIED")
+
 if __name__=="__main__":
     unittest.main()

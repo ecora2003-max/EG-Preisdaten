@@ -602,13 +602,31 @@ class PriceService:
         warnings=["Source retrieval and redistribution rights are not granted by parser success",
                   "Observations do not create purchases, receipts or inventory events"]
         if truncated:warnings.append("OUTPUT_TRUNCATED: matching observations exceed maxResults")
-        return {"contractVersion":CONTRACT_VERSION,"observations":found[:limit],
+        return {"contractVersion":CONTRACT_VERSION,
+                "capabilityPolicyVersion":_CAPABILITY_POLICY["policyVersion"],
+                "observations":found[:limit],
                 "matchedCount":len(found),"outputTruncated":truncated,
                 "coverage":coverage,"errors":errors,"warnings":warnings}
     def search_offers(self, request, datasets):
         return self.search(request,datasets,"SALE")
     def search_catalog_prices(self,request,datasets):
+        """Offline research snapshot bridge; ADR-016 blocks out-of-scope retailers."""
         return self.search(request,datasets,"REGULAR")
+    def search_product_prices(self,request,datasets):
+        """The project-approved BOUNDED, on-demand product query.
+
+        This is not a bulk catalogue downloader. Upstream collection and
+        third-party redistribution rights are separate mandatory gates.
+        """
+        if not isinstance(request,dict):
+            raise DataError("INVALID_REQUEST","Expected request object")
+        if not any(isinstance(request.get(field),str) and request[field].strip()
+                   for field in ("retailerArticleId","gtin","foodTypeId","query")):
+            raise DataError("TARGET_REQUIRED","A specific product, barcode or food-type query is required")
+        cap=request.get("maxResults",20)
+        if type(cap) is not int or not 1<=cap<=50:
+            raise DataError("TARGET_LIMIT_EXCEEDED","Targeted requests allow at most 50 results")
+        return self.search({**request,"maxResults":cap},datasets,"REGULAR")
     def lookup_price(self,request,datasets,retailer_article_id):
         return self.search({**request,"retailerArticleId":retailer_article_id},datasets,"BOTH")
     def get_coverage(self,request,datasets):
