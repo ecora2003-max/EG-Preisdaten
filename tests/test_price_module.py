@@ -459,5 +459,50 @@ class ModuleTests(unittest.TestCase):
         self.assertNotEqual(out["observations"][0]["payload"]["observationId"],
                             out["observations"][1]["payload"]["observationId"])
 
+
+    def test_netto_skipped_bad_tile_count_is_visible_in_coverage(self):
+        from urllib.parse import urlencode
+        good=urlencode({"SKU":"A1","Price":"1.99","ValidTo":"2026-10-31 23:59:59","Name":"Hafer"})
+        broken=urlencode({"SKU":"A2","Price":"2.99","ValidTo":"2026-10-31 23:59:59","Name":"Hafer2"})
+        def tile(pid,slug,display):
+            return (f'<div class="tc-store-product-tile" data-ff-id="{pid}">'
+                    f'<span class="tc-product-name">{slug}</span>'
+                    f'<a href="https://www.netto-online.de/ViewMMPWishlist-AddStoreArticle?{good if pid=="A1" else broken}">Test</a>'
+                    f'<div class="grid-top-price"><span class="product__current-price tc-product-price">{display}</span></div></div>')
+        html='<section><h2>Filial-Angebote</h2>'+tile("A1","Hafer","1,99")+tile("A2","Hafer2","1,99")+'</section>'
+        ds=source("NETTO_MD","SALE",html,"https://www.netto-online.de/angebote/c-N07",
+                  contentType="text/html")
+        out=self.service.search_offers({**REQUEST,"retailerIds":["NETTO_MD"]},[ds])
+        self.assertEqual(len(out["observations"]),1)
+        self.assertEqual(out["coverage"][0]["received"],2)
+        self.assertEqual(out["coverage"][0]["parsed"],1)
+        self.assertIn("PRICE_NAME_OR_SKU_MISMATCH",out["coverage"][0]["sourceWarnings"])
+
+    def test_lidl_offer_unsupported_discount_type_reported_as_skipped(self):
+        ds=source("LIDL","SALE",{"totalOffers":2,"offers":[
+            {"id":"x","title":"Eis","category":"Store","offerType":"StoreSpecialPriceDiscount",
+             "priceBox":{"largePartNumeric":1.49},
+             "startValidityDate":"2026-10-31","endValidityDate":"2026-11-07"},
+            {"id":"y","title":"3 für 2","category":"Store","offerType":"StoreXforYDiscount",
+             "priceBox":{"largePartNumeric":2.49},
+             "startValidityDate":"2026-10-31","endValidityDate":"2026-11-07"}]},
+             "https://offers.lidlplus.com/app/api/v4/DE/DE7434/offers",storeId="DE7434")
+        out=self.service.search_offers(REQUEST,[ds])
+        self.assertEqual(len(out["observations"]),1)
+        self.assertEqual(out["coverage"][0]["received"],2)
+        self.assertEqual(out["coverage"][0]["parsed"],1)
+        self.assertFalse(out["coverage"][0]["complete"])
+
+    def test_transport_timeouts_and_cancellation_have_specific_codes(self):
+        for err,expected in [("TIMEOUT","TIMEOUT"),("NETWORK","NETWORK_ERROR"),
+                             ("TLS","TLS_ERROR"),("CANCELLED","CANCELLED")]:
+            ds=fixture([r()],transportError=err)
+            result=self.service.search_offers(REQUEST,[ds])
+            self.assertEqual(result["observations"],[])
+            self.assertEqual(result["errors"][0]["code"],expected)
+        ds=fixture([r()],transportError="UPSTREAM_MAGIC")
+        self.assertEqual(self.service.search_offers(REQUEST,[ds])["errors"][0]["code"],
+                         "INVALID_TRANSPORT_ERROR")
+
 if __name__=="__main__":
     unittest.main()

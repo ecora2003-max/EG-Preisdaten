@@ -137,15 +137,24 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
                          scopeId=None,conditions=[],sourcePriceKind="SALE",
                          conditionalPrices=([{"priceCents":cents(x.advertised_app_price_eur),
                            "access":"NETTO_APP","evidence":"visible_app_price",
-                           "termsVerified":False}] if x.advertised_app_price_eur is not None else [])) for x in items],cov
+                           "termsVerified":False}] if x.advertised_app_price_eur is not None else [])) for x in items],{
+                               "received":cov.get("candidate_tiles",len(items)),
+                               "parsed":cov.get("verified_sale_price_tiles",len(items)),
+                               "complete":False,"sourceWarnings":cov.get("warnings",[]),
+                               "sourceStatus":cov.get("status","UNKNOWN")}
         else:
             raise DataError("UNSUPPORTED_SOURCE","No proven sales adapter for this chain")
+        raw_count=len(offers)
+        if r=="PENNY":raw_count=len(body["offerTiles"])
+        elif r=="LIDL":raw_count=len(body["offers"])
+        elif r=="EDEKA":raw_count=len(body["docs"])
         return [dict(id=x.product_id,label=x.title,price=x.price_eur,pack=x.quantity,
                      fromDate=x.valid_from,untilDate=x.valid_to,
                      scope=x.scope.value,scopeId=x.scope_id,
                      conditions=(["SEPARATE_BENEFIT_PRICE_TERMS_UNVERIFIED"] if r=="PENNY" and x.price_condition else []),
                      advertisedBenefitText=(x.price_condition if r=="PENNY" else None),
-                     sourcePriceKind="SALE") for x in offers], {"received":len(offers),"parsed":len(offers),"complete":False}
+                     sourcePriceKind="SALE") for x in offers], {"received":raw_count,"parsed":len(offers),
+                         "complete":False,"skipped":raw_count-len(offers)}
     if r=="REWE":
         from adapters.stationary_price_catalogues import rewe_stationary
         data=rewe_stationary(body,store)
@@ -363,13 +372,20 @@ class PriceService:
                     selected.append(dataset)
             if not selected:
                 coverage.append(dict(retailerId=retailer,received=0,parsed=0,complete=False,
-                                     status="NO_DATA",rights=_REGISTRY[retailer][3]))
+                                     status="NO_MATCHING_SCOPE" if raw_selected else "NO_DATA",rights=_REGISTRY[retailer][3]))
             for ds in selected:
                 channel=ds.get("channel")
                 if channel not in ("SALE","REGULAR") or kind!="BOTH" and kind!=channel:continue
                 received=0;parsed=0;complete=False
                 prior_len=len(found); seen_before=seen.copy()
                 try:
+                    transport=ds.get("transportError")
+                    if transport is not None:
+                        codes={"TIMEOUT":"TIMEOUT","NETWORK":"NETWORK_ERROR",
+                               "CANCELLED":"CANCELLED","TLS":"TLS_ERROR"}
+                        if transport not in codes:
+                            raise DataError("INVALID_TRANSPORT_ERROR","Unsupported transport error")
+                        raise DataError(codes[transport],"Source transport failed before a usable response")
                     status=ds.get("httpStatus",200)
                     if status==403:raise DataError("SOURCE_BLOCKED","403 source denied")
                     if status==429:raise DataError("RATE_LIMITED","429 source throttled")
@@ -404,7 +420,9 @@ class PriceService:
                     coverage.append(dict(retailerId=retailer,channel=channel,received=received,parsed=parsed,
                                          complete=complete,status="PARSED_PARTIAL" if not complete else "PARSED_PAGE",
                                          rights=_REGISTRY[retailer][3],reportedTotal=summary.get("reportedTotal"),
-                                         checkedAt=when,sourceUrl=ds.get("sourceUrl")))
+                                         checkedAt=when,sourceUrl=ds.get("sourceUrl"),
+                                         sourceWarnings=summary.get("sourceWarnings",[]),
+                                         sourceStatus=summary.get("sourceStatus")))
                 except (DataError, ValueError, TypeError, KeyError, ImportError, json.JSONDecodeError) as exc:
                     # Atomic dataset import: never leak half-parsed output after schema failure.
                     found=found[:prior_len];seen=seen_before
