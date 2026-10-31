@@ -30,3 +30,14 @@ Keine Login-/Zahlungs-/Warenkorbmethoden aufgerufen; keine Sperre umgangen, kein
 **Fazit:** Ein aktueller Netto-Filialpreis ist durch diesen Test **nicht nachgewiesen**. Der nächste sinnvolle technische Schritt ist die eindeutige Zuordnung der `MPOSApi` zur verwendeten Basis-URL anhand des App-Initialisierungscodes statt beliebiger URL-Kombinationen.
 
 **Ablage:** ausschließlich `ecora2003-max/Try`. Hauptrepository unverändert.
+
+
+## Abgleich mit aktuellem APK-Basis-Host (abgeschlossen)
+
+[Zusätzlicher erfolgreicher GitHub-Actions-Lauf](https://github.com/ecora2003-max/Try/actions/runs/41204272310) · [statischer Host-Finder](../tools/netto_mpos_base_host_resolve.py).
+
+In allen neun Android-DEX-Bestandteilen wurden öffentliche Hostnamenskonstanten und die Retrofit-Konfigurationsklassen geprüft. **Ergebnis:** Der im APK sichtbare `MPOSApi`-Interface-Code enthält keinen festen API-Basis-Host. Die dekompilierten `ApiClient`-Klassen im untersuchten Satz zeigen ebenfalls keine auswertbare konkrete `mpos`-Basis-URL. Der generische OpenAPI-`ApiClient` ist unter den vermuteten Klassennamen nicht vorhanden. Die Produktionsadresse könnte über Laufzeitkonfiguration oder einen anderen Clientpfad eingespielt werden; das ist eine Hypothese, **kein Nachweis**.
+
+Das APK enthält mehrere Netto-Hostnamen (darunter `app.netto-online.de` und `sia.netto-online.de`), aber keine nachgewiesene eindeutige Zuordnung zu `/api/v1/mpos/{storeId}/itemInfo`. Der Live-Aufruf an `app.netto-online.de` lieferte daher keinen Preis. **Keine weiteren nicht verifizierten Hosts auf Verdacht angesprochen.**
+
+**Abschlussstatus:** `TEST_PERFORMED_NO_LIVE_PRICE`. Die Tatsache, dass die Datenstruktur `ValidPrice` existiert, darf nicht als bereits bestätigte öffentliche API-Erreichbarkeit behandelt werden.
