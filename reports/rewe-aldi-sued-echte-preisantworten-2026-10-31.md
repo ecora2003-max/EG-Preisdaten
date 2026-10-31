@@ -32,3 +32,17 @@ Maximal **eine einzige Produktsuchanfrage pro Händler** (kein Crawling, keine P
 - Synthetic-Contract-Tests in [tests/test_stationary_price_catalogues.py](../tests/test_stationary_price_catalogues.py), [Github Actions PASS](https://github.com/ecora2003-max/Try/actions/runs/41195124182).
 
 **Keine Änderungen an `ecora2003-max/Ernaerungsgedaechnis`.** Keine tatsächlichen Vorratsbestände, Ernährungstagebücher oder Käufe erfasst/geändert.
+
+## Zusätzlicher entscheidender Live-Beleg: echte Filialpreis-Unterschiede bei REWE
+
+[Zweiter erfolgreicher GitHub-Actions-Lauf 41195181867](https://github.com/ecora2003-max/Try/actions/runs/41195181867) · [Prüfcode](../tools/rewe_two_store_scope_probe.py) · Artefakt `rewe-two-stores-one-term`.
+
+Am **31.10.2026 11:02:37 UTC** wurden genau **zwei** lesende Suchabfragen auf demselben REWE-Endpunkt `/api/stationary-product-search/products` für dasselbe Suchwort `Haferflocken` ausgeführt, jeweils mit unterschiedlichen `wwIdent`-Werten `840174` und `831002`, beide **HTTP 200**.
+
+- Markt `840174`: **12** Suchtreffer; Markt `831002`: **12** Suchtreffer.
+- **11 identische Produkt-IDs** in beiden Antworten, je **1 exklusiver Treffer**.
+- Unter den **11 gemeinsamen Produkten waren 5 aktuell angezeigte Preise unterschiedlich**.
+- Beispiele der jeweils gleichen Produkt-ID mit unterschiedlichen Centpreisen (Markt 840174 → Markt 831002): **0,95 € → 0,99 €**, **0,85 € → 0,99 €**, **2,29 € → 2,39 €**.
+- Im Ergebnis wurden nur Aggregat- und Preisangaben gespeichert, keine Kunden- oder Login-Daten.
+
+**Interpretation:** Damit ist durch einen eigenen aktuellen Test nachgewiesen, dass REWEs stationäre Suchschnittstelle **je `wwIdent` tatsächlich unterschiedliche Produktpreise und Treffer** liefern kann. Das ist stärker als bloß ein Filial-Parameter im Quellcode. Es bestätigt noch keine Vollständigkeit, Kassenbon-Gleichheit, Lizenz oder vertraglich erlaubte Dauernutzung.
