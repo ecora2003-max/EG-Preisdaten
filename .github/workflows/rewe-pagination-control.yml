@@ -1,0 +1,27 @@
+name: Verify REWE stationarity pagination
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/rewe_pagination_control_test.py
+      - .github/workflows/rewe-pagination-control.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test same-query REWE page controls
+        run: python3 tools/rewe_pagination_control_test.py
+      - name: Publish read-only results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rewe-paging-controls
+          path: results/full_catalogue_access_20261031/rewe_pagination_followup.json
+          retention-days: 7
