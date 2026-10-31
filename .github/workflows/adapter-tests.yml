@@ -9,6 +9,7 @@ on:
       - 'tests/**'
       - 'examples/**'
       - 'requirements-dev.txt'
+      - 'requirements-dev.lock'
       - '.github/workflows/adapter-tests.yml'
   workflow_dispatch:
 permissions:
@@ -25,7 +26,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install offline test dependencies
-        run: pip install -r requirements-dev.txt
+        run: pip install -r requirements-dev.lock
       - name: Compile Python sources
         run: python3 -m compileall -q adapters catalogues price_module tests
       - name: Offline contract and regression tests

@@ -161,6 +161,7 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
         rows=[dict(id=x["product_id"],label=x["title"],brand=x["brand"],
                    priceCents=x["price_cents"],regularCents=x["regular_cents"],
                    depositCents=x["deposit_cents"],scope="STORE_CONFIRMED",scopeId=store,
+                   hasDiscount=x["discount_is_observed"],
                    sourcePriceKind="CURRENT_DISPLAYED") for x in data["listings"]]
         return rows,{"received":data["source_count"],"parsed":len(rows),"complete":False}
     if r=="ALDI_SUED":
@@ -171,6 +172,8 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
         rows=[dict(id=x["product_id"],label=x["title"],brand=x["brand"],
                    priceCents=x["price_cents"],depositCents=x["deposit_cents"],
                    scope="STORE_CONFIRMED",scopeId=store,
+                   hasDiscount=x["discount_is_observed"],
+                   referenceOldText=x["previous_price_display"],
                    sourcePriceKind="CURRENT_DISPLAYED") for x in data["listings"]]
         return rows,{"received":data["source_count"],"parsed":len(rows),
                      "reportedTotal":data["total_count"],"complete":data["catalogue_complete"] is True}
@@ -203,6 +206,7 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
                      sourcePriceKind="CURRENT_DISPLAYED",
                      hasDiscount=x.has_discount,hasConditionalOffer=x.has_lidl_plus_offer,
                      priceWithoutDeposit=x.price_without_deposit_eur,
+                     referenceOldPrice=x.previous_display_price_eur,
                      conditionalPrices=([{"priceCents":cents(x.lidl_plus_price_eur),
                        "access":"LIDL_PLUS","evidence":"lidlPlusOffer.price",
                        "termsVerified":False}] if x.lidl_plus_price_eur is not None else [])) for x in items],cov
@@ -286,6 +290,12 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
                          time,ds.get("sourceUrl"),condition],ensure_ascii=False)
     obs_id="PRICE-"+hashlib.sha256(identity.encode()).hexdigest()[:24]
     qty=parse_quantity(row.get("pack"))
+    reference_old=cents(row.get("referenceOldPrice"))
+    if row.get("referenceOldPriceCents") is not None:
+        x=row["referenceOldPriceCents"]
+        if type(x) is not int or x<0 or x>100_000_000:
+            raise DataError("INVALID_PRICE","Reference price must be integer nonnegative cents")
+        reference_old=x
     conditional_prices=row.get("conditionalPrices",[])
     if not isinstance(conditional_prices,list):raise DataError("INVALID_CONDITION","Conditional prices list required")
     normalized_conditions=[]
@@ -319,6 +329,8 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
                        "eg-preisdaten:conditionalPrices":normalized_conditions,
                        "eg-preisdaten:hasConditionalOffer":row.get("hasConditionalOffer"),
                        "eg-preisdaten:hasDiscount":row.get("hasDiscount"),
+                       "eg-preisdaten:referenceOldPriceCents":reference_old,
+                       "eg-preisdaten:referenceOldText":row.get("referenceOldText"),
                        "eg-preisdaten:advertisedBenefitText":row.get("advertisedBenefitText"),
                        "eg-preisdaten:advertisedUnitPrice":row.get("advertisedUnitPrice"),
                        "eg-preisdaten:priceWithoutDepositCents":cents(row.get("priceWithoutDeposit"))}}

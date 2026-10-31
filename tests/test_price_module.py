@@ -504,5 +504,31 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(self.service.search_offers(REQUEST,[ds])["errors"][0]["code"],
                          "INVALID_TRANSPORT_ERROR")
 
+
+    def test_reference_price_not_as_a_paid_past_or_regular_price(self):
+        ds=source("LIDL","REGULAR",{"results":[
+            {"id":"x","title":"Milch","price":0.85,"oldPrice":1.19}]},
+            "https://product-catalog.lidlplus.com/api/app/v1/DE/store/DE7434/search",
+            mode="search",storeId="DE7434",snapshotDate=DAY)
+        p=self.service.search_catalog_prices(REQUEST,[ds])["observations"][0]["payload"]
+        self.assertEqual(p["priceKind"],"CURRENT_DISPLAYED")
+        self.assertEqual(p["priceCents"],85)
+        self.assertEqual(p["eg-preisdaten:referenceOldPriceCents"],119)
+        self.assertIs(p["eg-preisdaten:hasDiscount"],True)
+
+    def test_aldi_sued_strikethrough_price_only_text(self):
+        ds=source("ALDI_SUED","REGULAR",{"data":[{"sku":"X","name":"Haferflocken",
+             "price":{"amountRelevant":99,"currencyCode":"EUR","wasPriceDisplay":"1,29 €"}}]},
+             "https://api.aldi-sued.de/v3/product-search",storeId="B384")
+        p=self.service.search_catalog_prices({**REQUEST,"retailerIds":["ALDI_SUED"]},[ds])["observations"][0]["payload"]
+        self.assertEqual(p["priceKind"],"CURRENT_DISPLAYED")
+        self.assertEqual(p["eg-preisdaten:referenceOldText"],"1,29 €")
+        self.assertIsNone(p["eg-preisdaten:referenceOldPriceCents"])
+
+    def test_verified_barcode_requires_valid_check_digit_and_never_guesses(self):
+        valid=fixture([r(id="v",gtin="4000540200300"),r(id="i",gtin="4000540200301")])
+        values=[x["payload"]["article"]["gtin"] for x in self.service.search_offers(REQUEST,[valid])["observations"]]
+        self.assertEqual(values,["4000540200300",None])
+
 if __name__=="__main__":
     unittest.main()
