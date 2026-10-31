@@ -57,7 +57,7 @@ def parse_quantity(text: Any) -> dict[str, Any] | None:
     """Only explicit, unambiguous net mass/volume or piece counts; no weight guesses."""
     if not isinstance(text,str) or not text.strip(): return None
     s=text.lower().replace("\u00a0"," ").replace("×","x").replace("‐","-")
-    pattern=r"(?<![\\d.,])\\b(?:(\\d+)\\s*x\\s*)?(\\d+(?:[.,]\\d{1,3})?)\\s*-?\\s*(kg|g|ml|l|stück|stueck|stk)(?!\\w)"
+    pattern=r"(?<![\d.,])\b(?:(\d+)\s*x\s*)?(\d+(?:[.,]\d{1,3})?)\s*-?\s*(kg|g|ml|l|stück|stueck|stk)(?!\w)"
     matches=list(re.finditer(pattern,s))
     if len(matches)!=1:return None
     m=matches[0]
