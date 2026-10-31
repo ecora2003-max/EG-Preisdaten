@@ -115,9 +115,14 @@ def _host_authorized(url: Any, retailer: str, fixture: bool) -> str | None:
     except ValueError:raise DataError("INVALID_SOURCE","Malformed source URL")
     if u.scheme!="https" or not u.hostname or u.username or u.password or port not in (None,443):
         raise DataError("INVALID_SOURCE","Only anonymous official HTTPS URLs accepted")
-    sensitive={"token","access_token","auth","authorization","session","apikey",
-               "api_key","password","cookie","secret","signature","bearer"}
-    if any(k.casefold() in sensitive for k,_ in parse_qsl(u.query,keep_blank_values=True)):
+    # Credential aliases and fragments must not leak into source provenance.
+    if url!=url.strip() or any(ord(ch)<32 or ord(ch)==127 for ch in url) or u.fragment:
+        raise DataError("INVALID_SOURCE","Source URL contains unsafe characters or fragment")
+    sensitive={"token","accesstoken","auth","authorization","authtoken","session",
+               "sessionid","apikey","xapikey","password","cookie","secret",
+               "clientsecret","signature","bearer","jwt","idtoken","refreshtoken"}
+    if any(re.sub(r"[^a-z0-9]","",k.casefold()) in sensitive
+           for k,_ in parse_qsl(u.query,keep_blank_values=True)):
         raise DataError("INVALID_SOURCE","Source URL contains credential-like query keys")
     if not any(u.hostname==host or u.hostname.endswith("."+host) for host in _REGISTRY[retailer][4]):
         raise DataError("INVALID_SOURCE","Source does not belong to selected retailer")
