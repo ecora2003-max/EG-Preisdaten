@@ -98,7 +98,7 @@ def safe_request(label, url, post=None):
             entry["euro_signs"] = html.count("€")
             tests.append(entry)
             time.sleep(0.7)
-            return None
+            return html
     except HTTPError as e:
         entry["result"] = "http_error"; entry["http_status"] = e.code; tests.append(entry)
     except Exception as e:
@@ -139,10 +139,69 @@ if isinstance(penny, list):
                                 ("wwIdent","city","zipCode","sellingRegion","nextWeekSellingRegion",
                                  "flippingBookURL","nextWeekFlippingBookURL")}})
 
-safe_request("ALDI Nord next-week HTML", "https://www.aldi-nord.de/angebote-vorschau.html")
+nord_html = safe_request("ALDI Nord next-week HTML", "https://www.aldi-nord.de/angebote-vorschau.html")
 safe_request("ALDI Sued future structured offers",
              "https://api.aldi-sued.de/v3/product-search?serviceType=walk-in&servicePoint=B384&currency=EUR&limit=12&offset=0&sort=relevance&promotionKey=2026-11-02")
-safe_request("Kaufland next-week HTML", "https://filiale.kaufland.de/angebote/naechste-woche.html")
+kaufland_html = safe_request("Kaufland next-week HTML", "https://filiale.kaufland.de/angebote/naechste-woche.html")
+
+
+# Round 2: Verify actual structured product offers and embedded page data.
+if isinstance(li, list):
+    berlin_stores = [s for s in li if isinstance(s,dict) and
+                     "berlin" in str(s.get("locality","")).casefold() and s.get("storeKey")]
+    tests.append({"provider":"Lidl Berlin store matching","result":"derived_from_live_json",
+                  "matches":len(berlin_stores),
+                  "first_store_key":berlin_stores[0].get("storeKey") if berlin_stores else None})
+    selected = (berlin_stores[0] if berlin_stores else
+                next((s for s in li if isinstance(s,dict) and s.get("storeKey")), None))
+    if selected and not any(t.get("provider") == "Lidl offers Berlin store" for t in tests):
+        safe_request("Lidl offers Berlin store" if berlin_stores else "Lidl offers sample German store",
+                     "https://offers.lidlplus.com/app/api/v4/DE/"+str(selected["storeKey"])+"/offers")
+
+if isinstance(penny, list):
+    berlin_store = next((s for s in penny if isinstance(s,dict) and
+                         str(s.get("city","")).casefold()=="berlin" and s.get("sellingRegion")), None)
+    if berlin_store:
+        region=berlin_store.get("nextWeekSellingRegion") or berlin_store["sellingRegion"]
+        for week in ("2026-44","2026-45"):
+            safe_request("PENNY product offers calendar week "+week,
+                         "https://www.penny.de/.rest/offers/by-category/"+week+"/top-angebote?"+
+                         urlencode({"region":region}))
+
+if isinstance(nord_html,str):
+    match=re.search(r'<script[^>]*id=["\x27]__NEXT_DATA__["\x27][^>]*>(.*?)</script>',nord_html,re.S|re.I)
+    if match:
+        try:
+            nd=json.loads(match.group(1))
+            candidates=[]
+            api_keys=[]
+            def walk(node,path="root",depth=0):
+                if depth>17 or len(candidates)>8:return
+                if isinstance(node,dict):
+                    if "OFFER_GET" in node:api_keys.append(path+".OFFER_GET")
+                    for k,v in node.items():
+                        walk(v,path+"."+str(k),depth+1)
+                elif isinstance(node,list) and node and isinstance(node[0],dict):
+                    keys=set(node[0])
+                    if keys & {"price","priceInfo","productName","title","name","productTitle"}:
+                        candidates.append({"path":path,"count":len(node),
+                                           "keys":list(node[0])[:24]})
+                    for v in node[:5]:walk(v,path+"[]",depth+1)
+            walk(nd)
+            tests.append({"provider":"ALDI Nord embedded JSON structure",
+                          "result":"embedded_json_parsed","root_keys":list(nd)[:10],
+                          "offer_get_paths":api_keys[:8],"candidate_product_lists":candidates[:8]})
+        except Exception as e:
+            tests.append({"provider":"ALDI Nord embedded JSON structure",
+                          "result":"parse_error","reason":str(e)[:140]})
+
+if isinstance(kaufland_html,str):
+    tests.append({"provider":"Kaufland next-week embedded data signals",
+                  "result":"html_metadata_examined",
+                  "price_field_mentions":len(re.findall(r'["\x27]price["\x27]\s*:',kaufland_html)),
+                  "date_from_mentions":kaufland_html.count("dateFrom"),
+                  "kloffers_mentions":kaufland_html.count("kloffers"),
+                  "sales_from_mentions":kaufland_html.count("salesFrom")})
 
 summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),
          "purpose":"read-only snapshot of public retailer offering APIs",
