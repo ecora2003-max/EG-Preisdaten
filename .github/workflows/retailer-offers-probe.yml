@@ -1,0 +1,28 @@
+name: Supermarket offer API verification (read-only)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/retailer_offers_probe.py'
+      - '.github/workflows/retailer-offers-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Execute polite retailer API probes
+        run: python3 tools/retailer_offers_probe.py
+      - name: Upload JSON report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: retailer-offer-api-probe
+          path: results/retailer-offers.json
+          if-no-files-found: warn
+          retention-days: 7
