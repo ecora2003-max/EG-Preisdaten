@@ -1,0 +1,27 @@
+name: ALDI Nord full ordinary category live parser
+on:
+  push:
+    branches: [main]
+    paths:
+      - catalogues/aldi_nord.py
+      - tools/aldi_category_parser_live.py
+      - .github/workflows/aldi-catalogue-parser.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s tests -v
+      - run: python3 tools/aldi_category_parser_live.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-catalogue-parser-live
+          path: results/aldi_category_parser_live.json
+          retention-days: 7
