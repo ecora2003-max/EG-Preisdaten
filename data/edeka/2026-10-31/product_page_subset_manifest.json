@@ -13,5 +13,7 @@
   "queue_remaining": 829,
   "stopped_due_to": "REACHED_MAX_PAGE_CAP",
   "errors": [],
-  "public_snapshot_permission": "User reported authorization to download and publish EDEKA catalogues; terms not independently checked."
+  "public_snapshot_permission": "User reported authorization to download and publish EDEKA catalogues; terms not independently checked.",
+  "product_titles_normalized": true,
+  "title_repair_method": "Removed exact site-dialog h1 prefix; 240/240 products checked."
 }

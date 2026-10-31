@@ -14,13 +14,15 @@
     "queue_remaining": 829,
     "stopped_due_to": "REACHED_MAX_PAGE_CAP",
     "errors": [],
-    "public_snapshot_permission": "User reported authorization to download and publish EDEKA catalogues; terms not independently checked."
+    "public_snapshot_permission": "User reported authorization to download and publish EDEKA catalogues; terms not independently checked.",
+    "product_titles_normalized": true,
+    "title_repair_method": "Removed exact initial site-dialog h1 text from each name; 240 of 240 verified."
   },
   "products": [
     {
       "product_page_id": "4311596029167",
       "gtin": "4311596029167",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Whey Proteinpulver Iced Coffee Klassik",
+      "name": "Whey Proteinpulver Iced Coffee Klassik",
       "source_url": "https://www.edeka.de/sortiment/4311596029167/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -30,7 +32,7 @@
     {
       "product_page_id": "4311501006382",
       "gtin": "4311501006382",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Paprika edelsüß",
+      "name": "Paprika edelsüß",
       "source_url": "https://www.edeka.de/sortiment/4311501006382/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -40,7 +42,7 @@
     {
       "product_page_id": "4311501170885",
       "gtin": "4311501170885",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de High Protein Veganes Linsen Curry",
+      "name": "High Protein Veganes Linsen Curry",
       "source_url": "https://www.edeka.de/sortiment/4311501170885/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -50,7 +52,7 @@
     {
       "product_page_id": "4311501025062",
       "gtin": "4311501025062",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Röstzwiebeln",
+      "name": "Röstzwiebeln",
       "source_url": "https://www.edeka.de/sortiment/4311501025062/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -60,7 +62,7 @@
     {
       "product_page_id": "4311501001806",
       "gtin": "4311501001806",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Mungobohnenkeimlinge",
+      "name": "Mungobohnenkeimlinge",
       "source_url": "https://www.edeka.de/sortiment/4311501001806/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -70,7 +72,7 @@
     {
       "product_page_id": "4311501117040",
       "gtin": "4311501117040",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Fettuccine Käse-Sahne",
+      "name": "Fettuccine Käse-Sahne",
       "source_url": "https://www.edeka.de/sortiment/4311501117040/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -80,7 +82,7 @@
     {
       "product_page_id": "4311501173602",
       "gtin": "4311501173602",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Tortellini Carne",
+      "name": "Tortellini Carne",
       "source_url": "https://www.edeka.de/sortiment/4311501173602/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -90,7 +92,7 @@
     {
       "product_page_id": "4311501211007",
       "gtin": "4311501211007",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kalbsfond",
+      "name": "Kalbsfond",
       "source_url": "https://www.edeka.de/sortiment/4311501211007/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -100,7 +102,7 @@
     {
       "product_page_id": "4311501353998",
       "gtin": "4311501353998",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Champignons in Scheiben",
+      "name": "Champignons in Scheiben",
       "source_url": "https://www.edeka.de/sortiment/4311501353998/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -110,7 +112,7 @@
     {
       "product_page_id": "4311501369142",
       "gtin": "4311501369142",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Parboiled-Reis",
+      "name": "Parboiled-Reis",
       "source_url": "https://www.edeka.de/sortiment/4311501369142/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -120,7 +122,7 @@
     {
       "product_page_id": "4311501719688",
       "gtin": "4311501719688",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kichererbsen-Bohnen-Mix",
+      "name": "Kichererbsen-Bohnen-Mix",
       "source_url": "https://www.edeka.de/sortiment/4311501719688/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -130,7 +132,7 @@
     {
       "product_page_id": "4311501794791",
       "gtin": "4311501794791",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Spaghetti glutenfrei",
+      "name": "Spaghetti glutenfrei",
       "source_url": "https://www.edeka.de/sortiment/4311501794791/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -140,7 +142,7 @@
     {
       "product_page_id": "4311504012007",
       "gtin": "4311504012007",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Dinkel-Eiernudeln Spiralen",
+      "name": "Dinkel-Eiernudeln Spiralen",
       "source_url": "https://www.edeka.de/sortiment/4311504012007/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -150,7 +152,7 @@
     {
       "product_page_id": "4311596014682",
       "gtin": "4311596014682",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Proteinriegel Kokos-Geschmack",
+      "name": "Proteinriegel Kokos-Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596014682/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -160,7 +162,7 @@
     {
       "product_page_id": "4311596015733",
       "gtin": "4311596015733",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Trinkmahlzeit Erdbeere",
+      "name": "Trinkmahlzeit Erdbeere",
       "source_url": "https://www.edeka.de/sortiment/4311596015733/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -170,7 +172,7 @@
     {
       "product_page_id": "4311596016105",
       "gtin": "4311596016105",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Proteinriegel Weiße Schokolade-Erdbeer-Geschmack",
+      "name": "Proteinriegel Weiße Schokolade-Erdbeer-Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596016105/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -180,7 +182,7 @@
     {
       "product_page_id": "4311596029211",
       "gtin": "4311596029211",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de EAA Eistee Pfirsich-Geschmack",
+      "name": "EAA Eistee Pfirsich-Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596029211/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -190,7 +192,7 @@
     {
       "product_page_id": "4311596029457",
       "gtin": "4311596029457",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Whey Proteinpulver Vanille-Geschmack",
+      "name": "Whey Proteinpulver Vanille-Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596029457/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -200,7 +202,7 @@
     {
       "product_page_id": "4311596031559",
       "gtin": "4311596031559",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Crunchy Proteinriegel weiße Schokoladen-Geschmack",
+      "name": "Crunchy Proteinriegel weiße Schokoladen-Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596031559/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -210,7 +212,7 @@
     {
       "product_page_id": "4311596043491",
       "gtin": "4311596043491",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kreatin",
+      "name": "Kreatin",
       "source_url": "https://www.edeka.de/sortiment/4311596043491/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -220,7 +222,7 @@
     {
       "product_page_id": "4311596047567",
       "gtin": "4311596047567",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Zyrup Barista Salted Caramel Flavor",
+      "name": "Zyrup Barista Salted Caramel Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596047567/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -230,7 +232,7 @@
     {
       "product_page_id": "4311596054039",
       "gtin": "4311596054039",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Whey Protein Bananamilk Flavor",
+      "name": "Whey Protein Bananamilk Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596054039/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -240,7 +242,7 @@
     {
       "product_page_id": "4311596054220",
       "gtin": "4311596054220",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Whey Protein Cinnamon Cereal Flavor",
+      "name": "Whey Protein Cinnamon Cereal Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596054220/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -250,7 +252,7 @@
     {
       "product_page_id": "4311596054251",
       "gtin": "4311596054251",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Whey Protein Vanilla Speculoos Flavor",
+      "name": "Whey Protein Vanilla Speculoos Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596054251/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -260,7 +262,7 @@
     {
       "product_page_id": "4311596055517",
       "gtin": "4311596055517",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Creatinsticks Lemon Flavor",
+      "name": "Creatinsticks Lemon Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596055517/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -270,7 +272,7 @@
     {
       "product_page_id": "4311501009833",
       "gtin": "4311501009833",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Schlemmerhappen mit ASC-Lachs MSC ASC",
+      "name": "Schlemmerhappen mit ASC-Lachs MSC ASC",
       "source_url": "https://www.edeka.de/sortiment/4311501009833/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -280,7 +282,7 @@
     {
       "product_page_id": "4311501034859",
       "gtin": "4311501034859",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Weizenbrötchen",
+      "name": "Weizenbrötchen",
       "source_url": "https://www.edeka.de/sortiment/4311501034859/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -290,7 +292,7 @@
     {
       "product_page_id": "4311501043738",
       "gtin": "4311501043738",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kraftfutter",
+      "name": "Kraftfutter",
       "source_url": "https://www.edeka.de/sortiment/4311501043738/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -300,7 +302,7 @@
     {
       "product_page_id": "4311501045206",
       "gtin": "4311501045206",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kaffee Gold",
+      "name": "Kaffee Gold",
       "source_url": "https://www.edeka.de/sortiment/4311501045206/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -310,7 +312,7 @@
     {
       "product_page_id": "4311501057094",
       "gtin": "4311501057094",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Latte Macchiato Löffel",
+      "name": "Latte Macchiato Löffel",
       "source_url": "https://www.edeka.de/sortiment/4311501057094/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -320,7 +322,7 @@
     {
       "product_page_id": "4311501069431",
       "gtin": "4311501069431",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Zwiebelringe",
+      "name": "Zwiebelringe",
       "source_url": "https://www.edeka.de/sortiment/4311501069431/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -330,7 +332,7 @@
     {
       "product_page_id": "4311501090329",
       "gtin": "4311501090329",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Putenschnitzel aus dem Brustfilet",
+      "name": "Putenschnitzel aus dem Brustfilet",
       "source_url": "https://www.edeka.de/sortiment/4311501090329/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -340,7 +342,7 @@
     {
       "product_page_id": "4311501137970",
       "gtin": "4311501137970",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Taschentücher weich und sicher Designedition 15er",
+      "name": "Taschentücher weich und sicher Designedition 15er",
       "source_url": "https://www.edeka.de/sortiment/4311501137970/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -350,7 +352,7 @@
     {
       "product_page_id": "4311501435779",
       "gtin": "4311501435779",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Pfeffer schwarz",
+      "name": "Pfeffer schwarz",
       "source_url": "https://www.edeka.de/sortiment/4311501435779/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -360,7 +362,7 @@
     {
       "product_page_id": "4311501626573",
       "gtin": "4311501626573",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Raumspray Zitrone & Limette",
+      "name": "Raumspray Zitrone & Limette",
       "source_url": "https://www.edeka.de/sortiment/4311501626573/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -370,7 +372,7 @@
     {
       "product_page_id": "4311596037889",
       "gtin": "4311596037889",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Cheese Jalapeno-Sauce",
+      "name": "Cheese Jalapeno-Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311596037889/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -380,7 +382,7 @@
     {
       "product_page_id": "4311596068623",
       "gtin": "4311596068623",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Rotwurst",
+      "name": "Rotwurst",
       "source_url": "https://www.edeka.de/sortiment/4311596068623/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -390,7 +392,7 @@
     {
       "product_page_id": "4311501008638",
       "gtin": "4311501008638",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kaurolle Premium-Snack mit Hühnerbrustfilet",
+      "name": "Kaurolle Premium-Snack mit Hühnerbrustfilet",
       "source_url": "https://www.edeka.de/sortiment/4311501008638/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -400,7 +402,7 @@
     {
       "product_page_id": "4311501079348",
       "gtin": "4311501079348",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Griechischer Hirtenkäse 47% Fett i. Tr.",
+      "name": "Griechischer Hirtenkäse 47% Fett i. Tr.",
       "source_url": "https://www.edeka.de/sortiment/4311501079348/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -410,7 +412,7 @@
     {
       "product_page_id": "4311501091692",
       "gtin": "4311501091692",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Fladenbrot",
+      "name": "Fladenbrot",
       "source_url": "https://www.edeka.de/sortiment/4311501091692/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -420,7 +422,7 @@
     {
       "product_page_id": "4311501112663",
       "gtin": "4311501112663",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Gutes vom Land in Gelee",
+      "name": "Gutes vom Land in Gelee",
       "source_url": "https://www.edeka.de/sortiment/4311501112663/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -430,7 +432,7 @@
     {
       "product_page_id": "4311501155653",
       "gtin": "4311501155653",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Sauce Bearnaise",
+      "name": "Sauce Bearnaise",
       "source_url": "https://www.edeka.de/sortiment/4311501155653/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -440,7 +442,7 @@
     {
       "product_page_id": "4311501190555",
       "gtin": "4311501190555",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Bratkartoffeln mit Zwiebeln",
+      "name": "Bratkartoffeln mit Zwiebeln",
       "source_url": "https://www.edeka.de/sortiment/4311501190555/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -450,7 +452,7 @@
     {
       "product_page_id": "4311501381182",
       "gtin": "4311501381182",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Feine Pastete Sensitiv Pute mit Reis",
+      "name": "Feine Pastete Sensitiv Pute mit Reis",
       "source_url": "https://www.edeka.de/sortiment/4311501381182/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -460,7 +462,7 @@
     {
       "product_page_id": "4311501394823",
       "gtin": "4311501394823",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Mini-Eclairs",
+      "name": "Mini-Eclairs",
       "source_url": "https://www.edeka.de/sortiment/4311501394823/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -470,7 +472,7 @@
     {
       "product_page_id": "4311501614686",
       "gtin": "4311501614686",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Lieblingsknochen Kalb mit Pansen",
+      "name": "Lieblingsknochen Kalb mit Pansen",
       "source_url": "https://www.edeka.de/sortiment/4311501614686/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -480,7 +482,7 @@
     {
       "product_page_id": "4311501651759",
       "gtin": "4311501651759",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Rindersuppe",
+      "name": "Rindersuppe",
       "source_url": "https://www.edeka.de/sortiment/4311501651759/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -490,7 +492,7 @@
     {
       "product_page_id": "4311501033562",
       "gtin": "4311501033562",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de All-in-1 Power Complete Geschirr-Reiniger Tabs",
+      "name": "All-in-1 Power Complete Geschirr-Reiniger Tabs",
       "source_url": "https://www.edeka.de/sortiment/4311501033562/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -500,7 +502,7 @@
     {
       "product_page_id": "4311501036808",
       "gtin": "4311501036808",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Zündhölzer",
+      "name": "Zündhölzer",
       "source_url": "https://www.edeka.de/sortiment/4311501036808/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -510,7 +512,7 @@
     {
       "product_page_id": "4311501072240",
       "gtin": "4311501072240",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Frischer Weißkrautsalat",
+      "name": "Frischer Weißkrautsalat",
       "source_url": "https://www.edeka.de/sortiment/4311501072240/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -520,7 +522,7 @@
     {
       "product_page_id": "4311501130339",
       "gtin": "4311501130339",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kürbiskernbrot",
+      "name": "Kürbiskernbrot",
       "source_url": "https://www.edeka.de/sortiment/4311501130339/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -530,7 +532,7 @@
     {
       "product_page_id": "4311501132463",
       "gtin": "4311501132463",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Birkenzucker",
+      "name": "Birkenzucker",
       "source_url": "https://www.edeka.de/sortiment/4311501132463/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -540,7 +542,7 @@
     {
       "product_page_id": "4311501483312",
       "gtin": "4311501483312",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Hähnchenbrustfilet in Aspik",
+      "name": "Hähnchenbrustfilet in Aspik",
       "source_url": "https://www.edeka.de/sortiment/4311501483312/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -550,7 +552,7 @@
     {
       "product_page_id": "4311501584170",
       "gtin": "4311501584170",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de LED Tropfen E27, 245 Lumen, 2,8 Watt",
+      "name": "LED Tropfen E27, 245 Lumen, 2,8 Watt",
       "source_url": "https://www.edeka.de/sortiment/4311501584170/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -560,7 +562,7 @@
     {
       "product_page_id": "4311501585979",
       "gtin": "4311501585979",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Gefrier- und Frischhaltedose 2 l",
+      "name": "Gefrier- und Frischhaltedose 2 l",
       "source_url": "https://www.edeka.de/sortiment/4311501585979/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -570,7 +572,7 @@
     {
       "product_page_id": "4311501739341",
       "gtin": "4311501739341",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Gemüsepfanne „Italian Style“",
+      "name": "Gemüsepfanne „Italian Style“",
       "source_url": "https://www.edeka.de/sortiment/4311501739341/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -580,7 +582,7 @@
     {
       "product_page_id": "4311501759837",
       "gtin": "4311501759837",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Frühlingsrollen mit Rind",
+      "name": "Frühlingsrollen mit Rind",
       "source_url": "https://www.edeka.de/sortiment/4311501759837/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -590,7 +592,7 @@
     {
       "product_page_id": "4311596435944",
       "gtin": "4311596435944",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Mineralwasser classic",
+      "name": "Mineralwasser classic",
       "source_url": "https://www.edeka.de/sortiment/4311596435944/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -600,7 +602,7 @@
     {
       "product_page_id": "4311596460359",
       "gtin": "4311596460359",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Reine Buttermilch",
+      "name": "Reine Buttermilch",
       "source_url": "https://www.edeka.de/sortiment/4311596460359/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -610,7 +612,7 @@
     {
       "product_page_id": "4311501018217",
       "gtin": "4311501018217",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Hamburger Buns",
+      "name": "Hamburger Buns",
       "source_url": "https://www.edeka.de/sortiment/4311501018217/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -620,7 +622,7 @@
     {
       "product_page_id": "4311501030639",
       "gtin": "4311501030639",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Sauce süß-sauer",
+      "name": "Sauce süß-sauer",
       "source_url": "https://www.edeka.de/sortiment/4311501030639/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -630,7 +632,7 @@
     {
       "product_page_id": "4311501037034",
       "gtin": "4311501037034",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kloßteig Thüringer Art",
+      "name": "Kloßteig Thüringer Art",
       "source_url": "https://www.edeka.de/sortiment/4311501037034/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -640,7 +642,7 @@
     {
       "product_page_id": "4311501056165",
       "gtin": "4311501056165",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Saughaken",
+      "name": "Saughaken",
       "source_url": "https://www.edeka.de/sortiment/4311501056165/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -650,7 +652,7 @@
     {
       "product_page_id": "4311501058220",
       "gtin": "4311501058220",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Erdbeer Konfitüre extra",
+      "name": "Erdbeer Konfitüre extra",
       "source_url": "https://www.edeka.de/sortiment/4311501058220/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -660,7 +662,7 @@
     {
       "product_page_id": "4311501100264",
       "gtin": "4311501100264",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Frische Schlagsahne",
+      "name": "Frische Schlagsahne",
       "source_url": "https://www.edeka.de/sortiment/4311501100264/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -670,7 +672,7 @@
     {
       "product_page_id": "4311501213681",
       "gtin": "4311501213681",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Basmatireis weiß",
+      "name": "Basmatireis weiß",
       "source_url": "https://www.edeka.de/sortiment/4311501213681/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -680,7 +682,7 @@
     {
       "product_page_id": "4311501492574",
       "gtin": "4311501492574",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Sunny Tomato Dip",
+      "name": "Sunny Tomato Dip",
       "source_url": "https://www.edeka.de/sortiment/4311501492574/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -690,7 +692,7 @@
     {
       "product_page_id": "4311501611234",
       "gtin": "4311501611234",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Türkische Pfefferonen, scharf",
+      "name": "Türkische Pfefferonen, scharf",
       "source_url": "https://www.edeka.de/sortiment/4311501611234/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -700,7 +702,7 @@
     {
       "product_page_id": "4311501716649",
       "gtin": "4311501716649",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Knoblauch-Sauce",
+      "name": "Knoblauch-Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311501716649/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -710,7 +712,7 @@
     {
       "product_page_id": "4311501728017",
       "gtin": "4311501728017",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Smoothie Erdbeer-Banane-Traube",
+      "name": "Smoothie Erdbeer-Banane-Traube",
       "source_url": "https://www.edeka.de/sortiment/4311501728017/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -720,7 +722,7 @@
     {
       "product_page_id": "4311501733844",
       "gtin": "4311501733844",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Apfelsaft",
+      "name": "Apfelsaft",
       "source_url": "https://www.edeka.de/sortiment/4311501733844/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -730,7 +732,7 @@
     {
       "product_page_id": "4311501762929",
       "gtin": "4311501762929",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Halbgetrocknete Tomaten",
+      "name": "Halbgetrocknete Tomaten",
       "source_url": "https://www.edeka.de/sortiment/4311501762929/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -740,7 +742,7 @@
     {
       "product_page_id": "4311501768556",
       "gtin": "4311501768556",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Stremellachs Pfeffer MSC ASC",
+      "name": "Stremellachs Pfeffer MSC ASC",
       "source_url": "https://www.edeka.de/sortiment/4311501768556/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -750,7 +752,7 @@
     {
       "product_page_id": "4311536974410",
       "gtin": "4311536974410",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Papiertischtuch",
+      "name": "Papiertischtuch",
       "source_url": "https://www.edeka.de/sortiment/4311536974410/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -760,7 +762,7 @@
     {
       "product_page_id": "4311596413812",
       "gtin": "4311596413812",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Spaghetti mit Tomatensauce",
+      "name": "Spaghetti mit Tomatensauce",
       "source_url": "https://www.edeka.de/sortiment/4311596413812/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -770,7 +772,7 @@
     {
       "product_page_id": "4311596443239",
       "gtin": "4311596443239",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Tafelsalz",
+      "name": "Tafelsalz",
       "source_url": "https://www.edeka.de/sortiment/4311596443239/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -780,7 +782,7 @@
     {
       "product_page_id": "4311596460892",
       "gtin": "4311596460892",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Cola Mix Zero",
+      "name": "Cola Mix Zero",
       "source_url": "https://www.edeka.de/sortiment/4311596460892/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -790,7 +792,7 @@
     {
       "product_page_id": "4311596471270",
       "gtin": "4311596471270",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Wildfrucht-Teegetränk",
+      "name": "Wildfrucht-Teegetränk",
       "source_url": "https://www.edeka.de/sortiment/4311596471270/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -800,7 +802,7 @@
     {
       "product_page_id": "4311501029930",
       "gtin": "4311501029930",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Gourmet Sticks Geflügel & reich an Geflügelschinken",
+      "name": "Gourmet Sticks Geflügel & reich an Geflügelschinken",
       "source_url": "https://www.edeka.de/sortiment/4311501029930/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -810,7 +812,7 @@
     {
       "product_page_id": "4311501048122",
       "gtin": "4311501048122",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Grillgemüse",
+      "name": "Grillgemüse",
       "source_url": "https://www.edeka.de/sortiment/4311501048122/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -820,7 +822,7 @@
     {
       "product_page_id": "4311501110836",
       "gtin": "4311501110836",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Büffelmozzarella",
+      "name": "Büffelmozzarella",
       "source_url": "https://www.edeka.de/sortiment/4311501110836/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -830,7 +832,7 @@
     {
       "product_page_id": "4311501123751",
       "gtin": "4311501123751",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Smart Ice Cubes",
+      "name": "Smart Ice Cubes",
       "source_url": "https://www.edeka.de/sortiment/4311501123751/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -840,7 +842,7 @@
     {
       "product_page_id": "4311501168004",
       "gtin": "4311501168004",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Schildmakrele in Sonnenblumenöl MSC",
+      "name": "Schildmakrele in Sonnenblumenöl MSC",
       "source_url": "https://www.edeka.de/sortiment/4311501168004/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -850,7 +852,7 @@
     {
       "product_page_id": "4311501192375",
       "gtin": "4311501192375",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Weihnachtskugeln Praliné",
+      "name": "Weihnachtskugeln Praliné",
       "source_url": "https://www.edeka.de/sortiment/4311501192375/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -860,7 +862,7 @@
     {
       "product_page_id": "4311501200872",
       "gtin": "4311501200872",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Barista Schümli, ganze Bohne",
+      "name": "Barista Schümli, ganze Bohne",
       "source_url": "https://www.edeka.de/sortiment/4311501200872/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -870,7 +872,7 @@
     {
       "product_page_id": "4311501305157",
       "gtin": "4311501305157",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Feine Mahlzeit Ragout mit Lamm, Huhn, Karotten & Nudeln",
+      "name": "Feine Mahlzeit Ragout mit Lamm, Huhn, Karotten & Nudeln",
       "source_url": "https://www.edeka.de/sortiment/4311501305157/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -880,7 +882,7 @@
     {
       "product_page_id": "4311501480113",
       "gtin": "4311501480113",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Edel-Zartbitterschokolade 81 %",
+      "name": "Edel-Zartbitterschokolade 81 %",
       "source_url": "https://www.edeka.de/sortiment/4311501480113/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -890,7 +892,7 @@
     {
       "product_page_id": "4311501634950",
       "gtin": "4311501634950",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Weiße Kuvertüre",
+      "name": "Weiße Kuvertüre",
       "source_url": "https://www.edeka.de/sortiment/4311501634950/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -900,7 +902,7 @@
     {
       "product_page_id": "4311501721537",
       "gtin": "4311501721537",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Frische Weidevollmilch ESL",
+      "name": "Frische Weidevollmilch ESL",
       "source_url": "https://www.edeka.de/sortiment/4311501721537/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -910,7 +912,7 @@
     {
       "product_page_id": "4311501757345",
       "gtin": "4311501757345",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Pizzasauce",
+      "name": "Pizzasauce",
       "source_url": "https://www.edeka.de/sortiment/4311501757345/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -920,7 +922,7 @@
     {
       "product_page_id": "4311501081839",
       "gtin": "4311501081839",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Lasagne Bolognese Rindfleisch",
+      "name": "Lasagne Bolognese Rindfleisch",
       "source_url": "https://www.edeka.de/sortiment/4311501081839/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -930,7 +932,7 @@
     {
       "product_page_id": "4311501088616",
       "gtin": "4311501088616",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Haselnuss-Milch Creme",
+      "name": "Haselnuss-Milch Creme",
       "source_url": "https://www.edeka.de/sortiment/4311501088616/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -940,7 +942,7 @@
     {
       "product_page_id": "4311501100998",
       "gtin": "4311501100998",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Rote Früchte Konfitüre",
+      "name": "Rote Früchte Konfitüre",
       "source_url": "https://www.edeka.de/sortiment/4311501100998/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -950,7 +952,7 @@
     {
       "product_page_id": "4311501114315",
       "gtin": "4311501114315",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Schwarzwälder Schinken",
+      "name": "Schwarzwälder Schinken",
       "source_url": "https://www.edeka.de/sortiment/4311501114315/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -960,7 +962,7 @@
     {
       "product_page_id": "4311501130308",
       "gtin": "4311501130308",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Nordseekrabbensalat MSC",
+      "name": "Nordseekrabbensalat MSC",
       "source_url": "https://www.edeka.de/sortiment/4311501130308/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -970,7 +972,7 @@
     {
       "product_page_id": "4311501477038",
       "gtin": "4311501477038",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Naturals Hunde Premium - Mahlzeit Geflügel mit Kalbsherzen,Naturreis, Kürbis & Distelöl",
+      "name": "Naturals Hunde Premium - Mahlzeit Geflügel mit Kalbsherzen,Naturreis, Kürbis & Distelöl",
       "source_url": "https://www.edeka.de/sortiment/4311501477038/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -980,7 +982,7 @@
     {
       "product_page_id": "4311501621257",
       "gtin": "4311501621257",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Bananenchips, frittiert, gezuckert",
+      "name": "Bananenchips, frittiert, gezuckert",
       "source_url": "https://www.edeka.de/sortiment/4311501621257/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -990,7 +992,7 @@
     {
       "product_page_id": "4311501743874",
       "gtin": "4311501743874",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Rinderstrossen Premium-Snack",
+      "name": "Rinderstrossen Premium-Snack",
       "source_url": "https://www.edeka.de/sortiment/4311501743874/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1000,7 +1002,7 @@
     {
       "product_page_id": "4311501043271",
       "gtin": "4311501043271",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Protein-Wraps",
+      "name": "Protein-Wraps",
       "source_url": "https://www.edeka.de/sortiment/4311501043271/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1010,7 +1012,7 @@
     {
       "product_page_id": "4311501050873",
       "gtin": "4311501050873",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Hummus mit Ingwer-Orange",
+      "name": "Hummus mit Ingwer-Orange",
       "source_url": "https://www.edeka.de/sortiment/4311501050873/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1020,7 +1022,7 @@
     {
       "product_page_id": "4311501111727",
       "gtin": "4311501111727",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Soft Eis Vanille Schoko",
+      "name": "Soft Eis Vanille Schoko",
       "source_url": "https://www.edeka.de/sortiment/4311501111727/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1030,7 +1032,7 @@
     {
       "product_page_id": "4311501125953",
       "gtin": "4311501125953",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kokoskugeln",
+      "name": "Kokoskugeln",
       "source_url": "https://www.edeka.de/sortiment/4311501125953/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1040,7 +1042,7 @@
     {
       "product_page_id": "4311501141779",
       "gtin": "4311501141779",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Ziegenkäse in Scheiben Natur Vegetarisch",
+      "name": "Ziegenkäse in Scheiben Natur Vegetarisch",
       "source_url": "https://www.edeka.de/sortiment/4311501141779/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1050,7 +1052,7 @@
     {
       "product_page_id": "4311501153574",
       "gtin": "4311501153574",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Mac'n'Cheese",
+      "name": "Mac'n'Cheese",
       "source_url": "https://www.edeka.de/sortiment/4311501153574/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1060,7 +1062,7 @@
     {
       "product_page_id": "4311501175187",
       "gtin": "4311501175187",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Milchreis mit Erdbeeren",
+      "name": "Milchreis mit Erdbeeren",
       "source_url": "https://www.edeka.de/sortiment/4311501175187/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1070,7 +1072,7 @@
     {
       "product_page_id": "4311501177419",
       "gtin": "4311501177419",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Display Säfte",
+      "name": "Display Säfte",
       "source_url": "https://www.edeka.de/sortiment/4311501177419/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1080,7 +1082,7 @@
     {
       "product_page_id": "4311501375723",
       "gtin": "4311501375723",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Elsässer Flammkuchen",
+      "name": "Elsässer Flammkuchen",
       "source_url": "https://www.edeka.de/sortiment/4311501375723/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1090,7 +1092,7 @@
     {
       "product_page_id": "4311501474327",
       "gtin": "4311501474327",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Himbeeren",
+      "name": "Himbeeren",
       "source_url": "https://www.edeka.de/sortiment/4311501474327/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1100,7 +1102,7 @@
     {
       "product_page_id": "4311596021536",
       "gtin": "4311596021536",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de BBQ-Sauce",
+      "name": "BBQ-Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311596021536/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1110,7 +1112,7 @@
     {
       "product_page_id": "4311501044742",
       "gtin": "4311501044742",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Johannisbeerschnecke",
+      "name": "Johannisbeerschnecke",
       "source_url": "https://www.edeka.de/sortiment/4311501044742/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1120,7 +1122,7 @@
     {
       "product_page_id": "4311501080191",
       "gtin": "4311501080191",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Soft-Brocken Mix mit Rind",
+      "name": "Soft-Brocken Mix mit Rind",
       "source_url": "https://www.edeka.de/sortiment/4311501080191/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1130,7 +1132,7 @@
     {
       "product_page_id": "4311501092514",
       "gtin": "4311501092514",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Sandwich Lachs MSC ASC",
+      "name": "Sandwich Lachs MSC ASC",
       "source_url": "https://www.edeka.de/sortiment/4311501092514/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1140,7 +1142,7 @@
     {
       "product_page_id": "4311501148891",
       "gtin": "4311501148891",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Joghurt Vollmilch",
+      "name": "Joghurt Vollmilch",
       "source_url": "https://www.edeka.de/sortiment/4311501148891/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1150,7 +1152,7 @@
     {
       "product_page_id": "4311501176153",
       "gtin": "4311501176153",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Premium Matjes Filets mit Honig Senf Sauce MSC",
+      "name": "Premium Matjes Filets mit Honig Senf Sauce MSC",
       "source_url": "https://www.edeka.de/sortiment/4311501176153/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1160,7 +1162,7 @@
     {
       "product_page_id": "4311501302989",
       "gtin": "4311501302989",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Mandarin-Orangen",
+      "name": "Mandarin-Orangen",
       "source_url": "https://www.edeka.de/sortiment/4311501302989/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1170,7 +1172,7 @@
     {
       "product_page_id": "4311501345009",
       "gtin": "4311501345009",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Spargelspitzen",
+      "name": "Spargelspitzen",
       "source_url": "https://www.edeka.de/sortiment/4311501345009/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1180,7 +1182,7 @@
     {
       "product_page_id": "4311501345382",
       "gtin": "4311501345382",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Schwarzwurzeln",
+      "name": "Schwarzwurzeln",
       "source_url": "https://www.edeka.de/sortiment/4311501345382/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1190,7 +1192,7 @@
     {
       "product_page_id": "4311501483770",
       "gtin": "4311501483770",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Erlesene Lebkuchen-Mischung",
+      "name": "Erlesene Lebkuchen-Mischung",
       "source_url": "https://www.edeka.de/sortiment/4311501483770/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1200,7 +1202,7 @@
     {
       "product_page_id": "4311501696491",
       "gtin": "4311501696491",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Bitterschokoladen Kuvertüre",
+      "name": "Bitterschokoladen Kuvertüre",
       "source_url": "https://www.edeka.de/sortiment/4311501696491/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1210,7 +1212,7 @@
     {
       "product_page_id": "4311501050347",
       "gtin": "4311501050347",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Mini-Frühlingsrollen mit Dip",
+      "name": "Mini-Frühlingsrollen mit Dip",
       "source_url": "https://www.edeka.de/sortiment/4311501050347/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1220,7 +1222,7 @@
     {
       "product_page_id": "4311501139424",
       "gtin": "4311501139424",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Profi Edelstahl-Pfanne Ø 28 cm",
+      "name": "Profi Edelstahl-Pfanne Ø 28 cm",
       "source_url": "https://www.edeka.de/sortiment/4311501139424/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1230,7 +1232,7 @@
     {
       "product_page_id": "4311501152966",
       "gtin": "4311501152966",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Barbecue-Sauce",
+      "name": "Barbecue-Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311501152966/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1240,7 +1242,7 @@
     {
       "product_page_id": "4311501302682",
       "gtin": "4311501302682",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Erdbeeren",
+      "name": "Erdbeeren",
       "source_url": "https://www.edeka.de/sortiment/4311501302682/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1250,7 +1252,7 @@
     {
       "product_page_id": "4311501365496",
       "gtin": "4311501365496",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Parboiled Langkorn- & Wildreis",
+      "name": "Parboiled Langkorn- & Wildreis",
       "source_url": "https://www.edeka.de/sortiment/4311501365496/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1260,7 +1262,7 @@
     {
       "product_page_id": "4311501604021",
       "gtin": "4311501604021",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Fusilli mit Tomaten-Sahne-Sauce",
+      "name": "Fusilli mit Tomaten-Sahne-Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311501604021/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1270,7 +1272,7 @@
     {
       "product_page_id": "4311501743416",
       "gtin": "4311501743416",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kichererbsen",
+      "name": "Kichererbsen",
       "source_url": "https://www.edeka.de/sortiment/4311501743416/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1280,7 +1282,7 @@
     {
       "product_page_id": "4311501749555",
       "gtin": "4311501749555",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Grüne Bohnen",
+      "name": "Grüne Bohnen",
       "source_url": "https://www.edeka.de/sortiment/4311501749555/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1290,7 +1292,7 @@
     {
       "product_page_id": "4311501759745",
       "gtin": "4311501759745",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Frischkäse Jalapeños Vegetarisch",
+      "name": "Frischkäse Jalapeños Vegetarisch",
       "source_url": "https://www.edeka.de/sortiment/4311501759745/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1300,7 +1302,7 @@
     {
       "product_page_id": "4311596014767",
       "gtin": "4311596014767",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Proteinriegel Erdnuss-Geschmack",
+      "name": "Proteinriegel Erdnuss-Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596014767/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1310,7 +1312,7 @@
     {
       "product_page_id": "4311596015696",
       "gtin": "4311596015696",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Trinkmahlzeit Schoko",
+      "name": "Trinkmahlzeit Schoko",
       "source_url": "https://www.edeka.de/sortiment/4311596015696/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1320,7 +1322,7 @@
     {
       "product_page_id": "4311596029198",
       "gtin": "4311596029198",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Clear Whey Eistee Pfirsich",
+      "name": "Clear Whey Eistee Pfirsich",
       "source_url": "https://www.edeka.de/sortiment/4311596029198/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1330,7 +1332,7 @@
     {
       "product_page_id": "4311596047444",
       "gtin": "4311596047444",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Zyrup Lemon Iced Tea Flavor",
+      "name": "Zyrup Lemon Iced Tea Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596047444/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1340,7 +1342,7 @@
     {
       "product_page_id": "4311596047475",
       "gtin": "4311596047475",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Zyrup Cherry Flavor",
+      "name": "Zyrup Cherry Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596047475/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1350,7 +1352,7 @@
     {
       "product_page_id": "4311596053858",
       "gtin": "4311596053858",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Zyrup Lemon Lime",
+      "name": "Zyrup Lemon Lime",
       "source_url": "https://www.edeka.de/sortiment/4311596053858/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1360,7 +1362,7 @@
     {
       "product_page_id": "4311596054237",
       "gtin": "4311596054237",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Whey Protein Almond Coconut Flavor",
+      "name": "Whey Protein Almond Coconut Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596054237/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1370,7 +1372,7 @@
     {
       "product_page_id": "4311596465231",
       "gtin": "4311596465231",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kidneybohnen",
+      "name": "Kidneybohnen",
       "source_url": "https://www.edeka.de/sortiment/4311596465231/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1380,7 +1382,7 @@
     {
       "product_page_id": "4311596616800",
       "gtin": "4311596616800",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Reisessig",
+      "name": "Reisessig",
       "source_url": "https://www.edeka.de/sortiment/4311596616800/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1390,7 +1392,7 @@
     {
       "product_page_id": "4311596641604",
       "gtin": "4311596641604",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Proteinriegel weiße Schokolade-Vanille-Geschmack",
+      "name": "Proteinriegel weiße Schokolade-Vanille-Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596641604/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1400,7 +1402,7 @@
     {
       "product_page_id": "4311596651948",
       "gtin": "4311596651948",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Vitalkost Klassik",
+      "name": "Vitalkost Klassik",
       "source_url": "https://www.edeka.de/sortiment/4311596651948/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1410,7 +1412,7 @@
     {
       "product_page_id": "4311501018187",
       "gtin": "4311501018187",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Smokey Barbecue Dip",
+      "name": "Smokey Barbecue Dip",
       "source_url": "https://www.edeka.de/sortiment/4311501018187/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1420,7 +1422,7 @@
     {
       "product_page_id": "4311501037768",
       "gtin": "4311501037768",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kokosöl",
+      "name": "Kokosöl",
       "source_url": "https://www.edeka.de/sortiment/4311501037768/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1430,7 +1432,7 @@
     {
       "product_page_id": "4311501086124",
       "gtin": "4311501086124",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Edamame Dampfgegart",
+      "name": "Edamame Dampfgegart",
       "source_url": "https://www.edeka.de/sortiment/4311501086124/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1440,7 +1442,7 @@
     {
       "product_page_id": "4311501170755",
       "gtin": "4311501170755",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kaffeekapseln Ethiopia",
+      "name": "Kaffeekapseln Ethiopia",
       "source_url": "https://www.edeka.de/sortiment/4311501170755/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1450,7 +1452,7 @@
     {
       "product_page_id": "4311501716144",
       "gtin": "4311501716144",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Risotto-Reis",
+      "name": "Risotto-Reis",
       "source_url": "https://www.edeka.de/sortiment/4311501716144/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1460,7 +1462,7 @@
     {
       "product_page_id": "4311501735176",
       "gtin": "4311501735176",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Vegane Kochcreme",
+      "name": "Vegane Kochcreme",
       "source_url": "https://www.edeka.de/sortiment/4311501735176/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1470,7 +1472,7 @@
     {
       "product_page_id": "4311501771143",
       "gtin": "4311501771143",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kaffeekapsel Cafe au lait",
+      "name": "Kaffeekapsel Cafe au lait",
       "source_url": "https://www.edeka.de/sortiment/4311501771143/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1480,7 +1482,7 @@
     {
       "product_page_id": "4311596054497",
       "gtin": "4311596054497",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Soft Protein Bar, Milky Candy Cream Flavor",
+      "name": "Soft Protein Bar, Milky Candy Cream Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596054497/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1490,7 +1492,7 @@
     {
       "product_page_id": "4311596616367",
       "gtin": "4311596616367",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Sesamöl",
+      "name": "Sesamöl",
       "source_url": "https://www.edeka.de/sortiment/4311596616367/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1500,7 +1502,7 @@
     {
       "product_page_id": "4311596616435",
       "gtin": "4311596616435",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Sweet-Chili-Sauce",
+      "name": "Sweet-Chili-Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311596616435/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1510,7 +1512,7 @@
     {
       "product_page_id": "4311596618026",
       "gtin": "4311596618026",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Instant-Nudeln Gemüse",
+      "name": "Instant-Nudeln Gemüse",
       "source_url": "https://www.edeka.de/sortiment/4311596618026/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1520,7 +1522,7 @@
     {
       "product_page_id": "4311501010068",
       "gtin": "4311501010068",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Hirtengenuss",
+      "name": "Hirtengenuss",
       "source_url": "https://www.edeka.de/sortiment/4311501010068/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1530,7 +1532,7 @@
     {
       "product_page_id": "4311501021514",
       "gtin": "4311501021514",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Butterschmalz",
+      "name": "Butterschmalz",
       "source_url": "https://www.edeka.de/sortiment/4311501021514/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1540,7 +1542,7 @@
     {
       "product_page_id": "4311501156308",
       "gtin": "4311501156308",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kritharaki",
+      "name": "Kritharaki",
       "source_url": "https://www.edeka.de/sortiment/4311501156308/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1550,7 +1552,7 @@
     {
       "product_page_id": "4311501190753",
       "gtin": "4311501190753",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Expressreis Langkorn",
+      "name": "Expressreis Langkorn",
       "source_url": "https://www.edeka.de/sortiment/4311501190753/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1560,7 +1562,7 @@
     {
       "product_page_id": "4311501210949",
       "gtin": "4311501210949",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Rinderfond",
+      "name": "Rinderfond",
       "source_url": "https://www.edeka.de/sortiment/4311501210949/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1570,7 +1572,7 @@
     {
       "product_page_id": "4311501642450",
       "gtin": "4311501642450",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Bulgur",
+      "name": "Bulgur",
       "source_url": "https://www.edeka.de/sortiment/4311501642450/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1580,7 +1582,7 @@
     {
       "product_page_id": "4311501716625",
       "gtin": "4311501716625",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Curry-Sauce",
+      "name": "Curry-Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311501716625/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1590,7 +1592,7 @@
     {
       "product_page_id": "4311501757840",
       "gtin": "4311501757840",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Tomatenmark",
+      "name": "Tomatenmark",
       "source_url": "https://www.edeka.de/sortiment/4311501757840/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1600,7 +1602,7 @@
     {
       "product_page_id": "4311596616091",
       "gtin": "4311596616091",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kokosnussmilch",
+      "name": "Kokosnussmilch",
       "source_url": "https://www.edeka.de/sortiment/4311596616091/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1610,7 +1612,7 @@
     {
       "product_page_id": "4311501047811",
       "gtin": "4311501047811",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Erdbeeren, leicht gezuckert",
+      "name": "Erdbeeren, leicht gezuckert",
       "source_url": "https://www.edeka.de/sortiment/4311501047811/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1620,7 +1622,7 @@
     {
       "product_page_id": "4311501066737",
       "gtin": "4311501066737",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Hollandaise légère",
+      "name": "Hollandaise légère",
       "source_url": "https://www.edeka.de/sortiment/4311501066737/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1630,7 +1632,7 @@
     {
       "product_page_id": "4311501158678",
       "gtin": "4311501158678",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kaffeekapseln Café au lait",
+      "name": "Kaffeekapseln Café au lait",
       "source_url": "https://www.edeka.de/sortiment/4311501158678/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1640,7 +1642,7 @@
     {
       "product_page_id": "4311501434482",
       "gtin": "4311501434482",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kichererbsen",
+      "name": "Kichererbsen",
       "source_url": "https://www.edeka.de/sortiment/4311501434482/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1650,7 +1652,7 @@
     {
       "product_page_id": "4311501799796",
       "gtin": "4311501799796",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Suppengrün gefriergetrocknet",
+      "name": "Suppengrün gefriergetrocknet",
       "source_url": "https://www.edeka.de/sortiment/4311501799796/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1660,7 +1662,7 @@
     {
       "product_page_id": "4311596455454",
       "gtin": "4311596455454",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Tomatenmark",
+      "name": "Tomatenmark",
       "source_url": "https://www.edeka.de/sortiment/4311596455454/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1670,7 +1672,7 @@
     {
       "product_page_id": "4311501164150",
       "gtin": "4311501164150",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kokos Matcha Latte",
+      "name": "Kokos Matcha Latte",
       "source_url": "https://www.edeka.de/sortiment/4311501164150/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1680,7 +1682,7 @@
     {
       "product_page_id": "4311501437544",
       "gtin": "4311501437544",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Schwarze Oliven",
+      "name": "Schwarze Oliven",
       "source_url": "https://www.edeka.de/sortiment/4311501437544/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1690,7 +1692,7 @@
     {
       "product_page_id": "4311501686249",
       "gtin": "4311501686249",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Mini Backkäse mit Dip",
+      "name": "Mini Backkäse mit Dip",
       "source_url": "https://www.edeka.de/sortiment/4311501686249/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1700,7 +1702,7 @@
     {
       "product_page_id": "4311501793718",
       "gtin": "4311501793718",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Delikatess-Senf mittelscharf",
+      "name": "Delikatess-Senf mittelscharf",
       "source_url": "https://www.edeka.de/sortiment/4311501793718/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1710,7 +1712,7 @@
     {
       "product_page_id": "4311596051502",
       "gtin": "4311596051502",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Whey Protein Iced Coffee Dark Chocolate Flavor",
+      "name": "Whey Protein Iced Coffee Dark Chocolate Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596051502/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1720,7 +1722,7 @@
     {
       "product_page_id": "4311596661268",
       "gtin": "4311596661268",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Delverde Spaghetti mit Tomatensauce",
+      "name": "Delverde Spaghetti mit Tomatensauce",
       "source_url": "https://www.edeka.de/sortiment/4311596661268/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1730,7 +1732,7 @@
     {
       "product_page_id": "4311501034033",
       "gtin": "4311501034033",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Große Bohnen",
+      "name": "Große Bohnen",
       "source_url": "https://www.edeka.de/sortiment/4311501034033/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1740,7 +1742,7 @@
     {
       "product_page_id": "4311501056523",
       "gtin": "4311501056523",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Steirisches Kürbiskernöl g.g A",
+      "name": "Steirisches Kürbiskernöl g.g A",
       "source_url": "https://www.edeka.de/sortiment/4311501056523/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1750,7 +1752,7 @@
     {
       "product_page_id": "4311501351536",
       "gtin": "4311501351536",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Champignons in Scheiben",
+      "name": "Champignons in Scheiben",
       "source_url": "https://www.edeka.de/sortiment/4311501351536/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1760,7 +1762,7 @@
     {
       "product_page_id": "4311501354124",
       "gtin": "4311501354124",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kidneybohnen",
+      "name": "Kidneybohnen",
       "source_url": "https://www.edeka.de/sortiment/4311501354124/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1770,7 +1772,7 @@
     {
       "product_page_id": "4311501760673",
       "gtin": "4311501760673",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Vegane Creme",
+      "name": "Vegane Creme",
       "source_url": "https://www.edeka.de/sortiment/4311501760673/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1780,7 +1782,7 @@
     {
       "product_page_id": "4311596029174",
       "gtin": "4311596029174",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Whey Proteinpulver Iced Coffee Cookie-Geschmack",
+      "name": "Whey Proteinpulver Iced Coffee Cookie-Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596029174/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1790,7 +1792,7 @@
     {
       "product_page_id": "4311596054398",
       "gtin": "4311596054398",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Whey Protein Hazelnut-Nougat-Praliné Flavor",
+      "name": "Whey Protein Hazelnut-Nougat-Praliné Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596054398/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1800,7 +1802,7 @@
     {
       "product_page_id": "4311596618064",
       "gtin": "4311596618064",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Instant-Nudeln Huhn",
+      "name": "Instant-Nudeln Huhn",
       "source_url": "https://www.edeka.de/sortiment/4311596618064/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1810,7 +1812,7 @@
     {
       "product_page_id": "4311501072295",
       "gtin": "4311501072295",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Hafer-Mandeldrink",
+      "name": "Hafer-Mandeldrink",
       "source_url": "https://www.edeka.de/sortiment/4311501072295/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1820,7 +1822,7 @@
     {
       "product_page_id": "4311501088791",
       "gtin": "4311501088791",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Nudel-Frikadellen-Pfanne",
+      "name": "Nudel-Frikadellen-Pfanne",
       "source_url": "https://www.edeka.de/sortiment/4311501088791/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1830,7 +1832,7 @@
     {
       "product_page_id": "4311501106075",
       "gtin": "4311501106075",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Tortelloni Schinken",
+      "name": "Tortelloni Schinken",
       "source_url": "https://www.edeka.de/sortiment/4311501106075/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1840,7 +1842,7 @@
     {
       "product_page_id": "4311501751817",
       "gtin": "4311501751817",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kalamata Oliven, mit Stein",
+      "name": "Kalamata Oliven, mit Stein",
       "source_url": "https://www.edeka.de/sortiment/4311501751817/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1850,7 +1852,7 @@
     {
       "product_page_id": "4311596615490",
       "gtin": "4311596615490",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Burger-Sauce",
+      "name": "Burger-Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311596615490/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1860,7 +1862,7 @@
     {
       "product_page_id": "4311596616749",
       "gtin": "4311596616749",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Fischsauce",
+      "name": "Fischsauce",
       "source_url": "https://www.edeka.de/sortiment/4311596616749/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1870,7 +1872,7 @@
     {
       "product_page_id": "3211200188475",
       "gtin": "3211200188475",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Chardonnay",
+      "name": "Chardonnay",
       "source_url": "https://www.edeka.de/sortiment/3211200188475/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1880,7 +1882,7 @@
     {
       "product_page_id": "4004850998957",
       "gtin": "4004850998957",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Classic trocken QbA",
+      "name": "Classic trocken QbA",
       "source_url": "https://www.edeka.de/sortiment/4004850998957/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1890,7 +1892,7 @@
     {
       "product_page_id": "4006975017360",
       "gtin": "4006975017360",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Akzente Dornfelder QbA halbtrocken",
+      "name": "Akzente Dornfelder QbA halbtrocken",
       "source_url": "https://www.edeka.de/sortiment/4006975017360/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1900,7 +1902,7 @@
     {
       "product_page_id": "4043533013709",
       "gtin": "4043533013709",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Tonic Water",
+      "name": "Tonic Water",
       "source_url": "https://www.edeka.de/sortiment/4043533013709/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1910,7 +1912,7 @@
     {
       "product_page_id": "4044703016193",
       "gtin": "4044703016193",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Aperitivo Rosa Alkoholfrei",
+      "name": "Aperitivo Rosa Alkoholfrei",
       "source_url": "https://www.edeka.de/sortiment/4044703016193/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1920,7 +1922,7 @@
     {
       "product_page_id": "4054221300421",
       "gtin": "4054221300421",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Orangensaft",
+      "name": "Orangensaft",
       "source_url": "https://www.edeka.de/sortiment/4054221300421/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1930,7 +1932,7 @@
     {
       "product_page_id": "4311501728048",
       "gtin": "4311501728048",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Smoothie Apfel-Mango-Passionsfrucht",
+      "name": "Smoothie Apfel-Mango-Passionsfrucht",
       "source_url": "https://www.edeka.de/sortiment/4311501728048/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1940,7 +1942,7 @@
     {
       "product_page_id": "4311596436040",
       "gtin": "4311596436040",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Cola",
+      "name": "Cola",
       "source_url": "https://www.edeka.de/sortiment/4311596436040/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1950,7 +1952,7 @@
     {
       "product_page_id": "4311602066360",
       "gtin": "4311602066360",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Sekt weiß",
+      "name": "Sekt weiß",
       "source_url": "https://www.edeka.de/sortiment/4311602066360/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1960,7 +1962,7 @@
     {
       "product_page_id": "4311605482204",
       "gtin": "4311605482204",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Glühwein",
+      "name": "Glühwein",
       "source_url": "https://www.edeka.de/sortiment/4311605482204/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1970,7 +1972,7 @@
     {
       "product_page_id": "4311605493941",
       "gtin": "4311605493941",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Primitivo di Manduria DOC rot",
+      "name": "Primitivo di Manduria DOC rot",
       "source_url": "https://www.edeka.de/sortiment/4311605493941/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1980,7 +1982,7 @@
     {
       "product_page_id": "4311605700483",
       "gtin": "4311605700483",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Rivaner & Grauburgunder Baden Qualitätswein weiß",
+      "name": "Rivaner & Grauburgunder Baden Qualitätswein weiß",
       "source_url": "https://www.edeka.de/sortiment/4311605700483/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -1990,7 +1992,7 @@
     {
       "product_page_id": "4311501075449",
       "gtin": "4311501075449",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Schaschlik-Sauce",
+      "name": "Schaschlik-Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311501075449/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2000,7 +2002,7 @@
     {
       "product_page_id": "4311501130353",
       "gtin": "4311501130353",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Basmati Naturreis Vollkorn",
+      "name": "Basmati Naturreis Vollkorn",
       "source_url": "https://www.edeka.de/sortiment/4311501130353/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2010,7 +2012,7 @@
     {
       "product_page_id": "4311501154045",
       "gtin": "4311501154045",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Brotaufstrich Natur",
+      "name": "Brotaufstrich Natur",
       "source_url": "https://www.edeka.de/sortiment/4311501154045/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2020,7 +2022,7 @@
     {
       "product_page_id": "4311501642467",
       "gtin": "4311501642467",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Couscous",
+      "name": "Couscous",
       "source_url": "https://www.edeka.de/sortiment/4311501642467/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2030,7 +2032,7 @@
     {
       "product_page_id": "4311501662441",
       "gtin": "4311501662441",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Braune Linsen",
+      "name": "Braune Linsen",
       "source_url": "https://www.edeka.de/sortiment/4311501662441/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2040,7 +2042,7 @@
     {
       "product_page_id": "4311596001736",
       "gtin": "4311596001736",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Grillhähnchen Gewürz",
+      "name": "Grillhähnchen Gewürz",
       "source_url": "https://www.edeka.de/sortiment/4311596001736/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2050,7 +2052,7 @@
     {
       "product_page_id": "4311596001767",
       "gtin": "4311596001767",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Grillgemüse & Tofu Gewürz",
+      "name": "Grillgemüse & Tofu Gewürz",
       "source_url": "https://www.edeka.de/sortiment/4311596001767/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2060,7 +2062,7 @@
     {
       "product_page_id": "4311596016136",
       "gtin": "4311596016136",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Proteinriegel Erdnuss-Karamell-Geschmack",
+      "name": "Proteinriegel Erdnuss-Karamell-Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596016136/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2070,7 +2072,7 @@
     {
       "product_page_id": "4311596051434",
       "gtin": "4311596051434",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Clear Whey Lemon Iced Tea Geschmack",
+      "name": "Clear Whey Lemon Iced Tea Geschmack",
       "source_url": "https://www.edeka.de/sortiment/4311596051434/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2080,7 +2082,7 @@
     {
       "product_page_id": "4311596051441",
       "gtin": "4311596051441",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Clear Whey Blueberry Iced Tea Flavor",
+      "name": "Clear Whey Blueberry Iced Tea Flavor",
       "source_url": "https://www.edeka.de/sortiment/4311596051441/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2090,7 +2092,7 @@
     {
       "product_page_id": "4311596616831",
       "gtin": "4311596616831",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Sojasauce dunkel",
+      "name": "Sojasauce dunkel",
       "source_url": "https://www.edeka.de/sortiment/4311596616831/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2100,7 +2102,7 @@
     {
       "product_page_id": "4311596618149",
       "gtin": "4311596618149",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Instant-Nudeln Shrimps",
+      "name": "Instant-Nudeln Shrimps",
       "source_url": "https://www.edeka.de/sortiment/4311596618149/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2110,7 +2112,7 @@
     {
       "product_page_id": "4311501210345",
       "gtin": "4311501210345",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kümmel",
+      "name": "Kümmel",
       "source_url": "https://www.edeka.de/sortiment/4311501210345/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2120,7 +2122,7 @@
     {
       "product_page_id": "4311501210918",
       "gtin": "4311501210918",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Geflügelfond",
+      "name": "Geflügelfond",
       "source_url": "https://www.edeka.de/sortiment/4311501210918/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2130,7 +2132,7 @@
     {
       "product_page_id": "4311501353967",
       "gtin": "4311501353967",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Champignons ganze Köpfe",
+      "name": "Champignons ganze Köpfe",
       "source_url": "https://www.edeka.de/sortiment/4311501353967/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2140,7 +2142,7 @@
     {
       "product_page_id": "4311501435878",
       "gtin": "4311501435878",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Knoblauch granuliert",
+      "name": "Knoblauch granuliert",
       "source_url": "https://www.edeka.de/sortiment/4311501435878/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2150,7 +2152,7 @@
     {
       "product_page_id": "4311501668276",
       "gtin": "4311501668276",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kartoffelauflauf mit Blattspinat Vegetarisch",
+      "name": "Kartoffelauflauf mit Blattspinat Vegetarisch",
       "source_url": "https://www.edeka.de/sortiment/4311501668276/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2160,7 +2162,7 @@
     {
       "product_page_id": "4311596446940",
       "gtin": "4311596446940",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Champignons in Scheiben",
+      "name": "Champignons in Scheiben",
       "source_url": "https://www.edeka.de/sortiment/4311596446940/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2170,7 +2172,7 @@
     {
       "product_page_id": "4311501040232",
       "gtin": "4311501040232",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Reibeschmelz",
+      "name": "Reibeschmelz",
       "source_url": "https://www.edeka.de/sortiment/4311501040232/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2180,7 +2182,7 @@
     {
       "product_page_id": "4311501158708",
       "gtin": "4311501158708",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kaffeekapseln Cappuccino",
+      "name": "Kaffeekapseln Cappuccino",
       "source_url": "https://www.edeka.de/sortiment/4311501158708/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2190,7 +2192,7 @@
     {
       "product_page_id": "4311501437575",
       "gtin": "4311501437575",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Getrocknete Tomaten",
+      "name": "Getrocknete Tomaten",
       "source_url": "https://www.edeka.de/sortiment/4311501437575/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2200,7 +2202,7 @@
     {
       "product_page_id": "4311501024102",
       "gtin": "4311501024102",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Ultra Klumpstreu mit Babypuder Duft",
+      "name": "Ultra Klumpstreu mit Babypuder Duft",
       "source_url": "https://www.edeka.de/sortiment/4311501024102/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2210,7 +2212,7 @@
     {
       "product_page_id": "4311501375549",
       "gtin": "4311501375549",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Genuss Happen mit Lamm in Sauce",
+      "name": "Genuss Happen mit Lamm in Sauce",
       "source_url": "https://www.edeka.de/sortiment/4311501375549/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2220,7 +2222,7 @@
     {
       "product_page_id": "4311501442654",
       "gtin": "4311501442654",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Mini Sticks mit Lamm, Rind & Huhn",
+      "name": "Mini Sticks mit Lamm, Rind & Huhn",
       "source_url": "https://www.edeka.de/sortiment/4311501442654/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2230,7 +2232,7 @@
     {
       "product_page_id": "4311501617861",
       "gtin": "4311501617861",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Piepmatz Vogelsand für alle Vogelarten",
+      "name": "Piepmatz Vogelsand für alle Vogelarten",
       "source_url": "https://www.edeka.de/sortiment/4311501617861/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2240,7 +2242,7 @@
     {
       "product_page_id": "4311596013449",
       "gtin": "4311596013449",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de River Valley mit Wasserbüffel, Lamm und Huhn",
+      "name": "River Valley mit Wasserbüffel, Lamm und Huhn",
       "source_url": "https://www.edeka.de/sortiment/4311596013449/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2250,7 +2252,7 @@
     {
       "product_page_id": "4311596625024",
       "gtin": "4311596625024",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Amber Valley reich an Perlhuhn und mit Landgemüse",
+      "name": "Amber Valley reich an Perlhuhn und mit Landgemüse",
       "source_url": "https://www.edeka.de/sortiment/4311596625024/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2260,7 +2262,7 @@
     {
       "product_page_id": "4008577006186",
       "gtin": "4008577006186",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Unsere Goldstücke Dinkelbrötchen",
+      "name": "Unsere Goldstücke Dinkelbrötchen",
       "source_url": "https://www.edeka.de/sortiment/4008577006186/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2270,7 +2272,7 @@
     {
       "product_page_id": "4311501061107",
       "gtin": "4311501061107",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Dinkelvollkornbrot",
+      "name": "Dinkelvollkornbrot",
       "source_url": "https://www.edeka.de/sortiment/4311501061107/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2280,7 +2282,7 @@
     {
       "product_page_id": "4311501603253",
       "gtin": "4311501603253",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Kaisergemüse",
+      "name": "Kaisergemüse",
       "source_url": "https://www.edeka.de/sortiment/4311501603253/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2290,7 +2292,7 @@
     {
       "product_page_id": "4311501690413",
       "gtin": "4311501690413",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Alaska-Seelachs-Filettafeln MSC",
+      "name": "Alaska-Seelachs-Filettafeln MSC",
       "source_url": "https://www.edeka.de/sortiment/4311501690413/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2300,7 +2302,7 @@
     {
       "product_page_id": "4311501691786",
       "gtin": "4311501691786",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Crushed Ice",
+      "name": "Crushed Ice",
       "source_url": "https://www.edeka.de/sortiment/4311501691786/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2310,7 +2312,7 @@
     {
       "product_page_id": "4311501792810",
       "gtin": "4311501792810",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Wildschwein-Gulasch",
+      "name": "Wildschwein-Gulasch",
       "source_url": "https://www.edeka.de/sortiment/4311501792810/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2320,7 +2322,7 @@
     {
       "product_page_id": "4311501028971",
       "gtin": "4311501028971",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Orangeat",
+      "name": "Orangeat",
       "source_url": "https://www.edeka.de/sortiment/4311501028971/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2330,7 +2332,7 @@
     {
       "product_page_id": "4311501141182",
       "gtin": "4311501141182",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Maiswaffeln Natur",
+      "name": "Maiswaffeln Natur",
       "source_url": "https://www.edeka.de/sortiment/4311501141182/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2340,7 +2342,7 @@
     {
       "product_page_id": "4311501668177",
       "gtin": "4311501668177",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Nougat-Eier",
+      "name": "Nougat-Eier",
       "source_url": "https://www.edeka.de/sortiment/4311501668177/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2350,7 +2352,7 @@
     {
       "product_page_id": "4311501744208",
       "gtin": "4311501744208",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Fairtrade Vollmilch Schokolade",
+      "name": "Fairtrade Vollmilch Schokolade",
       "source_url": "https://www.edeka.de/sortiment/4311501744208/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2360,7 +2362,7 @@
     {
       "product_page_id": "4311596616404",
       "gtin": "4311596616404",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Krupuk",
+      "name": "Krupuk",
       "source_url": "https://www.edeka.de/sortiment/4311596616404/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2370,7 +2372,7 @@
     {
       "product_page_id": "4311501052471",
       "gtin": "4311501052471",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Körner Krusti",
+      "name": "Körner Krusti",
       "source_url": "https://www.edeka.de/sortiment/4311501052471/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2380,7 +2382,7 @@
     {
       "product_page_id": "4311501091098",
       "gtin": "4311501091098",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Backmischung Muffins Classic",
+      "name": "Backmischung Muffins Classic",
       "source_url": "https://www.edeka.de/sortiment/4311501091098/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2390,7 +2392,7 @@
     {
       "product_page_id": "4311501137178",
       "gtin": "4311501137178",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Pastasalat Penne-Schinken",
+      "name": "Pastasalat Penne-Schinken",
       "source_url": "https://www.edeka.de/sortiment/4311501137178/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2400,7 +2402,7 @@
     {
       "product_page_id": "4311501144381",
       "gtin": "4311501144381",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de Nuss Knusper Müsli",
+      "name": "Nuss Knusper Müsli",
       "source_url": "https://www.edeka.de/sortiment/4311501144381/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
@@ -2410,7 +2412,7 @@
     {
       "product_page_id": "4008496799657",
       "gtin": "4008496799657",
-      "name": "Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de High Energy AA & Max Tech AA - Display",
+      "name": "High Energy AA & Max Tech AA - Display",
       "source_url": "https://www.edeka.de/sortiment/4008496799657/",
       "price_eur": null,
       "price_kind": "NOT_PUBLISHED",
