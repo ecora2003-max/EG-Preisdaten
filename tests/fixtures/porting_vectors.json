@@ -1,0 +1,934 @@
+{
+  "formatVersion": 1,
+  "contractVersion": "1.0.0-draft",
+  "architectureCommit": "d22862739bd0e3ef8451ce029e54f7c33ee53e40",
+  "description": "Synthetic cross-language parity vectors; not retailer-live observations or licence evidence",
+  "cases": [
+    {
+      "name": "null-vs-confirmed-zero",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "unknown",
+              "label": "Milch",
+              "price": null,
+              "pack": "500 g"
+            },
+            {
+              "id": "free",
+              "label": "Milch",
+              "price": "0.00",
+              "pack": "1 Stück"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 2,
+        "errorCodes": [],
+        "coverageStatuses": [
+          "PARSED_PARTIAL"
+        ],
+        "observations": [
+          {
+            "priceCents": null,
+            "article": {
+              "retailerArticleId": "unknown",
+              "quantity": {
+                "amount": 500,
+                "unit": "g",
+                "basis": "NET"
+              }
+            },
+            "priceKind": "SALE"
+          },
+          {
+            "priceCents": 0,
+            "article": {
+              "retailerArticleId": "free",
+              "quantity": {
+                "amount": 1,
+                "unit": "piece",
+                "basis": "PIECE"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "multipack-and-reported-unit-price",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "pack",
+              "label": "Milch",
+              "price": "1.98",
+              "pack": "2 x 500 g",
+              "reportedBaseUnitPrices": [
+                {
+                  "basis": "kg",
+                  "priceEur": "1.98"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [],
+        "observations": [
+          {
+            "priceCents": 198,
+            "article": {
+              "quantity": {
+                "amount": 1000,
+                "unit": "g",
+                "packageCount": 2,
+                "quantityPerPackage": 500
+              }
+            },
+            "eg-preisdaten:basePriceCheck": "CONSISTENT_WITH_DISPLAYED_QUANTITY"
+          }
+        ]
+      }
+    },
+    {
+      "name": "deposit-and-unverified-app-price",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "drink",
+              "label": "Milch",
+              "price": "1.20",
+              "pack": "0,75 l",
+              "deposit": "0.25",
+              "conditions": [
+                "coupon required"
+              ],
+              "conditionalPrices": [
+                {
+                  "priceCents": 99,
+                  "access": "LIDL_PLUS",
+                  "evidence": "lidlPlusOffer.price",
+                  "termsVerified": false
+                }
+              ],
+              "reportedBaseUnitPrices": [
+                {
+                  "basis": "l",
+                  "priceEur": "1.60"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [],
+        "observations": [
+          {
+            "priceCents": 120,
+            "depositCents": 25,
+            "conditional": [
+              "coupon required"
+            ],
+            "article": {
+              "quantity": {
+                "amount": 750,
+                "unit": "ml"
+              }
+            },
+            "eg-preisdaten:basePriceCheck": "DEPOSIT_UNCERTAIN",
+            "eg-preisdaten:conditionalPrices": [
+              {
+                "priceCents": 99,
+                "access": "LIDL_PLUS",
+                "termsVerified": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "published-future-window-not-current",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "PENNY"
+        ],
+        "maxResults": 100,
+        "windowEnd": "2026-11-10"
+      },
+      "datasets": [
+        {
+          "retailerId": "PENNY",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "future",
+              "label": "Milch",
+              "price": "1.25",
+              "fromDate": "2026-11-03",
+              "untilDate": "2026-11-07"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [],
+        "observations": [
+          {
+            "validFrom": "2026-11-03",
+            "validUntil": "2026-11-07",
+            "eg-preisdaten:targetDateStatus": "OUTSIDE_TARGET_DATE"
+          }
+        ]
+      }
+    },
+    {
+      "name": "expired-outside-request-window",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "PENNY"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "PENNY",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "expired",
+              "label": "Milch",
+              "price": "1.25",
+              "fromDate": "2026-10-01",
+              "untilDate": "2026-10-02"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [],
+        "observations": []
+      }
+    },
+    {
+      "name": "unproven-store-scope-is-unknown",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "unknown",
+              "label": "Milch",
+              "price": "1.25",
+              "scope": "STORE_CONFIRMED",
+              "scopeId": "DE1"
+            }
+          ],
+          "storeId": "DE1"
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [],
+        "observations": [
+          {
+            "scope": {
+              "retailerId": "LIDL",
+              "scopeType": "UNKNOWN"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "store-provenance-and-exact-selection",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100,
+        "storeSelections": {
+          "LIDL": {
+            "storeId": "DE1"
+          }
+        }
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "exact",
+              "label": "Milch",
+              "price": "1.25",
+              "scope": "STORE_CONFIRMED",
+              "scopeId": "DE1"
+            },
+            {
+              "id": "other",
+              "label": "Milch",
+              "price": "1.25",
+              "scope": "STORE_CONFIRMED",
+              "scopeId": "DE2"
+            }
+          ],
+          "storeId": "DE1",
+          "scopeProof": {
+            "storeId": "DE1",
+            "sourceRef": "official-store"
+          }
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [],
+        "observations": [
+          {
+            "scope": {
+              "retailerId": "LIDL",
+              "scopeType": "STORE_CONFIRMED",
+              "storeId": "DE1"
+            },
+            "article": {
+              "retailerArticleId": "exact"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "regional-provenance",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "PENNY"
+        ],
+        "maxResults": 100,
+        "storeSelections": {
+          "PENNY": {
+            "regionId": "R1"
+          }
+        }
+      },
+      "datasets": [
+        {
+          "retailerId": "PENNY",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "region",
+              "label": "Milch",
+              "price": "1.25",
+              "scope": "REGION_CONFIRMED",
+              "scopeId": "R1"
+            }
+          ],
+          "regionId": "R1",
+          "scopeProof": {
+            "regionId": "R1",
+            "sourceRef": "official-region"
+          }
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [],
+        "observations": [
+          {
+            "scope": {
+              "retailerId": "PENNY",
+              "scopeType": "REGION_CONFIRMED",
+              "region": "R1"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "app-display-rights-gate",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "REWE"
+        ],
+        "maxResults": 100,
+        "usageMode": "APP_DISPLAY"
+      },
+      "datasets": [
+        {
+          "retailerId": "REWE",
+          "channel": "REGULAR",
+          "origin": "official-retailer",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "sourceUrl": "https://www.rewe.de/api/stationary-product-search/products",
+          "contentType": "application/json",
+          "storeId": "840174",
+          "body": {
+            "products": []
+          }
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "RIGHTS_NOT_CLEARED"
+        ],
+        "coverageStatuses": [
+          "ERROR"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "official-host-rejection",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "REWE"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "REWE",
+          "channel": "REGULAR",
+          "origin": "official-retailer",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "sourceUrl": "https://malicious.example/prices",
+          "contentType": "application/json",
+          "body": {
+            "products": []
+          }
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "INVALID_SOURCE"
+        ],
+        "coverageStatuses": [
+          "ERROR"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "atomic-rejection-on-invalid-validity",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "valid",
+              "label": "Milch",
+              "price": "1.25"
+            },
+            {
+              "id": "invalid",
+              "label": "Milch",
+              "price": "1.25",
+              "fromDate": "2026-11-10",
+              "untilDate": "2026-10-10"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "INVALID_DATE"
+        ],
+        "coverageStatuses": [
+          "ERROR"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "channel-price-kind-must-agree",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "bad",
+              "label": "Milch",
+              "price": "1.25",
+              "sourcePriceKind": "ONLINE_LISTED"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "INVALID_PRICE_KIND"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "subcent-price-is-not-rounded",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "bad",
+              "label": "Milch",
+              "price": "1.001"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "INVALID_PRICE"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "same-sku-different-pack-not-deduplicated",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "same",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "250 g"
+            },
+            {
+              "id": "same",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "500 g"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 2,
+        "errorCodes": [],
+        "uniqueObservationIds": true,
+        "observations": [
+          {
+            "article": {
+              "quantity": {
+                "amount": 250,
+                "unit": "g"
+              }
+            }
+          },
+          {
+            "article": {
+              "quantity": {
+                "amount": 500,
+                "unit": "g"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "rewe-current-versus-listed-regular",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "REWE"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "REWE",
+          "channel": "REGULAR",
+          "origin": "official-retailer",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "sourceUrl": "https://www.rewe.de/api/stationary-product-search/products",
+          "contentType": "application/json",
+          "storeId": "840174",
+          "scopeProof": {
+            "storeId": "840174",
+            "sourceRef": "official-market"
+          },
+          "body": {
+            "products": [
+              {
+                "id": "SKU1",
+                "title": "Milch",
+                "brand": "Demo",
+                "pricing": {
+                  "current": 115,
+                  "regular": 129,
+                  "refund": 25
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "expect": {
+        "matchedCount": 2,
+        "errorCodes": [],
+        "uniqueObservationIds": true,
+        "observations": [
+          {
+            "priceCents": 115,
+            "priceKind": "CURRENT_DISPLAYED",
+            "depositCents": 25,
+            "scope": {
+              "scopeType": "STORE_CONFIRMED",
+              "storeId": "840174"
+            }
+          },
+          {
+            "priceCents": 129,
+            "priceKind": "LISTED_REGULAR",
+            "depositCents": 25,
+            "scope": {
+              "scopeType": "STORE_CONFIRMED",
+              "storeId": "840174"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "eight-retailer-synthetic-coverage",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "ALDI_NORD",
+          "ALDI_SUED",
+          "LIDL",
+          "REWE",
+          "EDEKA",
+          "NETTO_MD",
+          "PENNY",
+          "KAUFLAND"
+        ],
+        "maxResults": 100
+      },
+      "datasets": [
+        {
+          "retailerId": "ALDI_NORD",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "A",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "500 g"
+            }
+          ]
+        },
+        {
+          "retailerId": "ALDI_SUED",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "A",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "500 g"
+            }
+          ]
+        },
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "A",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "500 g"
+            }
+          ]
+        },
+        {
+          "retailerId": "REWE",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "A",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "500 g"
+            }
+          ]
+        },
+        {
+          "retailerId": "EDEKA",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "A",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "500 g"
+            }
+          ]
+        },
+        {
+          "retailerId": "NETTO_MD",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "A",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "500 g"
+            }
+          ]
+        },
+        {
+          "retailerId": "PENNY",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "A",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "500 g"
+            }
+          ]
+        },
+        {
+          "retailerId": "KAUFLAND",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "A",
+              "label": "Milch",
+              "price": "1.25",
+              "pack": "500 g"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 8,
+        "errorCodes": [],
+        "uniqueObservationIds": true,
+        "observations": [
+          {
+            "scope": {
+              "retailerId": "ALDI_NORD"
+            },
+            "priceCents": 125
+          },
+          {
+            "scope": {
+              "retailerId": "ALDI_SUED"
+            },
+            "priceCents": 125
+          },
+          {
+            "scope": {
+              "retailerId": "LIDL"
+            },
+            "priceCents": 125
+          },
+          {
+            "scope": {
+              "retailerId": "REWE"
+            },
+            "priceCents": 125
+          },
+          {
+            "scope": {
+              "retailerId": "EDEKA"
+            },
+            "priceCents": 125
+          },
+          {
+            "scope": {
+              "retailerId": "NETTO_MD"
+            },
+            "priceCents": 125
+          },
+          {
+            "scope": {
+              "retailerId": "PENNY"
+            },
+            "priceCents": 125
+          },
+          {
+            "scope": {
+              "retailerId": "KAUFLAND"
+            },
+            "priceCents": 125
+          }
+        ]
+      }
+    }
+  ]
+}
