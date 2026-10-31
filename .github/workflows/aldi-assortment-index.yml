@@ -1,0 +1,24 @@
+name: ALDI Nord actual full assortment index coverage
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_assortment_index.py
+      - .github/workflows/aldi-assortment-index.yml
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/aldi_assortment_index.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-assortment-index-coverage
+          path: results/aldi_assortment_index.json
+          retention-days: 7
