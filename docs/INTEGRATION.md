@@ -126,3 +126,12 @@ Auch wenn eine spätere Händlerantwort ein rückwirkendes Angebotsfenster auswe
 ## Verbindliche neue Portierungs-/Rechtebelege (31.10.2026, `79df4094`)
 
 Die maschinenlesbare Paritätsmatrix umfasst jetzt **28** synthetische Fälle (`tests/fixtures/porting_vectors.json`), Python-CI [#41228924705](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41228924705) **103/103 PASS**. Der Kotlin-Host muss insbesondere die neuen Fälle `rights-untrusted-permitted-claim-still-blocked`, `app-display-synthetic-and-external-rights-mixed`, `regional-feed-without-store-region-proof-rejected` und `offer-only-netto-regular-price-kind-in-sale-rejected` mit gleicher Fehler-/Coverage-Semantik prüfen. Ein vom Datenlieferanten selbst behauptetes `rightsStatus=PERMITTED` oder `licenseRef` ist **keine** vertrauenswürdige zweckbezogene Freigabe. `PRIVATE_USER_HISTORY` ist ausschließlich eine eigene Host-Funktion für bestätigte Bons und kein zulässiger `PriceService.usageMode`. Synthetische Fixture-Anzeige dient nur Tests; sie ist keine Produktionsdatenquelle. Die konkrete Freigabe für externes `APP_DISPLAY` fehlt weiterhin; keine Live-GETs oder Android-/Kotlin-Tests in diesem Lauf.
+
+
+## Ergänzende Kotlin-Portierungsgrenze: Source-URL und ADR-016
+
+Der freigegebene **fachliche** reguläre Einstieg ist `search_product_prices`: explizites Produkt-/GTIN-/FoodType-/Suchkriterium und 1–50 Ergebnisse. `search_catalog_prices` ist ein historischer Offline-Forschungs-/Parserport, kein produktiver Bulk-/Live-Collector. `search(kind="BOTH")` und `lookup_price` müssen die vier REGULAR-Verbote ebenfalls durchsetzen. Quellen-/Rechtefreigaben bleiben getrennt.
+
+Händlerfremde Hostnamen, Userinfo, HTTP, nicht standardmäßige Ports, Credential-Aliase in URL-Queries (`authToken`, `session_id`, `x-api-key`), URL-Fragmente und Steuerzeichen werden für Quellprovenienz verworfen. Fehler/Logs dürfen keine Credentials spiegeln. Ohne exakten `scopeProof.sourceRef` samt identischer Store-/Region-ID ist eine behauptete Filialgeltung nur `UNKNOWN`; Region ohne Store-Region-Zuordnung darf keinen Marktbeleg vortäuschen. `APP_DISPLAY` bleibt für sämtliche externen Quellen ohne dokumentierte zweckgebundene Freigabe fail-closed. `RESEARCH_ONLY` ist kein Produktivrecht; `PRIVATE_USER_HISTORY` wird im Händler-Snapshot-Service nicht angeboten.
+
+Die **34 synthetischen Portierungsvektoren** in `tests/fixtures/porting_vectors.json` sind für Codex als Kotlin-JVM-Negativ-/Positivfälle bestimmt. Kotlin-/Android-Tests sind hier noch nicht ausgeführt.
