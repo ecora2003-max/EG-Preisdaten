@@ -64,6 +64,11 @@ def main():
                 snippet=re.sub(r'[A-Za-z0-9+/=]{80,}','[LONG_LITERAL]',snippet)
                 snippet=re.sub(r'<[^>]+>',' ',snippet)
                 excerpts.append(snippet[:380])
+                tag_start=doc.rfind("<script",0,match.start())
+                tag_end=doc.find(">",tag_start) if tag_start>=0 else -1
+                if tag_start>=0 and 0<=tag_end<match.start():
+                    item.setdefault("containing_script_open_tags",[]).append(doc[tag_start:tag_end+1][:240])
+
             item["price_context_examples"]=excerpts
             item["result"]="HTML_MEASURED"
         except urllib.error.HTTPError as e:
