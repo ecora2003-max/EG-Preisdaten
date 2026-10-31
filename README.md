@@ -3,6 +3,10 @@
 > **Verbindliche Einweisung für den zuständigen Entwicklungs-Chat:** [AGENTS.md](AGENTS.md) · [Entwicklungsauftrag](docs/DEVELOPMENT_MANDATE.md) · [Abnahmetests und Fertigstellung](docs/ACCEPTANCE.md) · [Integrationsschnittstellen](docs/INTEGRATION.md) · [Status](docs/STATUS.md). Gemeinsame Verträge: [EG-Architecture](https://github.com/ecora2003-max/EG-Architecture). **Nur dieses Modulrepo bearbeiten; Architektur und private Haupt-App ausschließlich lesen. Tests nach jeder fachlichen Änderung verpflichtend.**
 
 
+## Aktualisierte Händlerauswahl (ADR-016 / 31.10.2026)
+
+**Gezielte, auf maximal 50 Ergebnisse begrenzte Produktpreisabfragen:** ALDI Nord, ALDI Süd, REWE, Lidl. **Veröffentlichte Angebote:** alle acht Händler. Für Penny, Kaufland, EDEKA und Netto Marken-Discount sind reguläre Produktpreisabfragen im neuen Projektumfang ausgeschlossen; alte Forschungsparser bleiben archiviert. Fachliche Zulässigkeit einer Funktion **erteilt keine externen Datenrechte**. Maschinelle Policy in [price_module/retailer_capabilities.v1.json](price_module/retailer_capabilities.v1.json), fachliche Prüfung in [docs/STATUS.md](docs/STATUS.md), Android-Übernahme in [docs/INTEGRATION.md](docs/INTEGRATION.md).
+
 ## Aktueller Referenzkern (31.10.2026)
 
 [Pure Python Preis-Snapshot-API](price_module/service.py) · [synthetische CLI-Eingabe](examples/synthetic-price-query.json) · [Codex-Integrationsanleitung](docs/INTEGRATION.md) · [Abnahmestand](docs/STATUS.md).
@@ -13,7 +17,7 @@ python3 -m unittest discover -s tests -v
 python3 -m price_module < examples/synthetic-price-query.json
 ```
 
-**CI [77/77 Offline-Tests erfolgreich](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220821950), zuletzt geprüfter Code `fe580013c619`.** Der Kern ist unabhängig ausführbar und schemavalidiert. Externe Händlerdaten werden ohne dokumentierte Rechte **nicht** zur produktiven App-Anzeige freigegeben; wissenschaftliche Live-Einzelnachweise bleiben von dauerhaft zulässiger Nutzung getrennt. Kein Gesamt-Vollsortiment und keine Android-Integration behauptet.
+**CI [95/95 Offline-Tests erfolgreich](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41227740061), getesteter Code `13dcac61ba8a` und 23 Paritätsfälle `6a45e460a3e8`.** Alle acht Anbieter werden weiterhin nur als quellenbelegte Teilabdeckung behandelt; vollständige Nutzungsrechte und Android-Einbau fehlen.
 
 Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsprotokolle für eine spätere Integration in die Android-App. Es ist **keine fertig veröffentlichbare Händlerdatenplattform**.
 

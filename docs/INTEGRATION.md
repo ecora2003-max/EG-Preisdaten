@@ -92,3 +92,29 @@ Zusätzlich zu `query` (case-insensitive Name) und `retailerArticleId` akzeptier
 `eg-preisdaten:basePriceCheck` ist einer der Werte `NO_REPORTED_BASE_PRICE`, `PRICE_UNKNOWN`, `DEPOSIT_UNCERTAIN`, `NOT_COMPARABLE`, `CONSISTENT_WITH_DISPLAYED_QUANTITY` oder `MISMATCH`. Nur für explizit kompatible Masse/Volumen-Basis (`kg`→`g`, `l`→`ml`) wird der angezeigte Preis mit `Decimal(priceCents)×1000/amount` verglichen, eine Cent-Rundungsabweichung ist erlaubt. **Dies bestätigt weder die gelieferte Packmenge noch Kassenpreistreue**; bei Pfand gilt der Test nicht als beweissicher. Verbrauchermengen und Kaufpreise werden nicht verändert. [Test #41220671906](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220671906).
 
 **Aktuelle Codex-Portierungscheckliste:** [PORTING_TEST_MATRIX.md](PORTING_TEST_MATRIX.md). Letzter Offline-Regressionstest: [77/77 bestanden, Lauf #41220821950](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220821950), Code `fe580013c619c366ec749ac98e1a630a91a86231`.
+
+## Neue Händlerschnittstelle und ADR-016 (`3cfd591543ea4b8836992b1269de4db5e20a929f`)
+
+**Funktionspolicy ist nicht identisch mit einer Datenlizenz.** Die aus der Architektur übernommenen Daten stehen in [`price_module/retailer_capabilities.v1.json`](../price_module/retailer_capabilities.v1.json), Version `1.0.1`. Provider-Metadaten ergänzen `targetedProductPriceQuery`, `publishedOfferCollection` und `policyVersion` getrennt von historischen Parser-/Live-Evidenzen.
+
+| Händler | Gezielte Produktpreisabfrage | veröffentlichte Angebote |
+| --- | --- | --- |
+| ALDI_NORD, ALDI_SUED, REWE, LIDL | ja, begrenzt | ja |
+| PENNY, KAUFLAND, EDEKA, NETTO_MD | **nein** | ja |
+
+**Verbindliche Ziel-API:**
+```python
+from price_module import PriceService
+service = PriceService()
+result = service.search_product_prices(
+    {"shoppingDate":"2026-10-31", "retailerIds":["LIDL"],
+     "query":"Hafer", "maxResults":20, "usageMode":"RESEARCH_ONLY"},
+    lawful_snapshots  # caller supplies snapshots; no network call in this module
+)
+```
+
+Eingabe benötigt exaktes `retailerArticleId`, `gtin`, `foodTypeId` oder `query`; 1 bis maximal 50 Treffer, Standard 20. Fehlendes Suchziel: `TARGET_REQUIRED`; zu hohe Grenze: `TARGET_LIMIT_EXCEEDED`. Bestehendes `search_catalog_prices` bleibt ein **Offline-Forschungsport**, kein Bulk-Live-Fetcher. Beide und `search(BOTH)` verhindern `REGULAR` für vier angebotsgebundene Händler (`CAPABILITY_NOT_ALLOWED` und `coverage.status=POLICY_DENIED`). `search_offers` bleibt funktional für acht Händler zulässig; für ALDI Süd/REWE fehlen noch belastbare separierte Angebotsquellen.
+
+Für `APP_DISPLAY` prüft das Modul weiterhin **zusätzlich** Quellrechte; `UNVERIFIED`/ `RESTRICTED` werden nicht durch die Händlermatrix legitimiert. Externe Quelle und rechtskonformer Scope müssen separat belegt werden. Unbestätigte private Bon-/OCR-Preise gelangen nicht über diese Modulports in eine Kaufbuchung. Android/Codex braucht eigene, zweite Policy- und Anzeigeprüfung. Bereits vorhandener Netto-Onlinepreisparser bleibt allein historische Forschung, nicht der zugelassene aktuelle Produktpreisabfrageport.
+
+**Kotlin-/Codex-Tests:** [23 Paritätsfälle](../tests/fixtures/porting_vectors.json) mit fünf expliziten ADR-016-Szenarien, [CI 95/95](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41227740061), Stand `6a45e460a3e85859504587ef1af562f77ce21e30`. Shopping-v1.1 ist ein **separater, noch nicht freigegebener** Architekturentwurf; dieser Kern sendet unverändert `price.observation` in v1.
