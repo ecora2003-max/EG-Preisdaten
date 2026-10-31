@@ -1,0 +1,24 @@
+name: Netto selected-store product listing check
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/netto_filialangebote_store.py'
+      - '.github/workflows/netto-products-page.yml'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/netto_filialangebote_store.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-selected-store-product-page
+          path: results/netto_filialangebote_store.json
+          retention-days: 7
