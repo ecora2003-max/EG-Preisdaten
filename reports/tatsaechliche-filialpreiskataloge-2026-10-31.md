@@ -1,56 +1,51 @@
-# Tatsächlicher Filialpreiskatalog statt Preis-Snapshots (31.10.2026)
+# Tatsächliche Filialpreiskataloge: Live-Forschung (31.10.2026)
 
-## Verbindliches Ziel dieser Untersuchung
+**Striktes Ziel:** Möglichst vollständige Produktlisten eines konkreten Supermarktes mit **aktuellen angezeigten Filial-Verkaufspreisen**, Mengen/Grundpreisen sowie Aktions- und App-Preisen. Historische Bon-Datensätze, UVP und Kaufland-Marktplatzpreise sind **kein Ersatz**.
 
-**Gesucht:** ein aktuell abrufbarer *Händler-Preiskatalog* des tatsächlichen Filialsortiments, mit einem verifizierten Verkaufspreis pro Produkt sowie ggf. gleichzeitig geltendem Angebotspreis. Nach Möglichkeit vollständige aktuelle Abdeckung und reale Filialzuordnung.
+## Verifizierte Ergebnisse
 
-**Nicht ausreichend:** veraltete Bonpreise, offene Preisvergleichs-Datenbanken, nur Produktstammdaten, nur Prospektartikel, unverbindliche UVP, Marketplace-Preise, Shoppreise ohne Bezug zur Filiale oder ein Einzelbarcode-Scan ohne vollständige Katalogenumeration.
-
-Alle historischen Tests in diesem Projekt erfolgten im Testrepository **Try**. Das gesonderte Android-Repository `Ernaerungsgedaechnis` wurde nicht verändert.
-
-## Belastbare Quellen je Händler
-
-| Händler | Unmittelbarer aktueller realer Preiskatalog | Direkte Zugriffslage | Bewertung |
+| Händler | Vollsortiment + aktuelle Preise | Filialgeltung | Status |
 |---|---|---|---|
-| **ALDI Nord** | Offizielle Produktkategorien mit `currentPrice.priceValue` und Grundpreis | Zwei vollständige Kategorieseiten mit 50/50 und 32/32 Produkten live eingelesen; kein verifizierter Gesamtindex, Filialfilter oder ungekürzter Normalpreis | **Teilweise direkt nachgewiesen**; stärkster Kandidat für tatsächlich angezeigte aktuelle Preise |
-| **Lidl** | Interner Preis-/Produktabruf für Scan&Go-teilnehmende Filialen ist dokumentiert; öffentliche Produktkatalog-API aus Drittprojekt | Acht Anfragen an `product-catalog.lidlplus.com` ergaben HTTP 400; Lidl-Plus-Offers-API liefert dagegen nur 78 Aktionen/65 normale Einzelsparpreise für DE7434 | **Kein vollständig abrufbarer Filialpreiskatalog nachgewiesen** |
-| **PENNY** | PENNY Scan&Go im Markt, mit Einzelartikel-Preisanzeige; Preis kann laut Bedingungen abweichen | 12 Aktionskategorien und regionsgenaue Aktionen als JSON abrufbar, keine Normalpreis-Such-/Gesamtsortiments-API verifiziert | **Einzelartikel intern möglich, Massenkatalog nicht bestätigt** |
-| **Kaufland** | Kaufland Scan / K-Scan erfasst Artikel und zeigt laufenden Einkaufsbetrag | Filialaktionen / `klNr`-Gültigkeit verifiziert; `kaufland.de` Marketplace ist kein verlässlicher Filialnormalpreiskatalog | **Kassenseitige Preise intern, Bulk-Preiskatalog nicht bestätigt** |
-| **EDEKA** | Manche lokale Markthändler bieten `edeka.shop` mit filialspezifischen Preisen | Anbieterkatalog `edeka.de/sortiment` enthält keine durchgehend lokalen Preisfelder; nur Angebote via Markt-ID getestet; `edeka.shop` erfordert Auswahl tatsächlich teilnehmender Filialen | **Keine flächendeckende Schnittstelle; automatisierte Übernahme von EDEKA.de-Inhalten ohne Freigabe gestoppt** |
-| **Netto Marken-Discount** | Netto Plus Scan&Go benötigt Ortung für Preise der tatsächlichen Filiale | Offizieller marktspezifischer PDF-Wochenprospekt funktioniert; Netto-Online-Shoppreise können ausdrücklich von Filialpreisen abweichen; direkte Filial-Produktseite 403 | **Interne Preisfunktion dokumentiert; Produktkatalog-API nicht bestätigt** |
-| **ALDI Süd (zusätzlich)** | Open-Source-Client `ByteSizedMarius/aldiscount` dokumentiert unfiltrierte Produktsuche samt `price.amountRelevant`, Grundpreis, `wasPriceDisplay`, optional servicePoint | Ein echter schlichter GET auf `api.aldi-sued.de/v3/product-search` aus GitHub Actions ergab HTTP 403 | **Drittprojekt beschreibt korrektes Datenmodell, unser Zugriff derzeit blockiert** |
+| **Lidl** | **Echte Produktkatalog-API erfolgreich:** 18 Hauptkategorien, Unterkategorien, paginierte Produktlisten mit Preisobjekten; Produktsuche und Produktdetail mit echten Verkaufspreisen | **Konkrete Filialkennung im URL-Pfad**: DE7434 Berlin hatte bei `q=Milch` 40 Treffer; DE7602 Hannover 8. Derselbe Barcode-Artikel im Berliner Markt 0,85 €; im anderen Markt HTTP 204 (nicht im API-Datensatz) | **Stärkster konkreter Kandidat.** Filialpreiskatalog nachgewiesen, vollständige Abarbeitung sämtlicher Kategorien und Bedingungen für dauerhafte Nutzung noch offen |
+| **ALDI Nord** | In zwei amtlichen Sortimentkategorien 82/82 Artikel mit `currentPrice.priceValue`, Packung, Grundpreis aus öffentlich eingebettetem Algolia-JSON | Kettenweites Sortiments-JSON, kein geprüfter individueller Filial-Preisfilter | Funktionierender kategorieweiser aktueller Preiskatalog; volle Ketten- und Filialabdeckung unbewiesen |
+| **PENNY** | Bisher nur 193 bepreiste Angebotsobjekte aus 12 Kategorien, nicht alle regulären Produkte | Offizielle Verkaufsregion aus Marktverzeichnis | Gesamtpreis-Katalog nicht bestätigt; Scan&Go ist artikelweiser Zugriff, kein enumerierbarer öffentlicher Feed |
+| **Kaufland** | Bisher 511 gültige Werbeartikel in gewählter Filiale; keine vollständigen Regalpreislisten bestätigt | Konkrete `klNr`-Filialliste mit Datumsfenstern | Gesamtpreis-Katalog offen; Marktplatz-/Seller-API nicht mit Filialregalpreisen verwechseln |
+| **EDEKA** | EDEKA-Marktaktionen als JSON zuvor live verifiziert, aber nicht vollständige Normalpreise | Markt-ID/national-Fallback unterscheidbar | Ohne ausdrückliche Zustimmung kein automatischer EDEKA.de-Contentabruf; keine vollständige aktuelle Filialpreisquelle bestätigt |
+| **Netto Marken-Discount** | Offizieller KW45-Filialprospekt als textlesbare PDF getestet; keine sichere Zuordnung sämtlicher Produktpreise | Eindeutige Filialprospekt-URL zu `stores_id` | Vollsortiment-Preisdaten nicht bestätigt; Netto Plus Preisscanner ist nur artikelweise Funktion |
 
-### Live-Testbelege
+## Lidl – konkrete erfolgreiche Live-Tests
 
-- [ALDI Nord: zwei aktuelle Sortimentskategorien und Preisparser – PASS](https://github.com/ecora2003-max/Try/actions/runs/41186298754)
-- [ALDI Nord: direkte öffentliche Algolia-Suche nicht bestätigt](https://github.com/ecora2003-max/Try/actions/runs/41186627062)
-- [Lidl: vollständiger Produktkatalog im direkten API-Versuch HTTP 400](https://github.com/ecora2003-max/Try/actions/runs/41185956743)
-- [Lidl: nur echte filialbezogene Aktionspreise abgefragt – PASS](https://github.com/ecora2003-max/Try/actions/runs/41183799427)
-- [PENNY: 12 Angebotskategorien, nicht gesamtes Sortiment](https://github.com/ecora2003-max/Try/actions/runs/41182962632)
-- [Kaufland: Filiallisten von Werbeartikeln, nicht Vollsortiment](https://github.com/ecora2003-max/Try/actions/runs/41181939368)
-- [Netto: filialbezogene PDF möglich, kein Normalpreiskatalog](https://github.com/ecora2003-max/Try/actions/runs/41184427978)
-- [ALDI Süd: direkter Produktsuchversuch HTTP 403](https://github.com/ecora2003-max/Try/actions/runs/41186725467)
+Das zuvor beobachtete **HTTP 400** bei der direkten Lidl-Katalog-API wurde erklärt: Die API erwartet `Accept-Language: de`, nicht `de-DE`. Es wurde **keine Authentifizierung, kein Schutzmechanismus und keine technische Zugangssperre umgangen**. Mit den regulären, dokumentierten App-Kompatibilitätsheadern:
 
-### Originalhersteller-Hinweise zu Scan&Go
+`Accept: application/json`  
+`Accept-Language: de`  
+`X-Client-Version: 17.0.5`  
+`X-Client-Platform: android`
 
-- Lidl Plus Scan&Go: https://www.lidl.de/c/lidl-plus-scan-go/s10072875 – nur in teilnehmenden Filialen, Barcode-Scan, Check-in, aktuelle Daten werden synchronisiert; https://www.lidl.de/c/lidl-plus-teilnahmebedingungen/s10005289 – angezeigte App-Preise können von verbindlichen Filial-Regalpreisen abweichen.
-- PENNY Scan&Go: https://www.penny.de/datenschutz/agbs-scan-and-go – Artikel einzeln scannen, Preis kann abweichen.
-- Kaufland Scan: https://filiale.kaufland.de/service/haeufige-fragen.html – kundenkontoabhängig, nur bestimmte Filialen, laufender Warenkorbwert.
-- Netto Plus Scan&Go: https://sso.netto-online.de/oauth/account/consent?key=datenschutzhinweise-netto-app – Standort nötig, um die **je Filiale korrekten Preise** anzuzeigen.
+funktionieren normale GET-Aufrufe auf `https://product-catalog.lidlplus.com/api/app/v1/DE/store/DE7434`:
 
-Diese offiziellen Funktionen beweisen, dass die Händler intern *artikelbezogene Filialpreise* verwalten und ausgeben; sie beweisen **keine externe, vollständig auflistbare oder freigegebene öffentliche Preis-API**.
+- `/categories` → HTTP 200, **18 Hauptkategorien**; darunter Gemüse, Fleisch, Fisch, Milchprodukte, Backwaren, Grundnahrungsmittel, Tiefkühlkost, Getränke usw.
+- `/categories/1003/products?skip=0&limit=5&date=2026-10-31` → HTTP 200, `totalProducts: 29`, fünf tatsächliche **bepreiste** Fischprodukte; Preisfelder `price.price`, `priceWithoutDeposit`, `oldPrice`, `discount`, `lidlPlusOffer`, Packungs- und Grundpreisannotationen.
+- `/search?q=Milch&date=2026-10-31` → HTTP 200, 40 Produktdatensätze für Berlin (DE7434); 8 für Hannover (DE7602). In der Berliner Liste z. B. MILBONA fettarme Milch **0,85 €**, BIOLAND fettarme Milch **1,25 €**, HEMME Vollmilch **1,59 €**. Das ist ein **aktueller angezeigter Filialkatalogpreis**, nicht automatisch historischer Normalpreis.
+- `/products/8824326891371_DE?date=2026-10-31` → Berlin HTTP 200 mit Produkt, **0,85 €**, Zutaten, Allergenen, Nährwerten und Warenstatus. Derselbe Produkt-ID-Aufruf für Hannover → HTTP 204, **kein Produktdatensatz**.
 
-### Gefundene Fremdprojekte – kritisch
+**Belege:** [Schema, Kategorien und tatsächliche Preise](https://github.com/ecora2003-max/Try/actions/runs/41187206333) · [Product-ID in zwei Märkten](https://github.com/ecora2003-max/Try/actions/runs/41187388717) · [Fehlerursache Sprachheader](https://github.com/ecora2003-max/Try/actions/runs/41187079242) · [GitHub-Offline-Tests erfolgreich](https://github.com/ecora2003-max/Try/actions/runs/41187280765).
 
-- [aldiscount](https://github.com/ByteSizedMarius/aldiscount) – echter unfiltrierter ALDI-Süd-Produktsuchclient, im Test-Runnersystem aber 403.
-- [BlackFalconData Lidl Scraper](https://github.com/BlackFalconData-org/lidl-scraper) – kostenpflichtiger Apify-Actor mit Webshop-/Produktpreisen, kein nachgewiesener vollständiger Preisbestand ausgewählter Lidl-Filialen.
-- [loukesio/german-supermarket-prices](https://github.com/loukesio/german-supermarket-prices) – 9.109 Preisbeobachtungen, **0 Preise mit Datumsangabe in den letzten 30 Tagen** des 31.10.2026-Snapshots; häufig alte Beobachtungen, teils Händler-Prospekte und unklare Rechte. **Nicht der gesuchte aktuelle Händlerpreiskatalog.**
-- [Open Prices](https://prices.openfoodfacts.org) – echte kostenlose API für von Nutzern gemeldete historische Preise; aber unvollständig und kein tagesaktueller Filialpreiskatalog.
+**Implementiert:** [`catalogues/lidl.py`](../catalogues/lidl.py) normalisiert die echten Such- und Kategorien-Produktobjekte, erfasst `price`, Pfand, `oldPrice`, Rabatt-/Lidl-Plus-Indikatoren und `store_key`. Fehlende Preise und unvollständige Pagination werden nicht fälschlich als vollständiger, gültiger Filialpreiskatalog gemeldet. [Vertragstests](../tests/test_lidl_catalogue.py).
 
-## Implementierungsentscheidung
+**Nicht bewiesen:** Vollständige Abarbeitung aller Kategorien inklusive Unterkategorien und Pagination, Preise aller ~Filialartikel, Store-Genauigkeit vs. Kassenbon für Ausnahmen, Aktualitätsintervall sowie Recht zur kontinuierlichen systematischen Übernahme. Ein GET mit HTTP 200 ist **keine Nutzungslizenz**. Es ist dennoch nun **eine nachweislich funktionierende, reale Filialpreiskatalog-API und nicht bloß eine Prospektschnittstelle**.
 
-Bisher darf kein Anbieter als `FULL_STORE_PRICE_CATALOG_VERIFIED` gelten. Ein Parser-Erfolg auf zwei ALDI-Nord-Kategorien ist zwar ein Fortschritt, jedoch kein vollständiges Sortiment.
+## ALDI Nord
 
-Als belastbare Lösung für den späteren Preisvergleich sind drei Felder getrennt zu validieren: `actual_regular_price`, `actual_offer_price`, `store_id`. Solange die Quelle nur `displayed_current_price` oder `CHAIN_WIDE_REPORTED` liefert, **nicht** als garantierten aktuellen Kassenpreis der gewählten Filiale ausgeben.
+[Live-Kategorienparser](https://github.com/ecora2003-max/Try/actions/runs/41186298754): erste Kategorie 50/50 Artikel mit angezeigtem Preis, zweite Kategorie 32/32, jeweils `nbPages=1`; IDs, Mengen und Grundpreise vorhanden. Allgemeine `sortiment.html`-Indexseite liefert keine unmittelbar aus statischem HTML ableitbaren Produktkategorie-Links ([Test](https://github.com/ecora2003-max/Try/actions/runs/41187051287)). Die inoffizielle kostenpflichtige [Parse-API](https://parse.bot/marketplace/397bcd36-69f3-489f-a98d-49e56e4a80a7/aldi-de-api) dokumentiert ebenfalls Produktsuche und Kategoriepreise, ersetzt aber keine eigene geprüfte gratis-Quelle.
 
-Weiteres Vorgehen: ALDI Nord Kategorieindex/Abdeckung und eventuell Händlerpreisregeln verifizieren; für die vier Scan&Go-Händler nur ausdrücklich freigegebene Einzelprodukt-Lookups oder dokumentierte, erlaubte Exporte prüfen; keine technische Schutzumgehung und keine kostenpflichtigen APIs.
+## Kritische Unterscheidung
+
+- **Filialbezogen angezeigter aktueller Preis:** Lidl inzwischen per realem Produktdetail getestet.
+- **Nachgewiesener früherer regulärer Kassenpreis:** nur mit geeigneter eigener Preisverlaufskette; `oldPrice` auf dem Produktobjekt reicht nicht als Beweis.
+- **Angebotspreis:** kann bereits als aktueller Produktpreis angezeigt werden; `oldPrice` und `discount` getrennt halten. Gutschein- und Lidl-Plus-Bedingungen ebenfalls getrennt halten.
+- **Vollständige Abdeckung:** erst wenn jeder Kategoriebaum bis zum Ende paginiert und anhand der vom Händler gemeldeten `totalProducts` geprüft wurde.
+- **Nutzungsrechte:** gesondert prüfen. Insbesondere EDEKA.de untersagt automatisierte Datennutzung ohne vorherige Erlaubnis.
+- **Kaufland:** `kaufland.de` ist ein Marktplatz und liefert nicht automatisch Preise von Kaufland-Supermarktregalen.
+
+**Alle Recherche- und Teständerungen ausschließlich im Repository `Try`. Keine Änderungen in `Ernaerungsgedaechnis`.**
