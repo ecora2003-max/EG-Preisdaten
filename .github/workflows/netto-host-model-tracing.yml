@@ -1,0 +1,26 @@
+name: Netto mobile Retrofit base URL and price model tracing
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_product_host_model.py
+      - .github/workflows/netto-host-model-tracing.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Trace service factory class and ProductSearchResponse getters from APK
+        run: python3 tools/netto_product_host_model.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-host-and-result-model-static
+          path: results/netto_product_host_model_20261031.json
+          retention-days: 7
