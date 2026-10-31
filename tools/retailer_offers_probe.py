@@ -227,6 +227,48 @@ if isinstance(kaufland_html,str):
 safe_request("Lidl sample store key without country prefix",
              "https://offers.lidlplus.com/app/api/v4/DE/7434/offers")
 
+
+# Verify the nested structured offer payload, not merely HTML marker counts.
+if isinstance(kaufland_html, str):
+    key_pos = kaufland_html.find('"offerData":')
+    if key_pos >= 0:
+        obj_start = kaufland_html.find("{", key_pos + len('"offerData":'))
+        try:
+            offer_data, consumed = json.JSONDecoder().raw_decode(kaufland_html[obj_start:])
+            cycles = offer_data.get("cycles", []) if isinstance(offer_data, dict) else []
+            per_date = {}
+            future_sample = []
+            all_count = 0
+            for cycle in cycles:
+                for category in cycle.get("categories", []) if isinstance(cycle,dict) else []:
+                    for offer in category.get("offers", []) if isinstance(category,dict) else []:
+                        if not isinstance(offer,dict):continue
+                        all_count += 1
+                        date_key = str(offer.get("salesFrom") or offer.get("dateFrom") or "unknown")
+                        per_date[date_key] = per_date.get(date_key, 0) + 1
+                        if date_key >= "2026-11-02" and len(future_sample) < 3:
+                            future_sample.append({k:offer.get(k) for k in
+                                ("offerId","title","price","unit","dateFrom","dateTo","salesFrom","salesTo")})
+            tests.append({"provider":"Kaufland embedded offerData verified",
+                          "result":"json_decoded_from_html",
+                          "cycles_count":len(cycles),"total_offers_in_embedded_data":all_count,
+                          "offer_sales_start_counts":per_date,
+                          "sample_future_offers":future_sample})
+        except Exception as e:
+            tests.append({"provider":"Kaufland embedded offerData verified",
+                          "result":"parse_failed","reason":type(e).__name__+": "+str(e)[:140]})
+
+if isinstance(nord_html,str):
+    m=re.search(r'<script[^>]*id=["\x27]__NEXT_DATA__["\x27][^>]*>(.*?)</script>',nord_html,re.S|re.I)
+    if m:
+        nd=json.loads(m.group(1))
+        api_data=nd.get("props",{}).get("pageProps",{}).get("apiData")
+        tests.append({"provider":"ALDI Nord apiData nested structure",
+                      "result":"embedded_json_examined",
+                      "type":type(api_data).__name__,
+                      "keys":list(api_data)[:45] if isinstance(api_data,dict) else [],
+                      "array_count":len(api_data) if isinstance(api_data,list) else None})
+
 summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),
          "purpose":"read-only snapshot of public retailer offering APIs",
          "limitations":"No authentication, impersonation, CAPTCHA bypass or retries; skip when robots unavailable",
