@@ -23,11 +23,12 @@ class StoreItem:
     previous_display_price_eur: Decimal | None
     has_discount: bool
     has_lidl_plus_offer: bool
+    lidl_plus_price_eur: Decimal | None
     price_checked_date: str
     price_kind: str = "DISPLAYED_CURRENT_STORE_PRICE"
     def to_dict(self):
         out=asdict(self)
-        for k in ("current_price_eur","price_without_deposit_eur","deposit_eur","previous_display_price_eur"):
+        for k in ("current_price_eur","price_without_deposit_eur","deposit_eur","previous_display_price_eur","lidl_plus_price_eur"):
             out[k]=str(out[k]) if out[k] is not None else None
         return out
 
@@ -56,6 +57,8 @@ def _item(row:Mapping[str,Any],store_key:str,day:str)->StoreItem | None:
     deposit=_number(p.get("deposit"))
     price_no_deposit=_number(p.get("priceWithoutDeposit"))
     old=_number(p.get("oldPrice"))
+    plus=p.get("lidlPlusOffer")
+    plus_price=_number(plus.get("price")) if isinstance(plus,dict) else None
     return StoreItem(
         retailer="Lidl",store_key=store_key,product_id=product_id,
         name=name,brand=row.get("brand") if isinstance(row.get("brand"),str) else None,
@@ -63,6 +66,7 @@ def _item(row:Mapping[str,Any],store_key:str,day:str)->StoreItem | None:
         deposit_eur=deposit,previous_display_price_eur=old,
         has_discount=bool(p.get("discount")) or old is not None,
         has_lidl_plus_offer=bool(p.get("lidlPlusOffer")),
+        lidl_plus_price_eur=plus_price,
         price_checked_date=day
     )
 

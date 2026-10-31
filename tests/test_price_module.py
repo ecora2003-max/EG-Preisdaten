@@ -356,5 +356,55 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(out["observations"],[])
         self.assertEqual(out["coverage"][0]["status"],"PARSED_PARTIAL")
 
+
+    def test_conditional_penny_benefit_is_not_unconditional_price(self):
+        ds=source("PENNY","SALE",{"offerTiles":[{"uuid":"b","title":"Käse 140 g",
+                 "price":"1.49","benefitPrice":"1.29²","quantity":"140 g"}]},
+                 "https://www.penny.de/angebote",regionId="R1",weekStart=DAY)
+        out=self.service.search_offers({**REQUEST,"retailerIds":["PENNY"]},[ds])
+        p=out["observations"][0]["payload"]
+        self.assertEqual(p["priceCents"],149)
+        self.assertEqual(p["conditional"],["SEPARATE_BENEFIT_PRICE_TERMS_UNVERIFIED"])
+        self.assertEqual(p["eg-preisdaten:advertisedBenefitText"],"1.29²")
+        self.assertEqual(p["eg-preisdaten:conditionalPrices"],[])
+
+    def test_lidl_plus_secondary_price_is_not_base_price(self):
+        ds=source("LIDL","REGULAR",{"results":[
+            {"id":"x","title":"Milch 1 l","brand":"Example","price":1.29,
+             "lidlPlusOffer":{"price":0.89},"priceWithoutDeposit":1.29,
+             "oldPrice":1.49}]},
+             "https://product-catalog.lidlplus.com/api/app/v1/DE/store/DE7434/search",
+             storeId="DE7434",mode="search",snapshotDate=DAY)
+        out=self.service.search_catalog_prices(REQUEST,[ds])
+        self.assertEqual(out["errors"],[])
+        p=out["observations"][0]["payload"]
+        self.assertEqual(p["priceCents"],129)
+        self.assertEqual(p["priceKind"],"CURRENT_DISPLAYED")
+        self.assertEqual(p["eg-preisdaten:conditionalPrices"],[
+            {"priceCents":89,"access":"LIDL_PLUS","evidence":"lidlPlusOffer.price",
+             "termsVerified":False}])
+        self.assertEqual(p["eg-preisdaten:priceWithoutDepositCents"],129)
+        self.assertIs(p["eg-preisdaten:hasDiscount"],True)
+
+    def test_ambiguous_netto_base_price_is_not_product_weight(self):
+        from urllib.parse import urlencode
+        q=urlencode({"SKU":"A1","Price":"1.99","ValidTo":"2026-10-31 23:59:59",
+                    "Name":"Hafer","BasePrice":"1 kg = 3,98 EUR"})
+        html=('<section><h2>Filial-Angebote</h2><div class="store-offers__header__date">'
+              '26.10.2026 - 31.10.2026</div>'
+              '<div class="tc-store-product-tile" data-ff-id="A1">'
+              '<span class="tc-product-name">Hafer</span>'
+              '<a href="https://www.netto-online.de/ViewMMPWishlist-AddStoreArticle?'+q+'">Test</a>'
+              '<div class="grid-top-price"><span class="product__current-price tc-product-price">1,99</span></div>'
+              '<div class="grid-app-price"><span class="product__current-price tc-product-price">1,49</span></div>'
+              '</div></section>')
+        ds=source("NETTO_MD","SALE",html,"https://www.netto-online.de/angebote/c-N07",
+                  contentType="text/html")
+        p=self.service.search_offers({**REQUEST,"retailerIds":["NETTO_MD"]},[ds])["observations"][0]["payload"]
+        self.assertIsNone(p["article"]["quantity"])
+        self.assertEqual(p["eg-preisdaten:advertisedUnitPrice"],"1 kg = 3,98 EUR")
+        self.assertEqual(p["eg-preisdaten:conditionalPrices"][0]["priceCents"],149)
+        self.assertEqual(p["priceCents"],199)
+
 if __name__=="__main__":
     unittest.main()

@@ -26,6 +26,7 @@ class LidlPriceTests(unittest.TestCase):
         self.assertEqual(items[0].previous_display_price_eur,Decimal("1.09"))
         self.assertTrue(items[0].has_discount)
         self.assertTrue(items[0].has_lidl_plus_offer)
+        self.assertEqual(items[0].lidl_plus_price_eur, Decimal("0.69"))
     def test_guards(self):
         with self.assertRaises(ValueError):
             store_products({"totalProducts":1,"products":[]},store_key="bad",day="2026-10-31")

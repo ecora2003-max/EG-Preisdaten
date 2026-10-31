@@ -129,15 +129,19 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
             from catalogues.netto_branch_offers import parse_branch_offers
             items,cov=parse_branch_offers(body,ds["sourceUrl"])
             return [dict(id=x.offer_id,label=x.product_name,price=x.sale_price_eur,
-                         pack=x.advertised_unit_price,fromDate=x.valid_from_date,
+                         advertisedUnitPrice=x.advertised_unit_price,fromDate=x.valid_from_date,
                          untilDate=x.valid_to_local[:10],scope="UNKNOWN",
-                         scopeId=None,conditions=[],sourcePriceKind="SALE") for x in items],cov
+                         scopeId=None,conditions=[],sourcePriceKind="SALE",
+                         conditionalPrices=([{"priceCents":cents(x.advertised_app_price_eur),
+                           "access":"NETTO_APP","evidence":"visible_app_price",
+                           "termsVerified":False}] if x.advertised_app_price_eur is not None else [])) for x in items],cov
         else:
             raise DataError("UNSUPPORTED_SOURCE","No proven sales adapter for this chain")
         return [dict(id=x.product_id,label=x.title,price=x.price_eur,pack=x.quantity,
                      fromDate=x.valid_from,untilDate=x.valid_to,
                      scope=x.scope.value,scopeId=x.scope_id,
-                     conditions=[x.price_condition] if x.price_condition else [],
+                     conditions=(["SEPARATE_BENEFIT_PRICE_TERMS_UNVERIFIED"] if r=="PENNY" and x.price_condition else []),
+                     advertisedBenefitText=(x.price_condition if r=="PENNY" else None),
                      sourcePriceKind="SALE") for x in offers], {"received":len(offers),"parsed":len(offers),"complete":False}
     if r=="REWE":
         from adapters.stationary_price_catalogues import rewe_stationary
@@ -184,7 +188,12 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
         else:raise DataError("INVALID_REQUEST","Lidl catalogue needs mode=category/category-pages/search")
         return [dict(id=x.product_id,label=x.name,brand=x.brand,price=x.current_price_eur,
                      deposit=x.deposit_eur,scope="STORE_CONFIRMED",scopeId=store,
-                     sourcePriceKind="CURRENT_DISPLAYED") for x in items],cov
+                     sourcePriceKind="CURRENT_DISPLAYED",
+                     hasDiscount=x.has_discount,hasConditionalOffer=x.has_lidl_plus_offer,
+                     priceWithoutDeposit=x.price_without_deposit_eur,
+                     conditionalPrices=([{"priceCents":cents(x.lidl_plus_price_eur),
+                       "access":"LIDL_PLUS","evidence":"lidlPlusOffer.price",
+                       "termsVerified":False}] if x.lidl_plus_price_eur is not None else [])) for x in items],cov
     if r=="ALDI_NORD":
         from catalogues.aldi_nord import aldi_nord_catalogue_from_html
         items,meta=aldi_nord_catalogue_from_html(body)
@@ -264,6 +273,13 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
     identity=json.dumps([retailer,sid,raw_id,name,kind_out,value,start,end,ds.get("sourceUrl")],ensure_ascii=False)
     obs_id="PRICE-"+hashlib.sha256(identity.encode()).hexdigest()[:24]
     qty=parse_quantity(row.get("pack"))
+    conditional_prices=row.get("conditionalPrices",[])
+    if not isinstance(conditional_prices,list):raise DataError("INVALID_CONDITION","Conditional prices list required")
+    normalized_conditions=[]
+    for x in conditional_prices:
+        if not isinstance(x,dict) or type(x.get("priceCents")) is not int or x["priceCents"]<0 or x["priceCents"]>100_000_000 or x.get("access") not in ("NETTO_APP","LIDL_PLUS") or x.get("termsVerified") is not False:
+            raise DataError("INVALID_CONDITION","Unsupported or unverified conditional price")
+        normalized_conditions.append(dict(x))
     # A snapshot observed today is not proof of a future checkout price.
     if start is not None and end is not None:
         temporal="PUBLISHED_WINDOW" if start<=requested_start<=end else "OUTSIDE_TARGET_DATE"
@@ -286,7 +302,13 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
                                  "evidenceKind":"UNKNOWN" if ds.get("fixture") else "OFFICIAL_WEB",
                                  "rightsStatus":_REGISTRY[retailer][3],"dataQuality":"UNKNOWN" if ds.get("fixture") else "SOURCED",
                                  "parserVersion":VERSION},
-                       "availability":"UNKNOWN","eg-preisdaten:targetDateStatus":temporal}}
+                       "availability":"UNKNOWN","eg-preisdaten:targetDateStatus":temporal,
+                       "eg-preisdaten:conditionalPrices":normalized_conditions,
+                       "eg-preisdaten:hasConditionalOffer":row.get("hasConditionalOffer"),
+                       "eg-preisdaten:hasDiscount":row.get("hasDiscount"),
+                       "eg-preisdaten:advertisedBenefitText":row.get("advertisedBenefitText"),
+                       "eg-preisdaten:advertisedUnitPrice":row.get("advertisedUnitPrice"),
+                       "eg-preisdaten:priceWithoutDepositCents":cents(row.get("priceWithoutDeposit"))}}
 
 class PriceService:
     """All functions are synchronous pure snapshot transforms. No network requests."""
