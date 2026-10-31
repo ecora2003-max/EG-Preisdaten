@@ -1,0 +1,26 @@
+name: Netto official store brochure PDF text diagnostic
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/netto_brochure_pdf_text.py'
+      - '.github/workflows/netto-pdf-text.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check extractable brochure text without saving copyrighted PDF
+        run: python3 tools/netto_brochure_pdf_text.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-pdf-text-structure
+          path: results/netto_brochure_pdf_text_diagnostic.json
+          retention-days: 7
