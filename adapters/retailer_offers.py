@@ -293,6 +293,54 @@ def kaufland_offers(page: str | Mapping[str, Any], availability: list[Mapping[st
     return out
 
 
+
+def lidl_store_offers(payload: Mapping[str, Any], *, store_key: str) -> list[Offer]:
+    """Normalize direct Lidl Plus v4 offers bound to a concrete physical store.
+
+    Preconditions: response obtained from /app/api/v4/DE/{store_key}/offers,
+    using a storeKey previously selected from the official stores catalogue.
+    Reject online-only and complex conditional discount shapes.
+    """
+    if not re.fullmatch(r"DE[0-9]+", store_key):
+        raise ValueError("Lidl store key must be an exact DE-prefixed store identifier")
+    items = payload.get("offers")
+    if not isinstance(items, list):
+        raise ValueError("Lidl direct store API response lacks offers array")
+    if isinstance(payload.get("totalOffers"), int) and payload["totalOffers"] != len(items):
+        raise ValueError("Lidl returned truncated or inconsistent offer list")
+    result=[]
+    seen=set()
+    for item in items:
+        if not isinstance(item,dict):
+            continue
+        # This type represents an actual shelf price. Other types describe
+        # percentage, multi-buy or conditional promotions and need own parsers.
+        if item.get("offerType") != "StoreSpecialPriceDiscount":
+            continue
+        if item.get("category") != "Store":
+            continue
+        box=item.get("priceBox")
+        if not isinstance(box,dict):
+            continue
+        price=money(box.get("largePartNumeric") if box.get("largePartNumeric") is not None
+                    else box.get("largePartString"))
+        title=_text(item.get("title"))
+        oid=_text(item.get("id"))
+        if price is None or not title or not oid or oid in seen:
+            continue
+        start,end=_iso_date(item.get("startValidityDate")),_iso_date(item.get("endValidityDate"))
+        if not start or not end or start>end:
+            continue
+        seen.add(oid)
+        unit=_text(item.get("packaging")) or _text(item.get("pricePerUnit"))
+        note=_text(box.get("discountMessage")) or "Lidl Filialaktionspreis"
+        result.append(Offer(
+            retailer="Lidl",product_id=oid,title=title,price_eur=price,
+            quantity=unit,valid_from=start,valid_to=end,
+            scope=Scope.STORE,scope_id=store_key,
+            note=note))
+    return result
+
 def lidl_flyer(payload: Mapping[str,Any], *, expected_start: str,
                confirmed_region_code: str | None = None) -> list[Offer]:
     """Lidl public leaflet JSON is not proof of which individual store participates.
