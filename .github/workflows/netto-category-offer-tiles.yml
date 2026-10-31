@@ -1,0 +1,27 @@
+name: Netto branch offer tiles on public product categories
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_category_offer_tile_probe.py
+      - .github/workflows/netto-category-offer-tiles.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check offer tiles and possible API paths on category pages
+        run: python3 tools/netto_category_offer_tile_probe.py
+      - name: Save structured results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: netto-category-offer-tiles
+          path: results/netto_offer_tiles_from_category_20261031.json
+          retention-days: 7
