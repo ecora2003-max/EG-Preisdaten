@@ -1,0 +1,27 @@
+name: Netto MPOS actual single price check
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_mpos_live_price_test.py
+      - .github/workflows/netto-mpos-live-price.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Execute one real anonymous read-only price lookup
+        run: python3 tools/netto_mpos_live_price_test.py
+      - name: Archive diagnostic JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: netto-mpos-live-price-result
+          path: results/netto_mpos_live_price_test_20261031.json
+          retention-days: 7
