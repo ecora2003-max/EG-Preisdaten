@@ -68,7 +68,7 @@ def prices_from_product_html(page_html: str, page_url: str)->list[NettoOnlineOff
     found=[]
     seen=set()
     for script in _SCRIPT.finditer(page_html):
-        try:document=json.loads(unescape(script.group(1)))
+        try:document=json.loads(unescape(script.group(1)),strict=False)
         except (json.JSONDecodeError,TypeError):continue
         for obj in _walk(document):
             if not isinstance(obj,dict) or not _is_type(obj,"Product"):continue
