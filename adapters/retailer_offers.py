@@ -417,6 +417,64 @@ def edeka_offers(payload: Mapping[str,Any], *, market_id: str) -> list[Offer]:
     return result
 
 
+
+def netto_store_prospects(page_html: str, *, store_id: str) -> list[dict[str, Any]]:
+    """Extract official per-store leaflet links without claiming product-price parsing.
+
+    The plain first-party HTML was observed at
+    /ueber-netto/Online-Prospekte.chtm?stores_id={store_id}.
+    Only link to the official wochenprospekt.netto-online.de host and only
+    accept the same store ID in the resulting flyer URL.
+    """
+    from html.parser import HTMLParser
+    from urllib.parse import urlparse, parse_qs
+    if not re.fullmatch(r"[0-9]{3,8}",str(store_id)):
+        raise ValueError("Netto store ID must be numeric")
+    match=re.search(r'<div\b[^>]*class=["\x27][^"\x27]*your-store__info__address[^"\x27]*["\x27][^>]*>(.*?)</div>',page_html,re.S|re.I)
+    if not match:
+        raise ValueError("Netto official selected-store address not found")
+    address=unescape(re.sub(r'<[^>]*>'," ",match.group(1)))
+    address=re.sub(r"\s+"," ",address).strip()
+    if not address or "Netto" not in address:
+        raise ValueError("Netto selected-store identity not verified")
+    class AnchorParser(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.records=[]
+        def handle_starttag(self,tag,attrs):
+            if tag=="a":
+                a=dict(attrs)
+                self.records.append(a)
+    parser=AnchorParser()
+    parser.feed(page_html)
+    output=[]
+    seen=set()
+    for a in parser.records:
+        aid=str(a.get("id") or "")
+        m=re.fullmatch(r"filialangebote-KW(\d{2})",aid,re.I)
+        if not m:
+            continue
+        href=unescape(str(a.get("href") or "")).strip()
+        p=urlparse(href)
+        if p.scheme!="https" or p.netloc!="wochenprospekt.netto-online.de":
+            continue
+        params=parse_qs(p.query)
+        if params.get("storeid") != [str(store_id)]:
+            continue
+        week=int(m.group(1))
+        if not (1<=week<=53) or week in seen:
+            continue
+        seen.add(week)
+        output.append({"retailer":"Netto Marken-Discount","store_id":str(store_id),
+                       "store_address":address,"iso_week":week,
+                       "official_prospect_url":href,
+                       "offers_parsed":False,
+                       "applicability":"STORE_PROSPECT_CONFIRMED",
+                       "note":"Prospekt ist für die Filiale bestimmt; einzelne Produktpreise noch nicht automatisch validiert"})
+    if not output:
+        raise ValueError("No official market-matching Netto weekly prospects")
+    return sorted(output,key=lambda r:r["iso_week"])
+
 def netto_status() -> dict[str,str]:
     """Fail closed. No verified structured product interface + market match yet."""
     return {"retailer":"Netto Marken-Discount","status":"NOT_IMPLEMENTATION_READY",
