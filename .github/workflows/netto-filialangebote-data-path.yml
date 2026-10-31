@@ -1,0 +1,27 @@
+name: Netto filialangebote offer API path discovery
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_filialangebote_data_path.py
+      - .github/workflows/netto-filialangebote-data-path.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Identify candidate offer data routes in public page HTML
+        run: python3 tools/netto_filialangebote_data_path.py
+      - name: Save bounded diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: netto-filialangebote-api-paths
+          path: results/netto_filialangebote_data_path_20261031.json
+          retention-days: 7
