@@ -846,7 +846,7 @@ class ModuleTests(unittest.TestCase):
 
     def test_targeted_product_price_query_requires_explicit_small_target(self):
         for ids in (["ALDI_NORD"],["ALDI_SUED"],["REWE"],["LIDL"]):
-            req={**REQUEST,"retailerIds":ids}
+            req={**REQUEST,"retailerIds":ids,"maxResults":20}
             with self.subTest(retailer=ids[0]):
                 ds=fixture([r(id="sku1",label="Milch"),r(id="sku2",label="Bohnen")],
                            retailer=ids[0],channel="REGULAR")
@@ -865,7 +865,7 @@ class ModuleTests(unittest.TestCase):
     def test_targeted_query_excludes_all_four_offer_only_retailers(self):
         for retailer in ("PENNY","KAUFLAND","EDEKA","NETTO_MD"):
             with self.subTest(retailer=retailer):
-                req={**REQUEST,"retailerIds":[retailer],"query":"Milch"}
+                req={**REQUEST,"retailerIds":[retailer],"query":"Milch","maxResults":20}
                 ds=fixture([r()],retailer=retailer,channel="REGULAR")
                 out=self.service.search_product_prices(req,[ds])
                 self.assertEqual(out["observations"],[])
