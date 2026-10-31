@@ -1,10 +1,5 @@
 name: EDEKA bounded authorized product page snapshot
 on:
-  push:
-    branches: [main]
-    paths:
-      - tools/edeka_product_linkgraph_snapshot.py
-      - .github/workflows/edeka-product-linkgraph-snapshot.yml
   workflow_dispatch:
 permissions:
   contents: write
