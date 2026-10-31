@@ -1,0 +1,26 @@
+name: Alternative retailer public-access diagnostics
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/alternative_access_diagnostics.py'
+      - '.github/workflows/alternative-access.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Probe public retailer sources without authentication
+        run: python3 tools/alternative_access_diagnostics.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: alternative-retailer-access-report
+          path: results/alternative_access_diagnostics.json
+          retention-days: 7
