@@ -38,6 +38,22 @@ def main():
             body=r.read(1000000)
             result["http_status"]=r.status
         html=body.decode("utf8","replace")
+        import re
+        from catalogues.netto_online import _SCRIPT
+        scripts=list(_SCRIPT.finditer(html))
+        result["ld_script_count"]=len(scripts)
+        result["ld_examples"]=[]
+        for m in scripts[:8]:
+            try:
+                raw=json.loads(m.group(1))
+                types=[]
+                if isinstance(raw,dict):
+                    types=[raw.get("@type"),raw.get("type")]
+                result["ld_examples"].append({"parse_ok":True,"types":types,
+                    "root_keys":sorted(raw)[:20] if isinstance(raw,dict) else [],
+                    "offer_type":str(type(raw.get("offers")).__name__) if isinstance(raw,dict) else None})
+            except Exception as e:
+                result["ld_examples"].append({"parse_ok":False,"error_class":type(e).__name__,"error_reason":str(e)[:130]})
         offers=prices_from_product_html(html,URL)
         result["offer_count"]=len(offers)
         result["offers"]=[a.as_dict() for a in offers[:5]]
