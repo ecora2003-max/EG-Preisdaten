@@ -13,6 +13,7 @@ can remain invisible.
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import json
 import re
 import subprocess
@@ -102,9 +103,9 @@ def candidates_from_dex(apk: Path):
 def strings_report(path):
     obj = {
         "scanner": {
-            "hosts": {},
-            "paths": {},
-            "signal_hits": {},
+            "hosts": Counter(),
+            "paths": Counter(),
+            "signal_hits": Counter(),
             "scanned_bytes": 0,
             "scanned_files": 0,
             "files": []
