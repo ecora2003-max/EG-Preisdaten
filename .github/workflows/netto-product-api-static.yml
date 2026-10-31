@@ -1,0 +1,27 @@
+name: Netto Plus product search static host and schema tracing
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_product_api_static_context.py
+      - .github/workflows/netto-product-api-static.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Trace Retrofit client and response models from APK
+        run: python3 tools/netto_product_api_static_context.py
+      - name: Upload safe structural diagnostics
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-static-product-api-report
+          path: results/netto_product_api_static_20261031.json
+          retention-days: 7
