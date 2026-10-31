@@ -1,0 +1,25 @@
+name: ALDI public full catalogue search feasibility
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_public_search_probe.py
+      - .github/workflows/aldi-public-search.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/aldi_public_search_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-public-search-metadata
+          path: results/aldi_public_search_probe.json
+          retention-days: 7
