@@ -150,6 +150,8 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
     if r=="ALDI_SUED":
         from adapters.stationary_price_catalogues import aldi_sued
         data=aldi_sued(body,store)
+        if any(x["currency"] != "EUR" for x in data["listings"]):
+            raise DataError("INVALID_CURRENCY", "Non-EUR catalogue values cannot become EUR cents")
         rows=[dict(id=x["product_id"],label=x["title"],brand=x["brand"],
                    priceCents=x["price_cents"],depositCents=x["deposit_cents"],
                    scope="STORE_CONFIRMED",scopeId=store,
@@ -280,6 +282,9 @@ class PriceService:
             raise DataError("INVALID_RETAILER","Select at least one known retailer")
         limit=request.get("maxResults",100)
         if type(limit) is not int or not 1<=limit<=1000:raise DataError("INVALID_REQUEST","maxResults must be 1..1000")
+        term=request.get("query")
+        if term is not None and not isinstance(term,str):
+            raise DataError("INVALID_REQUEST","query must be string")
         found=[]; errors=[]; coverage=[]; seen=set()
         for retailer in dict.fromkeys(retailers):
             selected=[d for d in datasets if isinstance(d,dict) and d.get("retailerId")==retailer]
@@ -290,6 +295,7 @@ class PriceService:
                 channel=ds.get("channel")
                 if channel not in ("SALE","REGULAR") or kind!="BOTH" and kind!=channel:continue
                 received=0;parsed=0;complete=False
+                prior_len=len(found); seen_before=seen.copy()
                 try:
                     status=ds.get("httpStatus",200)
                     if status==403:raise DataError("SOURCE_BLOCKED","403 source denied")
@@ -317,7 +323,7 @@ class PriceService:
                             payload=_payload(row,ds,channel,when,idx,begin,end,regular)
                             if payload is None:continue
                             oid=payload["payload"]["observationId"]
-                            if oid not in seen:
+                            if oid not in seen and (term is None or term.casefold() in payload["payload"]["article"]["label"].casefold()):
                                 found.append(payload);seen.add(oid)
                     if received!=parsed:complete=False
                     if len(found)>=limit:
@@ -328,14 +334,12 @@ class PriceService:
                                          complete=complete,status="PARSED_PARTIAL" if not complete else "PARSED_PAGE",
                                          rights=_REGISTRY[retailer][3],reportedTotal=summary.get("reportedTotal")))
                 except (DataError, ValueError, TypeError, KeyError, ImportError, json.JSONDecodeError) as exc:
+                    # Atomic dataset import: never leak half-parsed output after schema failure.
+                    found=found[:prior_len];seen=seen_before
                     code=exc.code if isinstance(exc,DataError) else "SCHEMA_CHANGED"
                     errors.append(dict(retailerId=retailer,channel=channel,code=code,message=str(exc)[:250]))
                     coverage.append(dict(retailerId=retailer,channel=channel,received=received,parsed=parsed,
                                          complete=False,status="ERROR",rights=_REGISTRY[retailer][3]))
-        term=request.get("query")
-        if term is not None:
-            if not isinstance(term,str):raise DataError("INVALID_REQUEST","query must be string")
-            found=[x for x in found if term.casefold() in x["payload"]["article"]["label"].casefold()]
         return {"contractVersion":CONTRACT_VERSION,"observations":found[:limit],
                 "coverage":coverage,"errors":errors,
                 "warnings":["Source retrieval and redistribution rights are not granted by parser success",

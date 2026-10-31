@@ -188,5 +188,101 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(res["errors"][0]["code"],"SCHEMA_CHANGED")
         self.assertEqual(res["coverage"][0]["status"],"ERROR")
 
+
+    def test_all_offer_bridges_with_realistic_offline_shapes(self):
+        req={**REQUEST,"windowEnd":"2026-11-07"}
+        cases=[
+          (source("PENNY","SALE",{"offerTiles":[{"uuid":"x","title":"Käse","price":"1.49",
+                        "benefitPrice":"1.29²","quantity":"140 g"}]},
+                    "https://www.penny.de/angebote",
+                    regionId="R1",weekStart="2026-11-02",
+                    scopeProof={"regionId":"R1","sourceRef":"published-selling-region"}),
+           "PENNY",149,"REGION_CONFIRMED"),
+          (source("KAUFLAND","SALE",{"page":{"cycles":[{"categories":[{"offers":[{
+                    "klNr":"A","title":"Tofu","price":1.99,"unit":"200 g",
+                    "salesFrom":"2026-11-02","salesTo":"2026-11-07"}]}]}]},
+                    "availability":[{"klNr":"A","dateFrom":"2026-11-02","dateTo":"2026-11-07"}]},
+                    "https://www.kaufland.de/angebote",storeId="DE5220",
+                    firstDay="2026-11-02",lastDay="2026-11-07",
+                    scopeProof={"storeId":"DE5220","sourceRef":"official-klNr-market"}),
+           "KAUFLAND",199,"STORE_CONFIRMED"),
+          (source("ALDI_NORD","SALE",{"props":{"pageProps":{"apiData":json.dumps([
+                    ["OFFER_GET",{"req":{"locale":"de","week":"next"},
+                    "res":{"algoliaDataMap":{"a":{"objectID":"a","name":"Nüsse",
+                    "currentPrice":{"priceValue":1.49,"validFromLocalDate":"2026-11-02",
+                    "validUntilLocalDate":"2026-11-07"}}}}}]])}}},
+                    "https://www.aldi-nord.de/angebote"),
+           "ALDI_NORD",149,"CHAIN_WIDE_REPORTED"),
+          (source("LIDL","SALE",{"offers":[{"id":"1","title":"Eis","category":"Store",
+                    "offerType":"StoreSpecialPriceDiscount",
+                    "priceBox":{"largePartNumeric":1.49},
+                    "startValidityDate":"2026-11-02","endValidityDate":"2026-11-07"}],
+                    "totalOffers":1},
+                    "https://offers.lidlplus.com/app/api/v4/DE/DE7434/offers",
+                    storeId="DE7434",scopeProof={"storeId":"DE7434","sourceRef":"official-lidl-store"}),
+           "LIDL",149,"STORE_CONFIRMED"),
+          (source("EDEKA","SALE",{"national":False,"docs":[{"angebotid":1,"titel":"Tofu",
+                    "preis":"2,29","gueltig_von":"2026-11-02","gueltig_bis":"2026-11-07"}]},
+                    "https://www.edeka.de/api/angebote",storeId="1234",
+                    scopeProof={"storeId":"1234","sourceRef":"market-id"}),
+           "EDEKA",229,"STORE_CONFIRMED")
+        ]
+        for ds,retailer,expected_price,scope in cases:
+            result=self.service.search_offers({**req,"retailerIds":[retailer]},[ds])
+            self.assertFalse(result["errors"],(retailer,result["errors"]))
+            self.assertEqual(len(result["observations"]),1,retailer)
+            p=result["observations"][0]["payload"]
+            self.assertEqual(p["priceCents"],expected_price,retailer)
+            self.assertEqual(p["scope"]["scopeType"],scope,retailer)
+            if retailer=="EDEKA":
+                self.assertEqual(p["source"]["rightsStatus"],"RESTRICTED")
+
+    def test_parser_rolls_back_all_rows_on_one_invalid_row(self):
+        ds=fixture([r(id="good"),r(id="bad",price="1.123")])
+        result=self.service.search_offers(REQUEST,[ds])
+        self.assertEqual(result["errors"][0]["code"],"INVALID_PRICE")
+        self.assertEqual(result["observations"],[])
+
+    def test_query_filter_applies_before_output_limit(self):
+        ds=fixture([r(id="a",label="Tomaten"),r(id="b",label="Milch"),
+                    r(id="c",label="Milch")])
+        req={**REQUEST,"query":"Milch","maxResults":1}
+        result=self.service.search_offers(req,[ds])
+        self.assertEqual(len(result["observations"]),1)
+        self.assertEqual(result["observations"][0]["payload"]["article"]["label"],"Milch")
+
+    def test_no_foreign_currency_claimed_as_eur(self):
+        body={"data":[{"sku":"X","name":"M","price":{"amountRelevant":199,
+             "currencyCode":"USD"}}]}
+        ds=source("ALDI_SUED","REGULAR",body,
+                  "https://api.aldi-sued.de/v3/product-search",storeId="B384")
+        out=self.service.search_catalog_prices({**REQUEST,"retailerIds":["ALDI_SUED"]},[ds])
+        self.assertEqual(out["errors"][0]["code"],"INVALID_CURRENCY")
+        self.assertEqual(out["observations"],[])
+
+    def test_official_chain_current_category_and_netto_online(self):
+        product={"objectID":"A","name":"Bio-Quark","brandName":"BIO","salesUnit":"250 g",
+                 "currentPrice":{"priceValue":0.99}}
+        aldi_payload={"props":{"pageProps":{"algoliaState":{"initialResults":{
+                "an_prd_de_de_products2":{"results":[{"nbHits":1,"nbPages":1,"page":0,
+                                                       "hits":[product]}]}}}}}}
+        html='<script id="__NEXT_DATA__" type="application/json">'+json.dumps(aldi_payload)+'</script>'
+        aldi=source("ALDI_NORD","REGULAR",html,
+                    "https://www.aldi-nord.de/sortiment/produkte",contentType="text/html")
+        result=self.service.search_catalog_prices({**REQUEST,"retailerIds":["ALDI_NORD"]},[aldi])
+        self.assertEqual(result["observations"][0]["payload"]["scope"]["scopeType"],"CHAIN_WIDE_REPORTED")
+        self.assertEqual(result["observations"][0]["payload"]["priceCents"],99)
+        self.assertTrue(result["coverage"][0]["complete"]) # one API category only, not whole chain
+        netto_html="""<script type="application/ld+json">{"@type":"Product","name":"Haferflocken",
+                    "sku":"D1","offers":{"@type":"Offer","price":"1.89",
+                    "priceCurrency":"EUR"}}</script>"""
+        netto=source("NETTO_MD","REGULAR",netto_html,
+                     "https://www.netto-online.de/produkt/haferflocken",
+                     contentType="text/html")
+        result=self.service.search_catalog_prices({**REQUEST,"retailerIds":["NETTO_MD"]},[netto])
+        self.assertEqual(result["observations"][0]["payload"]["priceKind"],"ONLINE_LISTED")
+        self.assertEqual(result["observations"][0]["payload"]["scope"]["scopeType"],"ONLINE")
+        self.assertEqual(result["observations"][0]["payload"]["priceCents"],189)
+
 if __name__=="__main__":
     unittest.main()
