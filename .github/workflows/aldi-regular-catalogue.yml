@@ -1,0 +1,25 @@
+name: ALDI Nord regular product catalogue price schema
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_everyday_catalogue.py
+      - .github/workflows/aldi-regular-catalogue.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/aldi_everyday_catalogue.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-everyday-catalogue-json
+          path: results/aldi_everyday_catalogue.json
+          retention-days: 7
