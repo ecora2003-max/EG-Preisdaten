@@ -1,0 +1,24 @@
+name: ALDI Nord priced everyday items in server JSON
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_category_product_records.py
+      - .github/workflows/aldi-product-json.yml
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/aldi_category_product_records.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-price-products-json
+          path: results/aldi_category_product_records.json
+          retention-days: 7
