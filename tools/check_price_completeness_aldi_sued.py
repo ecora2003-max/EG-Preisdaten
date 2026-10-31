@@ -22,7 +22,7 @@ STORE = "B384"
 LIMIT = 60
 MAX_PAGES = 75
 DELAY_SECONDS = 0.65
-UA = "ErnaehrungsgedaechtnisResearch/1.1 (price completeness diagnostics)"
+UA = "ErnaehrungsgedaechnisResearch/1.0 (one-off noncommercial API diagnostic)"
 FIELDS = ("Date", "Age", "Cache-Control", "ETag", "Last-Modified", "Expires")
 
 
