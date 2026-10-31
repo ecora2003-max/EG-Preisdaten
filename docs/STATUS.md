@@ -1,7 +1,7 @@
 # Preisdaten – Wiederaufnahmestand (31.10.2026)
 
 **Grad:** `PARTIAL_READY / OFFLINE_VERIFIED` (Fachkern); **nicht** `READY_FOR_INTEGRATION` für produktive Händler-Livefeeds und nicht `INTEGRATED`. Das maßgebliche Ziel steht in `docs/ACCEPTANCE.md`.
-**Letzter vollständig geprüfter Code-Commit:** `8e935b4844d55261c393f0d3bef338cb3fc66437`. GitHub Actions [#41220671906](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220671906): **74/74 Offline-Tests PASS**, CLI und Kompilierung PASS.
+**Letzter vollständig geprüfter Code-Commit:** `fe580013c619c366ec749ac98e1a630a91a86231`. GitHub Actions [#41220821950](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220821950): **77/77 Offline-Tests PASS**, CLI und Kompilierung PASS.
 **Architekturvertrag:** `1.0.0-draft`, gelesen `d22862739bd0e3ef8451ce029e54f7c33ee53e40`; lokale Vertragsschema- und Beispiel-Fixures übernommen.
 **Haupt-App:** nur gelesen, `6ba419ed2875c1988f45afee65e2708e7895cacf`; kein anderer Repo-Write.
 **Historische Forschung:** ehemals `Try`, via GitHub-Redirect identisch mit `EG-Preisdaten`. Forschungsberichte bleiben erhalten.
@@ -25,7 +25,7 @@ Weitere Details: [Quellen- und Rechtsmatrix](SOURCES.md), alte `reports/` und [T
 
 ## Aktueller Entwicklungsmeilenstein – Commit `b201eed8cd9b5ab5de0db54cfa1cefd43727f234`
 
-- **74/74 Tests grün**, inkl. 8-Händler-Offlinematrix, Architektur-JSON-Schema, alle bisherigen Händlerparser, Netto-Live-HTML-Fixures, negative Fehler- und Scope-Szenarien.
+- **77/77 Tests grün**, inkl. 8-Händler-Offlinematrix, Architektur-JSON-Schema, alle bisherigen Händlerparser, Netto-Live-HTML-Fixures, negative Fehler- und Scope-Szenarien.
 - Preisarten fachlich sauber getrennt: Lidl Plus und Netto App als **gesonderte konditionale Preisbelege ohne bestätigte Zugangsvoraussetzungen**, PENNY-Fußnotenpreis als Originaltext; Streich-/Referenzpreise keine früheren real bezahlten Preise.
 - Der Fachkern erfasst Einzelpreise, Quellen-Grundpreisbelege, Pfand, bekannte Mengen und *unsichere* Mengen. Eine Netto-Grundpreisanzeige `1 kg = …` wird **nicht** fälschlich als Packungsgewicht 1 kg gedeutet.
 - `storeSelections` und Reihenfilter verhindern Übernahme fremder Märkte/Verkaufsregionen; unterschiedliche Beobachtungszeitpunkte bleiben getrennte Beobachtungen. `shoppingDate` (nicht der Fensteranfang) ist für `targetDateStatus` ausschlaggebend.
@@ -68,6 +68,7 @@ Zusätzliche Code- und CI-Meilensteine:
 
 | `079c763` | [#41220508128](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220508128) | **PASS 72/72: GTIN-Prüfziffer und explizite FoodType-Filter** |
 | `8e935b4` | [#41220671906](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220671906) | **PASS 74/74: Dezimalexakter Grundpreis-Plausibilitätscheck** |
+| `fe58001` | [#41220821950](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220821950) | **PASS 77/77: ungültige Quellmetadaten, Anfragen und Extremmengen abgewehrt** |
 
 **Keine neuen Live-GET-Abrufe in diesen Code-/Unit-Testläufen.** Historische Live-Nachweise liegen in den alten Research-Berichten und Actions; sie wurden nicht als neue Beobachtung deklariert. Die JSON-Schema-Tests wurden mit `jsonschema` Draft 2020-12 und Formatchecker tatsächlich ausgeführt; `requirements-dev.txt` installiert zusätzlich BeautifulSoup für den älteren Netto-Parser.
 
