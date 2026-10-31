@@ -11,17 +11,17 @@ Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsproto
 | **ALDI Nord** | 276 Aktionsdatensätze mit Preisen für die Folgewoche | Kettenweit; lokale Ausnahmen unbekannt | Kettenadapter erfolgreich getestet |
 | **Lidl** | 65 Einzel-Aktionspreise aus 78 Angeboten der Filiale DE7434 | **Konkrete Filiale bestätigt** über `storeKey` | Filialadapter erfolgreich getestet |
 | **EDEKA** | 256 Angebote Berlin, 40 Hamburg, 28 nationale Ersatzangebote | Offizielle Markt-ID und `national=false` | **Technisch getestet, automatisierte Nutzung bis zu Freigabe gesperrt** |
-| **Netto Marken-Discount** | Allgemeine Prospektseite erreichbar; Filialseite 403 / gewöhnlicher Chrome „Access Denied“ | Filiale nicht maschinenlesbar bestätigt | **Nicht produktionsfähig; keine Schutzumgehung** |
+| **Netto Marken-Discount** | **Offizielle Filialprospekt-URLs für KW 45 bestätigt**; Berliner Prospekt als 72-seitige, 36,4-MB-PDF mit Text extrahierbar | **Prospekt konkreter Filiale bestätigt**, Artikelpreise noch nicht fehlerfrei zugeordnet | **Prospekt-Adapter getestet; vollautomatischer Produktadapter noch nicht produktionsfähig** |
 
 **Kritisch:** Funktionierende HTTP-Endpunkte bzw. erfolgreiche Integrationstests sind **keine Lizenz**, Angebotsdaten automatisiert in einer eigenen App oder Datenbank zu verwenden. Ein API-Client muss die Nutzungsbedingungen und gegebenenfalls Lizenzvereinbarungen des jeweiligen Anbieters erfüllen.
 
 **EDEKA:** [Aktuelle Website-Nutzungsbedingungen](https://www.edeka.de/services/nutzungsbedingungen/) verbieten ausdrücklich automatisierte Extraktion und Datenbankübernahme ohne vorherige Zustimmung. Alle drei EDEKA-Live-Forschungsskripte wurden daher mit einem `EDEKA_PERMISSION_CONFIRMED=1`-Gate gesichert. Ohne externe Freigabe wird **nicht** erneut automatisiert abgefragt. Dieser Gate ist nur ein technischer Schutz, nicht der Nachweis einer Erlaubnis.
 
-**Netto:** Ein Filialseitenabruf aus GitHub Actions wurde blockiert; eine normale Browseransicht bestätigte die Sperre. Keine Benutzeragent-Vortäuschung, Sessionübernahme, Browser-Stealth oder Umgehung implementieren. Für automatisierten Betrieb ist eine freigegebene Datenquelle nötig; alternativ nur vom Nutzer bereitgestellte Informationen mit kenntlich gemachter Unsicherheit importieren.
+**Netto:** Einzelne Filialseiten und `/filialangebote` wurden geblockt; dagegen funktioniert `GET https://www.netto-online.de/ueber-netto/Online-Prospekte.chtm?stores_id=7679` mit regulärem HTTP 200 und liefert **die tatsächliche Filialadresse und den zugeordneten offiziellen Wochenprospekt**. Über `wochenprospekt.netto-online.de` ist die Filial-PDF regulär abrufbar; eine 72-seitige Berliner KW45-Ausgabe enthielt auf den ersten drei Seiten durchsuchbaren Text mit Produktnamen und Preisangaben. Ein belastbares Zuordnungsverfahren *Produkt ↔ Preis ↔ Seite* muss erst validiert werden; bis dahin werden keine aus der PDF geratenen Preise ausgegeben. Eine Genehmigung für systematische Datenübernahme ist unabhängig von technischem Zugriff zu prüfen.
 
 ## Projektdateien
 
-- [Python-Parser und Angebotsmodell](adapters/retailer_offers.py) mit `STORE_CONFIRMED`, `REGION_CONFIRMED`, `CHAIN_WIDE_REPORTED`, `UNKNOWN`.
+- [Python-Parser, Angebotsmodell und Netto-Prospektzuordnung](adapters/retailer_offers.py) mit `STORE_CONFIRMED`, `REGION_CONFIRMED`, `CHAIN_WIDE_REPORTED`, `UNKNOWN`.
 - [Offline-Vertragstests](tests/test_retailer_offers.py)
 - [Live-Kompatibilitätstest für PENNY, Kaufland, ALDI Nord und Lidl](tools/live_adapter_smoke.py)
 - [Erweiterte technische Bewertung](reports/implementierungsstand-2026-10-31.md)
@@ -32,7 +32,9 @@ Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsproto
 - [PENNY, Kaufland, ALDI Nord und **direktes Lidl** – Live ALL PASS](https://github.com/ecora2003-max/Try/actions/runs/41183799427)
 - [EDEKA Berlin, Hamburg, national – historischer erfolgreich abgeschlossener Forschungslauf](https://github.com/ecora2003-max/Try/actions/runs/41183681778). **Nicht erneut ohne Freigabe ausführen.**
 - [Lidl Berlin vs. Hannover – sechs abweichende Filialaktionen](https://github.com/ecora2003-max/Try/actions/runs/41183580801)
-- [Netto ohne Browser-Bypass – offizielle Filialseite zeigt Access Denied](https://github.com/ecora2003-max/Try/actions/runs/41183768242)
+- [Netto: offizielle Filialprospekt-Verknüpfung für zwei Filialen – PASS](https://github.com/ecora2003-max/Try/actions/runs/41184627158)
+- [Netto: Filial-PDF 72 Seiten, textlesbar – PASS](https://github.com/ecora2003-max/Try/actions/runs/41184427978)
+- [Netto: Filialproduktseite weiterhin geblockt](https://github.com/ecora2003-max/Try/actions/runs/41184674088)
 
 Lokal nur mit Python-Standardbibliothek:
 
