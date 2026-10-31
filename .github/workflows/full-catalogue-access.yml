@@ -1,0 +1,35 @@
+name: Verify entire price catalog accessibility - three grocers
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/full_catalogue_access_*.py
+      - .github/workflows/full-catalogue-access.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        grocer: [aldi_nord, rewe, aldi_sued]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate Python syntax
+        run: python3 -m py_compile tools/full_catalogue_access_${{ matrix.grocer }}.py
+      - name: Enumerate available public catalogue data and pagination
+        run: python3 tools/full_catalogue_access_${{ matrix.grocer }}.py
+      - name: Archive aggregate results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-catalogue-access-${{ matrix.grocer }}
+          path: results/full_catalogue_access_20261031/${{ matrix.grocer }}.json
+          retention-days: 7
+          if-no-files-found: warn
