@@ -1,0 +1,26 @@
+name: Lidl and Kaufland store applicability deep check
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/lidl_kaufland_deep.py
+      - .github/workflows/lidl-kaufland-deep.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run deeper publicly accessible checks
+        run: python3 tools/lidl_kaufland_deep.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: retailer-deep-results
+          path: results/lidl_kaufland_deep.json
+          retention-days: 7
