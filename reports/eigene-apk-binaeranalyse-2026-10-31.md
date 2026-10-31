@@ -47,6 +47,62 @@ Die echte aktuelle EDEKA-App hat das Google-Play-Paket `de.edeka.genuss` (nicht 
 
 Die reguläre Coupon-App und die ältere separate **PENNY Scan&Go**-App sind zwei unterschiedliche Pakete und technische Backends. Letztere referenziert tatsächlich `scanandgo-p.rewe-group.com`; Namens-/Klassenfunde weisen auf `ItemInfo`, `ProductDetail` und `PriceFormatter` hin. Ohne bestätigte öffentliche Katalog-Route und Berechtigung liefert dieser Host bislang **keinen für uns verifizierten vollständigen Preiskatalog**.
 
+## Gezielte JADX-Dekompilierung: konkrete HTTP-Methoden und Parameter
+
+**Zusätzlich tatsächlich durchgeführt:** [GitHub-Actions-Lauf mit JADX 1.5.6 – PASS](https://github.com/ecora2003-max/Try/actions/runs/41191207477), [temporär ausgeführter Decompiler-Code](../tools/targeted_jadx_retailer_apis.py). Dabei wurden echte Kotlin-/Java-/Retrofit-API-Klassen zweier bereits zuvor untersuchter Android-Pakete **gezielt dekompiliert**. Nur Methodennamen, HTTP-Routen und Parameternamen wurden gespeichert; die App-Binärdateien und dekompilierter Quelltext wurden anschließend gelöscht.
+
+### Kaufland: tatsächlicher K-SCAN-Produktdownload-Endpunkt
+
+Im aktuellen Paket `com.kaufland.Kaufland` wurde die Klasse
+
+`com.schwarzit.selfscan.shared.core.network.retrofit.api.ProductDownloadApi`
+
+mit einem echten Retrofit-HTTP-Methodenattribut gefunden:
+
+```text
+GET v1/products/{countryId}/{storeId}
+```
+
+Die separate Klasse `ProductApi` enthält:
+
+```text
+GET v1/products/{countryId}/{storeId}/{itemNr}
+```
+
+**Beobachtete Pfadparameter:** `countryId`, `storeId`, beim Einzelprodukt zusätzlich `itemNr`. Keine Query-Parameter in diesen beiden Interface-Deklarationen gefunden. Zudem enthält die App den Host `k-app-scan-dz-bff.api.prod.sit.sys.odj.cloud` und den `ProductSyncManager`.
+
+**Einordnung:** Das ist ein **außerordentlich konkreter Hinweis auf einen echten filialbezogenen, möglicherweise zusammenhängenden K-SCAN-Produktdownload** – wesentlich mehr als eine reine Wochenangebots-API. Ob seine Antwort tatsächlich das gesamte Sortiment, die aktuellen Verkaufspreise oder nur ein reduziertes Scanning-Verzeichnis enthält, konnte anhand der Methodendeklaration nicht belegt werden. Ebenso wurde noch nicht geprüft, ob die gefundene Domain exakt die Basis-URL dieses Clients ist oder eine App-Sitzung verlangt. **Kein direkter Händler-Endpunkt ausgeführt.**
+
+### Netto Marken-Discount: tatsächliche Produktsuch-API und POS-Scanner
+
+Die ebenfalls aus dem aktuellen heruntergeladenen Paket `com.valuephone.vpnetto` dekompilierte Klasse `org.openapitools.client.apis.ProductAPIApi` enthält:
+
+```text
+GET rest/api/v2/categoryList
+GET rest/api/v2/productSearch
+GET rest/api/v2/productScan
+```
+
+**Dekompilierte Query-Parameternamen:** `searchString`, `listUUID`, `userUUID`. Die letzteren könnten zu einem individuellen Nutzer-/Listen-Kontext gehören; daher ist dies **nicht automatisch eine anonyme Ladenpreissuche**.
+
+Eine unabhängige zweite Klasse `org.openapitools.client.apis.MPOSApi` enthält:
+
+```text
+GET api/v1/mpos/{storeId}/itemInfo
+GET api/v1/mpos/{storeId}/analyzeBarcode
+```
+
+**Beobachtete Query-Parameternamen:** `itemEAN`, `allRelatedItems`, `barcodeTypeString` (zusätzlich andere Parameter für nicht relevante Zahlungs-/Transaktionsmethoden). Die App kennt also beide Funktionsarten: **eine generische Produktsuche und einen konkreten Filial-POS-Artikel-Lookup**. Die Produktpreisabdeckung, die Antwortmodelle und nötigen Berechtigungen sind noch unbestätigt.
+
+**Wichtig:** Im selben MPOS-Interface stehen auch schreibende Checkout-, Zahlungs- und Transaktions-Endpunkte. Wir haben diese **niemals aufgerufen**.
+
+### Aussagekraft des JADX-Laufs
+
+- Die Retrofit-Annotationen sind **direkt aus den tatsächlichen APK-Klassen** gewonnen, nicht aus geratenen URL-Schemata oder einer alten Drittanalyse.
+- Die Klasse, ihre Methode und `{storeId}` beweisen einen **in der App vorgesehenen** Filialprodukt-Datenweg.
+- Weder die API-Verfügbarkeit, ein erfolgreicher Live-Preisabruf, die Gesamtkatalog-Vollständigkeit noch die Erlaubnis zur dauerhaften Datenübernahme sind damit nachgewiesen.
+- Unsere nächste technische Priorität ist deshalb Kauflands `ProductDownloadApi` und Nettos `ProductAPIApi`, nicht der Kaufland-Marktplatz und nicht Nettos Prospekt-PDF.
+
 ## Methodische Grenzen
 
 - Statische Treffer im Code können historisch, nicht mehr verwendet, an andere Länder gebunden, nur zu Testzwecken vorhanden oder durch Authentifizierung geschützt sein.
