@@ -1,0 +1,26 @@
+name: ALDI Süd catalogue terminal offset probe
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_sued_catalogue_end_probe.py
+      - .github/workflows/aldi-sued-offset-edge.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Probe catalogue end offsets
+        run: python3 tools/aldi_sued_catalogue_end_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-sued-end-offsets
+          path: results/full_catalogue_access_20261031/aldi_sued_end_offsets.json
+          retention-days: 7
