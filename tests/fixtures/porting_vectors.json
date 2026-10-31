@@ -1486,6 +1486,465 @@
         ],
         "observations": []
       }
+    },
+    {
+      "name": "regular-foreign-retailer-source-url-denied",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "REWE"
+        ],
+        "maxResults": 20,
+        "query": "Haferflocken"
+      },
+      "datasets": [
+        {
+          "retailerId": "REWE",
+          "channel": "REGULAR",
+          "origin": "official-retailer",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "sourceUrl": "https://www.penny.de/offers",
+          "contentType": "application/json",
+          "httpStatus": 200,
+          "body": {}
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "INVALID_SOURCE"
+        ],
+        "coverageStatuses": [
+          "ERROR"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "regular-credential-alias-in-url-denied",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "ALDI_SUED"
+        ],
+        "maxResults": 20,
+        "query": "Haferflocken"
+      },
+      "datasets": [
+        {
+          "retailerId": "ALDI_SUED",
+          "channel": "REGULAR",
+          "origin": "official-retailer",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "sourceUrl": "https://www.aldi-sued.de/search?authToken=synthetic",
+          "contentType": "application/json",
+          "httpStatus": 200,
+          "body": {}
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "INVALID_SOURCE"
+        ],
+        "coverageStatuses": [
+          "ERROR"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "regular-allowed-four-synthetic-targeted-snapshots",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "ALDI_NORD",
+          "ALDI_SUED",
+          "REWE",
+          "LIDL"
+        ],
+        "maxResults": 20,
+        "query": "Haferflocken"
+      },
+      "datasets": [
+        {
+          "retailerId": "ALDI_NORD",
+          "channel": "REGULAR",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "ALDI_NORD",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "LISTED_REGULAR"
+            }
+          ]
+        },
+        {
+          "retailerId": "ALDI_SUED",
+          "channel": "REGULAR",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "ALDI_SUED",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "LISTED_REGULAR"
+            }
+          ]
+        },
+        {
+          "retailerId": "REWE",
+          "channel": "REGULAR",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "REWE",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "LISTED_REGULAR"
+            }
+          ]
+        },
+        {
+          "retailerId": "LIDL",
+          "channel": "REGULAR",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "LIDL",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "LISTED_REGULAR"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 4,
+        "errorCodes": [],
+        "coverageStatuses": [
+          "PARSED_PARTIAL",
+          "PARSED_PARTIAL",
+          "PARSED_PARTIAL",
+          "PARSED_PARTIAL"
+        ],
+        "observations": [
+          {
+            "scope": {
+              "retailerId": "ALDI_NORD",
+              "scopeType": "UNKNOWN"
+            },
+            "priceKind": "LISTED_REGULAR",
+            "priceCents": 129,
+            "article": {
+              "retailerArticleId": "ALDI_NORD"
+            }
+          },
+          {
+            "scope": {
+              "retailerId": "ALDI_SUED",
+              "scopeType": "UNKNOWN"
+            },
+            "priceKind": "LISTED_REGULAR",
+            "priceCents": 129,
+            "article": {
+              "retailerArticleId": "ALDI_SUED"
+            }
+          },
+          {
+            "scope": {
+              "retailerId": "REWE",
+              "scopeType": "UNKNOWN"
+            },
+            "priceKind": "LISTED_REGULAR",
+            "priceCents": 129,
+            "article": {
+              "retailerArticleId": "REWE"
+            }
+          },
+          {
+            "scope": {
+              "retailerId": "LIDL",
+              "scopeType": "UNKNOWN"
+            },
+            "priceKind": "LISTED_REGULAR",
+            "priceCents": 129,
+            "article": {
+              "retailerArticleId": "LIDL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "regular-excluded-four-with-netto-sale-still-visible",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "PENNY",
+          "KAUFLAND",
+          "EDEKA",
+          "NETTO_MD"
+        ],
+        "maxResults": 20
+      },
+      "datasets": [
+        {
+          "retailerId": "PENNY",
+          "channel": "REGULAR",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "PENNY",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "LISTED_REGULAR"
+            }
+          ]
+        },
+        {
+          "retailerId": "KAUFLAND",
+          "channel": "REGULAR",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "KAUFLAND",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "LISTED_REGULAR"
+            }
+          ]
+        },
+        {
+          "retailerId": "EDEKA",
+          "channel": "REGULAR",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "EDEKA",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "LISTED_REGULAR"
+            }
+          ]
+        },
+        {
+          "retailerId": "NETTO_MD",
+          "channel": "REGULAR",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "NETTO_MD",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "LISTED_REGULAR"
+            }
+          ]
+        },
+        {
+          "retailerId": "NETTO_MD",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "NETTO-SALE",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [
+          "CAPABILITY_NOT_ALLOWED",
+          "CAPABILITY_NOT_ALLOWED",
+          "CAPABILITY_NOT_ALLOWED",
+          "CAPABILITY_NOT_ALLOWED"
+        ],
+        "coverageStatuses": [
+          "POLICY_DENIED",
+          "POLICY_DENIED",
+          "POLICY_DENIED",
+          "POLICY_DENIED",
+          "PARSED_PARTIAL"
+        ],
+        "observations": [
+          {
+            "scope": {
+              "retailerId": "NETTO_MD"
+            },
+            "priceKind": "SALE",
+            "article": {
+              "retailerArticleId": "NETTO-SALE"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "regular-store-claimed-without-scope-proof-is-unknown",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "LIDL"
+        ],
+        "maxResults": 20,
+        "query": "Haferflocken",
+        "storeSelections": {
+          "LIDL": {
+            "storeId": "S1"
+          }
+        }
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "REGULAR",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "STORE1",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "LISTED_REGULAR",
+              "scope": "STORE_CONFIRMED",
+              "scopeId": "S1"
+            }
+          ],
+          "storeId": "S1"
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [],
+        "coverageStatuses": [
+          "PARSED_PARTIAL"
+        ],
+        "observations": [
+          {
+            "scope": {
+              "retailerId": "LIDL",
+              "scopeType": "UNKNOWN"
+            },
+            "article": {
+              "retailerArticleId": "STORE1"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "penny-region-feed-does-not-prove-store-applicability",
+      "request": {
+        "shoppingDate": "2026-10-31",
+        "retailerIds": [
+          "PENNY"
+        ],
+        "maxResults": 20,
+        "storeSelections": {
+          "PENNY": {
+            "storeId": "S1"
+          }
+        }
+      },
+      "datasets": [
+        {
+          "retailerId": "PENNY",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "REGION",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "scope": "REGION_CONFIRMED",
+              "scopeId": "R1"
+            }
+          ],
+          "regionId": "R1",
+          "scopeProof": {
+            "regionId": "R1",
+            "sourceRef": "synthetic-region"
+          }
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [],
+        "coverageStatuses": [
+          "OUT_OF_SCOPE",
+          "NO_MATCHING_SCOPE"
+        ],
+        "observations": []
+      }
     }
   ],
   "retailerCapabilityPolicyVersion": "1.0.1"
