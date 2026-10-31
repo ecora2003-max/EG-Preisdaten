@@ -6,10 +6,11 @@ scraping proxy, CAPTCHA bypass, or credential use. No guaranteed in-stock claims
 from __future__ import annotations
 
 from dataclasses import dataclass, asdict
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 from enum import Enum
 from html import unescape
+from zoneinfo import ZoneInfo
 import json
 import re
 from typing import Any, Iterable, Mapping
@@ -48,7 +49,7 @@ def money(value: Any) -> Decimal | None:
     if isinstance(value, bool) or value is None:
         return None
     if isinstance(value, dict):
-        for key in ("amountRelevant", "value", "amount", "price", "current", "gross"):
+        for key in ("priceValue", "amountRelevant", "value", "amount", "price", "current", "gross"):
             if key in value:
                 result = money(value[key])
                 if result is not None:
@@ -110,7 +111,8 @@ def penny_offers(payload: Mapping[str, Any], *, region: str, week_start: str) ->
     if not isinstance(tiles, list):
         raise ValueError("PENNY offerTiles missing")
     start = date.fromisoformat(week_start)
-    end = date.fromordinal(start.toordinal() + 6).isoformat()
+    # Calendar-week route does not establish an individual offer's expiry date.
+    end = None
     result = []
     seen = set()
     for i, entry in enumerate(tiles):
@@ -169,9 +171,33 @@ def aldi_nord_next(payload: str | Mapping[str, Any]) -> list[Offer]:
         price=money(product.get("currentPrice"))
         if not name or price is None:
             continue
+        price_info=product.get("currentPrice") if isinstance(product.get("currentPrice"),dict) else {}
+        def local_date(field):
+            explicit=_iso_date(price_info.get(field+"LocalDate"))
+            if explicit: return explicit
+            stamp=price_info.get(field)
+            if isinstance(stamp,(int,float)):
+                return datetime.fromtimestamp(stamp,ZoneInfo("Europe/Berlin")).date().isoformat()
+            return None
+        start,end=local_date("validFrom"),local_date("validUntil")
+        if not start or not end:
+            for promo in product.get("promotionPrices") or []:
+                if not isinstance(promo,dict) or money(promo.get("priceValue"))!=price:
+                    continue
+                def pd(field):
+                    explicit=_iso_date(promo.get(field+"LocalDate"))
+                    if explicit:return explicit
+                    stamp=promo.get(field)
+                    if isinstance(stamp,(int,float)):
+                        return datetime.fromtimestamp(stamp,ZoneInfo("Europe/Berlin")).date().isoformat()
+                    return None
+                st,ed=pd("validFrom"),pd("validUntil")
+                if st and ed:
+                    start,end=st,ed
+                    break
         offers.append(Offer("ALDI Nord",str(product.get("objectID") or key),name,price,
-                            _text(product.get("salesUnit")),None,None,Scope.CHAIN,None,
-                            note="Bundesweite Vorschau; mögliche Filialausnahmen nicht verifiziert"))
+                            _text(product.get("salesUnit")),start,end,Scope.CHAIN,None,
+                            note="Kettenweite Vorschau ohne Filialfilter; Ausnahmen möglich"))
     return offers
 
 
@@ -202,14 +228,14 @@ def kaufland_offers(page: str | Mapping[str, Any], availability: list[Mapping[st
     first,last=date.fromisoformat(first_day),date.fromisoformat(last_day)
     if first>last:
         raise ValueError("Invalid date interval")
-    eligibility=set()
+    eligibility={}
     for e in availability:
         if not isinstance(e,dict):
             continue
         ident=_text(e.get("klNr"))
         s,t=_iso_date(e.get("dateFrom")),_iso_date(e.get("dateTo"))
         if ident and s and t and s <= last_day and t >= first_day:
-            eligibility.add(ident)
+            eligibility.setdefault(ident, []).append((s,t))
     data=_kaufland_data(page)
     cycles=data.get("cycles") if isinstance(data,dict) else None
     if not isinstance(cycles,list):
@@ -234,9 +260,16 @@ def kaufland_offers(page: str | Mapping[str, Any], availability: list[Mapping[st
                 sales_end=_iso_date(item.get("salesTo"))
                 if sales_start and sales_end and (sales_start > last_day or sales_end < first_day):
                     continue
+                matching=[(max(first_day,a),min(last_day,b)) for a,b in eligibility[kl]]
+                if not matching:continue
+                start=min(a for a,b in matching)
+                end=max(b for a,b in matching)
+                if sales_start:start=max(start,sales_start)
+                if sales_end:end=min(end,sales_end)
+                if start>end:continue
                 seen.add(kl)
                 out.append(Offer("Kaufland",kl,title,price,_text(item.get("unit")),
-                                 first_day,last_day,Scope.STORE,store_id,
+                                 start,end,Scope.STORE,store_id,
                                  note="Offiziell geführte Aktions-Gültigkeit; kein Lagerbestand"))
     return out
 
