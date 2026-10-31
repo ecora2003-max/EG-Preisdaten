@@ -28,7 +28,7 @@ def permission(url):
         except Exception as e:robots_cache[base]="unknown: "+type(e).__name__
     rule=robots_cache[base]
     return (rule=="allow" if isinstance(rule,str) else rule.can_fetch(ua,url))
-for sid,page in storepages.items():
+for sid,page in list(storepages.items())[:1]:
     rec={"store_id":sid,"prospect_page":page}
     try:
         if not permission(page):
@@ -46,9 +46,9 @@ for sid,page in storepages.items():
         with urlopen(Request(url,headers={"User-Agent":ua,"Accept":"application/pdf"}),timeout=30) as f:
             rec["http"]=f.status
             rec["content_type"]=f.headers.get("Content-Type","")
-            raw=f.read(16_000_001)
+            raw=f.read(80_000_001)
         rec["pdf_bytes"]=len(raw)
-        if not raw.startswith(b"%PDF") or len(raw)>16_000_000:
+        if not raw.startswith(b"%PDF") or len(raw)>80_000_000:
             rec["status"]="not a PDF or exceeds bounded size";output.append(rec);continue
         if shutil.which("pdftotext") is None:
             rec["status"]="PDF downloaded but pdftotext not installed";output.append(rec);continue
