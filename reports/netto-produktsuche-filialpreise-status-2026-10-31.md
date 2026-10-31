@@ -21,7 +21,7 @@ Die beiden Produkt-API-Familien `ProductAPIApi` und `MPOSApi` sind in der aktuel
 
 - Alle neun DEX-Dateien der App, öffentliches Paket-SHA-256 `eab697ef54d3d236f92578b6c65d327f208a8c115b6a89d7ae94ff281cd1e51e`.
 - `ProductAPIApi` tatsächlich als Retrofit-Interface bestätigt.
-- `org.openapitools.client.models.ProductSearchResponse` im generierten App-Code mit JSON-Feldern `message`, `result` und `returnCode`; eine Klasse dieser Art allein belegt keinen **numerischen Verkaufspreis**.
+- `org.openapitools.client.models.ProductSearchResponse` im generierten App-Code mit JSON-Feldern `message`, `result`, `returnCode` sowie dem nachträglich bestätigten Getter **`getContent(): Product[]`**. Das bedeutet: Der Response-Typ kann eine echte **Liste von Produktobjekten** transportieren; konkrete Netto-Preisfelder sind innerhalb dieser Liste noch zu prüfen.
 - Die APK enthält Netto-Hostnamen wie `app.netto-online.de`, `www.netto-online.de` und `sia.netto-online.de`. Eine eindeutige Abbildung **genau der Produktsuch-Route auf ihren produktiven Basis-Host** wurde dadurch noch nicht erreicht.
 
 **[Anonymer Live-Suchtest](https://github.com/ecora2003-max/Try/actions/runs/41202237702)**, `GET rest/api/v2/productSearch?searchString=Haferflocken&storeId=7679`:
@@ -41,3 +41,7 @@ Damit **bislang 0 nachgewiesene aktuelle Netto-Filialpreise über `productSearch
 **Weitere technische Aufgabe:** Den vom Retrofit-Client tatsächlich verwendeten Basis-Host anhand der App-Service-Initialisierung bestimmen. Danach mit einer einzigen echten Markt-ID-Suche das **JSON-Produktschema und die Preisfelder** validieren. Ohne bestätigte Preisdaten ist ein Preisvergleichsadapter noch nicht produktionsreif.
 
 **Änderungen nur in `ecora2003-max/Try`. Das Hauptrepository blieb unverändert.**
+
+### Validierung des Response-Typs
+
+[Erneute gezielte JADX-Auswertung](https://github.com/ecora2003-max/Try/actions/runs/41202592843) bestätigt die tatsächliche Java-Signatur `public final Product[] getContent()`. Die vermutete reine Status-/Textantwort wäre damit **zu kurz gegriffen**. Die Suche ist technisch geeignet, strukturierte Produktobjekte zurückzugeben, sofern der korrekte Host erreichbar ist.
