@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Install Poppler PDF text tools on the ephemeral runner
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
       - name: Check extractable brochure text without saving copyrighted PDF
         run: python3 tools/netto_brochure_pdf_text.py
       - uses: actions/upload-artifact@v4
