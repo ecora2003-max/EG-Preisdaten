@@ -1,0 +1,24 @@
+name: Lidl store-specific leaflet linkage
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/lidl_store_flyers.py
+      - .github/workflows/lidl-store-flyers.yml
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/lidl_store_flyers.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lidl-store-flyers
+          path: results/lidl_store_flyers.json
+          retention-days: 7
