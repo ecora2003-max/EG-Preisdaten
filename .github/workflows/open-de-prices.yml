@@ -1,0 +1,25 @@
+name: Open source German store prices and freshness validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/open_de_prices_coverage.py
+      - .github/workflows/open-de-prices.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/open_de_prices_coverage.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: open-de-supermarket-price-coverage
+          path: results/open_de_prices_coverage.json
+          retention-days: 7
