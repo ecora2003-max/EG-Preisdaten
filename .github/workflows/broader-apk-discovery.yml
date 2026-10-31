@@ -1,0 +1,36 @@
+name: Broad static retailer APK interface discovery
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/broader_apk_discovery.py
+      - .github/workflows/broader-apk-discovery.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  discover:
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        app: [aldi_sued, rewe, edeka, netto_marken_discount, penny, penny_scan_go, kaufland]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Discover unlisted product-related API interfaces read-only
+        run: python3 tools/broader_apk_discovery.py --app "${{ matrix.app }}"
+      - name: Archive evidence or error status
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-discovery-${{ matrix.app }}
+          path: results/broader_apk_discovery/${{ matrix.app }}.json
+          if-no-files-found: warn
+          retention-days: 7
