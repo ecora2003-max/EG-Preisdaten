@@ -1,0 +1,26 @@
+name: Netto webshop embedded price data diagnosis
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_online_embedded_price_diagnostic.py
+      - .github/workflows/netto-shop-embedded-price.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Extract safe metadata about embedded price values
+        run: python3 tools/netto_online_embedded_price_diagnostic.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-shop-embedded-price-evidence
+          path: results/netto_online_embedded_price_diagnostic.json
+          retention-days: 7
