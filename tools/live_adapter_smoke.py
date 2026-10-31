@@ -23,7 +23,7 @@ UA="Ernaehrungsgedaechtnis-Research/0.4 (read-only integration test)"
 robots={}
 results=[]
 failed=[]
-def fetch(label,url):
+def fetch(label,url,headers=None):
     u=urlparse(url);host=u.scheme+"://"+u.netloc
     if host not in robots:
         try:
@@ -35,7 +35,7 @@ def fetch(label,url):
     rule=robots[host]
     if (isinstance(rule,str) and rule!="allow") or (not isinstance(rule,str) and not rule.can_fetch(UA,url)):
         raise RuntimeError("disallowed or unknown robots status: "+str(rule))
-    with urlopen(Request(url,headers={"User-Agent":UA,"Accept":"application/json,text/html"}),timeout=24) as resp:
+    with urlopen(Request(url,headers={"User-Agent":UA,"Accept":"application/json,text/html",**(headers or {})}),timeout=24) as resp:
         data=resp.read(12_000_001)
         if len(data)>12_000_000:raise RuntimeError("response exceeds test bound")
         return data.decode("utf-8","replace")
@@ -62,7 +62,7 @@ def check_penny():
 
 def check_kaufland():
     sid="DE5220"
-    page=fetch("Kaufland offer html","https://filiale.kaufland.de/angebote/uebersicht.html?kloffer-week=next")
+    page=fetch("Kaufland offer html","https://filiale.kaufland.de/angebote/uebersicht.html?kloffer-week=next",headers={"Cookie":"x-aem-variant="+sid})
     availability=json.loads(fetch("Kaufland market applicability","https://filiale.kaufland.de/.kloffers.storeName="+sid+".json"))
     offers=kaufland_offers(page,availability,store_id=sid,first_day="2026-11-02",last_day="2026-11-08")
     assert len(offers)>0
