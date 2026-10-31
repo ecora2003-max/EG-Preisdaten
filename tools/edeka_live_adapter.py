@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """Direct EDEKA marketId/region validity and parser smoke using official public JSON."""
 import json,sys
+
+# Website content terms prohibit automated collection absent explicit permission.
+import os
+if os.environ.get("EDEKA_PERMISSION_CONFIRMED") != "1":
+    print("SKIPPED: EDEKA.de requires prior explicit permission for automated retrieval.")
+    raise SystemExit(0)
 from urllib.request import Request,urlopen
 from urllib.parse import urlencode
 from pathlib import Path
