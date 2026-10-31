@@ -17,6 +17,7 @@ TARGETS=[
 "de.netto.plus.commons.api.infrastructure.ApiClient",
 "org.openapitools.client.apis.ProductAPIApi",
 "org.openapitools.client.models.ProductSearchResponse",
+"org.openapitools.client.models.Product",
 ]
 OUT=Path("results/netto_product_host_model_20261031.json")
 HOST_RE=re.compile(r'\b(?:https?://)?(?:[a-z0-9-]+\.)+(?:de|com|net|org)(?::\d+)?\b',re.I)
