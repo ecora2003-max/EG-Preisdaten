@@ -118,6 +118,28 @@ class RetailerContracts(unittest.TestCase):
         self.assertEqual(len(a),1)
         self.assertEqual(a[0].scope,Scope.UNVERIFIED)
 
+    def test_edeka_official_market_scope_millisecond_dates(self):
+        payload={"national":False,"gueltig_von":1792972800000,
+                 "gueltig_bis":1793404800000,"docs":[
+                    {"angebotid":6433527,"titel":"Himbeeren","preis":1.99,
+                     "beschreibung":"125 g Packung","gueltig_bis":1793404800000},
+                    {"angebotid":6433527,"titel":"Himbeeren","preis":1.99}]}
+        offers=edeka_offers(payload,market_id="10003451")
+        self.assertEqual(len(offers),1)
+        self.assertEqual(offers[0].scope,Scope.STORE)
+        self.assertEqual(offers[0].scope_id,"10003451")
+        self.assertEqual(offers[0].valid_from,"2026-10-26")
+        self.assertEqual(offers[0].valid_to,"2026-10-31")
+        self.assertEqual(offers[0].price_eur,Decimal("1.99"))
+
+    def test_edeka_national_fallback_not_store_confirmed(self):
+        payload={"national":True,"docs":[
+            {"angebotid":1,"titel":"Nationale Butter","preis":1.49}]}
+        offers=edeka_offers(payload,market_id="1")
+        self.assertEqual(len(offers),1)
+        self.assertEqual(offers[0].scope,Scope.CHAIN)
+        self.assertIsNone(offers[0].scope_id)
+
     def test_netto_fails_closed(self):
         self.assertEqual(netto_status()["status"],"NOT_IMPLEMENTATION_READY")
 
