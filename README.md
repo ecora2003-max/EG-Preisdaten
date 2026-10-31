@@ -72,3 +72,7 @@ Die eingebundenen Feldparsers sind Referenzcode. Die Original-Android-App im sep
 - [Rein offline nutzbarer Preisnormalisierer](adapters/stationary_price_catalogues.py) mit [erfolgreichen Tests](https://github.com/ecora2003-max/Try/actions/runs/41195124182).
 
 **Datenrechte und Abdeckung offen:** Kein Nachweis einer Lizenz für laufende systematische Datenbankübernahme, keine Vollsortimentabdeckung oder Kassenbon-Validierung, kein produktiver Adapter. Alle neuen Tests sind einmalige, robots-respektierende, anonyme GET-Abfragen ohne Schutzumgehung. Ausschließlich `Try` wurde geändert.
+
+## Geprüfte Vollständigkeit und Aktualität (31.10.2026)
+
+[**Messbericht für Lidl, ALDI Nord, REWE und ALDI Süd**](reports/umfang-und-aktualitaet-preisdaten-2026-10-31.md): Lidl 69/69 vollständig paginierte Kategorien mit 2.005/2.005 Preisfeldern; ALDI Nord 82/82 Preise in zwei vollständigen Kategorien; REWE 72/72 Preise in sechs Suchantworten, aber Pagination `limit`/`offset` in der Probe ohne Wirkung; ALDI Süd meldet 3.538 Artikel, komplette Abfrage jedoch an HTTP 403 gescheitert. Kein Händler hat im Test eine verifizierte Garantie für die zeitliche Übereinstimmung mit dem Kassenpreis oder eine dokumentierte Preisänderungs-Latenz geliefert.
