@@ -305,6 +305,9 @@ class PriceService:
         term=request.get("query")
         if term is not None and not isinstance(term,str):
             raise DataError("INVALID_REQUEST","query must be string")
+        mode=request.get("usageMode","RESEARCH_ONLY")
+        if mode not in ("RESEARCH_ONLY","APP_DISPLAY"):
+            raise DataError("INVALID_REQUEST","usageMode must be RESEARCH_ONLY or APP_DISPLAY")
         found=[]; errors=[]; coverage=[]; seen=set()
         for retailer in dict.fromkeys(retailers):
             selected=[d for d in datasets if isinstance(d,dict) and d.get("retailerId")==retailer]
@@ -322,6 +325,8 @@ class PriceService:
                     if status==429:raise DataError("RATE_LIMITED","429 source throttled")
                     if status==204:raise DataError("NO_CONTENT","204 without price payload")
                     if type(status) is not int or status!=200:raise DataError("UPSTREAM_ERROR","Unexpected HTTP status")
+                    if mode=="APP_DISPLAY" and ds.get("fixture") is not True and _REGISTRY[retailer][3]!="PERMITTED":
+                        raise DataError("RIGHTS_NOT_CLEARED","External retailer data lack verified reuse permission")
                     if ds.get("fixture") is not True:
                         _host_authorized(ds.get("sourceUrl"),retailer,False)
                     elif ds.get("format")!="synthetic-fixture":
@@ -348,11 +353,13 @@ class PriceService:
                     if received!=parsed:complete=False
                     if len(found)>=limit:
                         coverage.append(dict(retailerId=retailer,channel=channel,received=received,parsed=parsed,
-                                             complete=False,status="OUTPUT_LIMIT",rights=_REGISTRY[retailer][3]))
+                                             complete=False,status="OUTPUT_LIMIT",rights=_REGISTRY[retailer][3],
+                                             checkedAt=when,sourceUrl=ds.get("sourceUrl")))
                         break
                     coverage.append(dict(retailerId=retailer,channel=channel,received=received,parsed=parsed,
                                          complete=complete,status="PARSED_PARTIAL" if not complete else "PARSED_PAGE",
-                                         rights=_REGISTRY[retailer][3],reportedTotal=summary.get("reportedTotal")))
+                                         rights=_REGISTRY[retailer][3],reportedTotal=summary.get("reportedTotal"),
+                                         checkedAt=when,sourceUrl=ds.get("sourceUrl")))
                 except (DataError, ValueError, TypeError, KeyError, ImportError, json.JSONDecodeError) as exc:
                     # Atomic dataset import: never leak half-parsed output after schema failure.
                     found=found[:prior_len];seen=seen_before

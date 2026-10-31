@@ -317,5 +317,44 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(out["observations"][0]["payload"]["eg-preisdaten:targetDateStatus"],
                          "PUBLISHED_WINDOW")
 
+
+    def test_restricted_source_fails_closed_in_app_usage(self):
+        edeka=source("EDEKA","SALE",{"national":False,"docs":[
+                {"angebotid":1,"titel":"Tofu","preis":"1.99"}]},
+                "https://www.edeka.de/api/angebote",storeId="1234")
+        req={**REQUEST,"retailerIds":["EDEKA"],"usageMode":"APP_DISPLAY"}
+        out=self.service.search_offers(req,[edeka])
+        self.assertEqual(out["observations"],[])
+        self.assertEqual(out["errors"][0]["code"],"RIGHTS_NOT_CLEARED")
+        preview=self.service.search_offers({**req,"usageMode":"RESEARCH_ONLY"},[edeka])
+        self.assertEqual(len(preview["observations"]),1)
+        self.assertEqual(preview["observations"][0]["payload"]["source"]["rightsStatus"],"RESTRICTED")
+        synthetic=fixture([r()])
+        out=self.service.search_offers({**REQUEST,"usageMode":"APP_DISPLAY"},[synthetic])
+        self.assertEqual(len(out["observations"]),1)
+
+    def test_netto_branch_price_must_match_visible_and_embedded_value(self):
+        from urllib.parse import urlencode
+        url="https://www.netto-online.de/angebote/c-N07"
+        def page(price):
+            query=urlencode({"SKU":"A1","Price":price,"ValidTo":"2026-10-31 23:59:59",
+                             "Name":"Hafer","BasePrice":"1 kg=3.98 EUR"})
+            return ('<section><h2>Filial-Angebote</h2>'
+                    '<div class="store-offers__header__date">26.10.2026 - 31.10.2026</div>'
+                    '<div class="tc-store-product-tile" data-ff-id="A1">'
+                    '<span class="tc-product-name">Hafer</span>'
+                    '<a href="https://www.netto-online.de/ViewMMPWishlist-AddStoreArticle?'+query+'">Test</a>'
+                    '<div class="grid-top-price"><span class="product__current-price tc-product-price">1,99</span></div>'
+                    '</div></section>')
+        ds=source("NETTO_MD","SALE",page("1.99"),url,contentType="text/html")
+        out=self.service.search_offers(REQUEST | {"retailerIds":["NETTO_MD"]},[ds])
+        self.assertEqual(len(out["observations"]),1,out["errors"])
+        self.assertEqual(out["observations"][0]["payload"]["priceCents"],199)
+        self.assertEqual(out["observations"][0]["payload"]["scope"]["scopeType"],"UNKNOWN")
+        ds["body"]=page("2.49")
+        out=self.service.search_offers(REQUEST | {"retailerIds":["NETTO_MD"]},[ds])
+        self.assertEqual(out["observations"],[])
+        self.assertEqual(out["coverage"][0]["status"],"PARSED_PARTIAL")
+
 if __name__=="__main__":
     unittest.main()
