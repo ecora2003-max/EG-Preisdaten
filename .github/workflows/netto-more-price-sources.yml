@@ -1,0 +1,26 @@
+name: Netto extra price sources and on-site search
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_more_price_sources.py
+      - .github/workflows/netto-more-price-sources.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Inspect public Netto onsite search and permanent reductions
+        run: python3 tools/netto_more_price_sources.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-more-price-sources
+          path: results/netto_more_price_sources_20261031.json
+          retention-days: 7
