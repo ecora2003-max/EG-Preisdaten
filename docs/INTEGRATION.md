@@ -86,3 +86,7 @@ Letztes CI: [70/70 Tests #41220291373](https://github.com/ecora2003-max/EG-Preis
 ### Identitätssuche (Code `079c7638effe`)
 
 Zusätzlich zu `query` (case-insensitive Name) und `retailerArticleId` akzeptiert `SearchRequest` die optionalen Filter `gtin` (8/12/13/14-stellige Kennung mit gültiger Prüfziffer, exakter Treffer) sowie `foodTypeId` (nur **bereits quellenbestätigter ID-Wert**). Keine automatische Artikel-/FoodType-Zuordnung; ein Quell-Snapshot ohne belegten `foodTypeId` kann nicht per `foodTypeId` gefunden werden. Ungültiger GTIN-Filter führt zu `INVALID_GTIN`, unzulässiger FoodType zu `INVALID_REQUEST`, ungültige Quell-ID zu `INVALID_ID`. Alle diese Filter greifen **vor** `maxResults`. [72 Offline-Tests](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220508128).
+
+### Exakter Grundpreis-Quellcheck (`8e935b4844d5`)
+
+`eg-preisdaten:basePriceCheck` ist einer der Werte `NO_REPORTED_BASE_PRICE`, `PRICE_UNKNOWN`, `DEPOSIT_UNCERTAIN`, `NOT_COMPARABLE`, `CONSISTENT_WITH_DISPLAYED_QUANTITY` oder `MISMATCH`. Nur für explizit kompatible Masse/Volumen-Basis (`kg`→`g`, `l`→`ml`) wird der angezeigte Preis mit `Decimal(priceCents)×1000/amount` verglichen, eine Cent-Rundungsabweichung ist erlaubt. **Dies bestätigt weder die gelieferte Packmenge noch Kassenpreistreue**; bei Pfand gilt der Test nicht als beweissicher. Verbrauchermengen und Kaufpreise werden nicht verändert. [Test #41220671906](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220671906).

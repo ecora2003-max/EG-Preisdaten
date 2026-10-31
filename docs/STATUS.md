@@ -1,7 +1,7 @@
 # Preisdaten – Wiederaufnahmestand (31.10.2026)
 
 **Grad:** `PARTIAL_READY / OFFLINE_VERIFIED` (Fachkern); **nicht** `READY_FOR_INTEGRATION` für produktive Händler-Livefeeds und nicht `INTEGRATED`. Das maßgebliche Ziel steht in `docs/ACCEPTANCE.md`.
-**Letzter vollständig geprüfter Code-Commit:** `079c7638effee3f0729391ae173ca2dd11d538f9`. GitHub Actions [#41220508128](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220508128): **72/72 Offline-Tests PASS**, CLI und Kompilierung PASS.
+**Letzter vollständig geprüfter Code-Commit:** `8e935b4844d55261c393f0d3bef338cb3fc66437`. GitHub Actions [#41220671906](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220671906): **74/74 Offline-Tests PASS**, CLI und Kompilierung PASS.
 **Architekturvertrag:** `1.0.0-draft`, gelesen `d22862739bd0e3ef8451ce029e54f7c33ee53e40`; lokale Vertragsschema- und Beispiel-Fixures übernommen.
 **Haupt-App:** nur gelesen, `6ba419ed2875c1988f45afee65e2708e7895cacf`; kein anderer Repo-Write.
 **Historische Forschung:** ehemals `Try`, via GitHub-Redirect identisch mit `EG-Preisdaten`. Forschungsberichte bleiben erhalten.
@@ -25,14 +25,14 @@ Weitere Details: [Quellen- und Rechtsmatrix](SOURCES.md), alte `reports/` und [T
 
 ## Aktueller Entwicklungsmeilenstein – Commit `b201eed8cd9b5ab5de0db54cfa1cefd43727f234`
 
-- **72/72 Tests grün**, inkl. 8-Händler-Offlinematrix, Architektur-JSON-Schema, alle bisherigen Händlerparser, Netto-Live-HTML-Fixures, negative Fehler- und Scope-Szenarien.
+- **74/74 Tests grün**, inkl. 8-Händler-Offlinematrix, Architektur-JSON-Schema, alle bisherigen Händlerparser, Netto-Live-HTML-Fixures, negative Fehler- und Scope-Szenarien.
 - Preisarten fachlich sauber getrennt: Lidl Plus und Netto App als **gesonderte konditionale Preisbelege ohne bestätigte Zugangsvoraussetzungen**, PENNY-Fußnotenpreis als Originaltext; Streich-/Referenzpreise keine früheren real bezahlten Preise.
 - Der Fachkern erfasst Einzelpreise, Quellen-Grundpreisbelege, Pfand, bekannte Mengen und *unsichere* Mengen. Eine Netto-Grundpreisanzeige `1 kg = …` wird **nicht** fälschlich als Packungsgewicht 1 kg gedeutet.
 - `storeSelections` und Reihenfilter verhindern Übernahme fremder Märkte/Verkaufsregionen; unterschiedliche Beobachtungszeitpunkte bleiben getrennte Beobachtungen. `shoppingDate` (nicht der Fensteranfang) ist für `targetDateStatus` ausschlaggebend.
 - Ausgegeben: `matchedCount`, `outputTruncated`, Quellenfehler und abgelehnte Tiles; kein Scheinnachweis für Gesamtmarkt.
 - Explizite Transportfehler `TIMEOUT/NETWORK_ERROR/TLS_ERROR/CANCELLED`, gesperrte/fehlerhafte HTTP- und Schema-Antworten; URLs mit Zugangsdaten oder tokenartigen Queryparametern werden abgelehnt.
 - Gepinnte reproduzierbare CI-Dependency-Liste `requirements-dev.lock`; Lauf benötigt keinen externen kostenpflichtigen Dienst und keine Credentials.
-- Offen: fehlende Nutzungsrechtsfreigaben und mehrere Händler-Livepfade; App-Komplettintegration und Kotlin-Portierung verbleiben ausschließlich bei Codex. **Kein `READY_FOR_INTEGRATION` für produktive Live-Daten**. Neu: explizite `gtin`- und `foodTypeId`-Filter ohne geratene Zuordnung.
+- Offen: fehlende Nutzungsrechtsfreigaben und mehrere Händler-Livepfade; App-Komplettintegration und Kotlin-Portierung verbleiben ausschließlich bei Codex. **Kein `READY_FOR_INTEGRATION` für produktive Live-Daten**. Neu: explizite `gtin`- und `foodTypeId`-Filter ohne geratene Zuordnung sowie Quellen-Grundpreis-Plausibilitätsprüfung (mit Pfand- und Vergleichbarkeitsgrenzen).
 
 ## Neu implementiert
 
@@ -67,6 +67,7 @@ Zusätzliche Code- und CI-Meilensteine:
 | `b201eed` | [#41220291373](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220291373) | **PASS 70/70: Filial- und Regionssperren** |
 
 | `079c763` | [#41220508128](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220508128) | **PASS 72/72: GTIN-Prüfziffer und explizite FoodType-Filter** |
+| `8e935b4` | [#41220671906](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220671906) | **PASS 74/74: Dezimalexakter Grundpreis-Plausibilitätscheck** |
 
 **Keine neuen Live-GET-Abrufe in diesen Code-/Unit-Testläufen.** Historische Live-Nachweise liegen in den alten Research-Berichten und Actions; sie wurden nicht als neue Beobachtung deklariert. Die JSON-Schema-Tests wurden mit `jsonschema` Draft 2020-12 und Formatchecker tatsächlich ausgeführt; `requirements-dev.txt` installiert zusätzlich BeautifulSoup für den älteren Netto-Parser.
 
@@ -77,6 +78,6 @@ Zusätzliche Code- und CI-Meilensteine:
 3. Mengen-/Grundpreisfelder aus Roh-APIs sind teilweise nicht genau genug strukturiert; mehr Paket-/Pfand-/Apppreis-Sonderfälle, nachweisbare Mengenbasis und eindeutige Quellenstatus ergänzen.
 4. Unabhängige Kategorie-/Filialabdeckung nur für einige API-interne Teilmengen; keine Händler-Vollsortiment- oder Preisänderungs-/Kassentreue-Garantie. Eigenständiger Store-Lookup ist bisher nur ein exact-match-Port, kein zugelassener Live-Store-Directory-Client.
 5. Android/Kotlin-Code, Hardware-/App-Regression und offizielle Vertragsfreigabe nur durch Architektursteuerung/Codex; für das externe Modul weiterhin offen.
-6. **Unmittelbar nächste Aktion:** unabhängig von ungeklärten Live-Rechten die älteren Angebotsparser auf konkrete Feldverluste, Rabatt-/Gültigkeits- und Pagination-Edgefälle prüfen; positive und negative Offline-Fixtures ergänzen. Nächste durchführbare Entwicklungsphase ist eine harte Integrationskonsistenzprüfung gegen den aktuellen `1.0.0-draft`-Vertrag und eine Android-Portierungs-Fallliste, danach neue CI-Runs mit SHA hier nachtragen. Lizenzklärung vor jedem Live-App-Einsatz als eigenes Gate erhalten; alte Try-Forschung nicht wiederholen.
+6. **Unmittelbar nächste Aktion:** die konkrete Migration der namespaced Preis-/Quellfelder in eine Android-Kotlin-Portierungs-Testmatrix aufnehmen und Offline-JSON-Datensatzvarianten auf Vertragskompatibilität prüfen. Danach im Fachkern zusätzliche belastbare Quell- und Bedingungsfälle prüfen, ohne bereits durchgeführte Try-Liveforschung neu zu beginnen. Für produktive Live-Daten sind explizite Nutzungsrechte/Einzelmarktbelege weiterhin ein externer Freigabe-Blocker.
 
 **Kein Abschluss des Gesamtmandats:** `PARTIAL_READY`; nur synthetischer Offlinekern derzeit als Integrationstestvorlage geeignet. `INTEGRATED` nur Codex.

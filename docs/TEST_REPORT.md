@@ -28,3 +28,7 @@ Neue fachliche Invarianten: bedingte und unbedingte Preise nicht vertauschen; Re
 ## Weiterer geprüfter Commit `079c7638effee3f0729391ae173ca2dd11d538f9`
 
 [CI #41220508128](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220508128): **72/72 Offline-Tests erfolgreich**, 0 Failures/Errors; Kompilierung/CLI erfolgreich. Zwei neue Negativ-/Positivtests: exakt gültiger GTIN-Filter ohne Annahmen aus ungültigen Barcodes; ausschließlich explizit übermittelter `foodTypeId`-Filter, ungültige FoodType-Werte mit atomarer Ablehnung. Kein neuer Händler-Live-GET, kein Rechtsstatuswechsel.
+
+## Folgelauf: Grundpreis-Konsistenz, Commit `8e935b4844d55261c393f0d3bef338cb3fc66437`
+
+[GitHub Actions #41220671906](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220671906): **74/74 Tests PASS**, Kompilierung und CLI PASS. Zwei neue Tests: unveränderte Grundpreis-Quellenwerte werden bei nachweisbar kompatiblen Einheiten mit exakter Decimal-Arithmetik und 1-Cent-Toleranz gegen den beobachteten Verkaufspreis geprüft; widersprüchliche Beträge werden als `MISMATCH` markiert, ohne Preiswerte zu erfinden. Fehlen Preis/Menge/kompatible Basis oder ist Pfand bekannt, wird das Ergebnis bewusst nicht als konsistent behauptet. Ungültige Grundpreisfelder führen zu atomarer Ablehnung. Kein neuer Live-GET.
