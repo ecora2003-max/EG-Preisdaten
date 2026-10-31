@@ -53,6 +53,18 @@ def main():
                     else:examples.append({"money":match.group()[:30]})
                     if len(examples)>=12:break
                 item[k+"_examples"]=examples
+            # Diagnostic for current product only: a small sanitized excerpt
+            # around exactly the candidate JSON price. No HTML body stored.
+            excerpts=[]
+            for match in list(re.finditer(r'"price"\s*:\s*"?\d+(?:[.,]\d+)?"?',doc,re.I))[:4]:
+                start=max(0,match.start()-180)
+                end=min(len(doc),match.end()+200)
+                snippet=doc[start:end]
+                snippet=re.sub(r'https?://[^\s"<>]+','[URL]',snippet)
+                snippet=re.sub(r'[A-Za-z0-9+/=]{80,}','[LONG_LITERAL]',snippet)
+                snippet=re.sub(r'<[^>]+>',' ',snippet)
+                excerpts.append(snippet[:380])
+            item["price_context_examples"]=excerpts
             item["result"]="HTML_MEASURED"
         except urllib.error.HTTPError as e:
             item["http_status"]=e.code;item["result"]="HTTP_ERROR"
