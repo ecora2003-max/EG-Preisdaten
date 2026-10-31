@@ -61,16 +61,16 @@ for sid,page in list(storepages.items())[:1]:
             rec["extracted_chars_first_3_pages"]=len(text)
             rec["words_first_3_pages"]=len(text.split())
             rec["price_like_occurrences"]=len(re.findall(r'\b\d{1,3}[,.]\d{2}\b',text))
-                        # Preserve a few line positions to evaluate price-product pairing.
+            # Preserve a few line positions to evaluate price-product pairing.
             candidate_lines=[]
             all_lines=text.splitlines()
             for idx,line in enumerate(all_lines):
-                if re.search(r"\\b(?:\\d{1,3}[.,]\\d{2}|\\d+[.,]\\d{2})\\b",line):
+                if re.search(r"\d+[.,]\d{2}",line):
                     candidate_lines.append({"line":idx,"preview":line[:120],
                         "prev":all_lines[idx-1][:120] if idx else ""})
                 if len(candidate_lines)>=12:break
             rec["layout_price_line_samples"]=candidate_lines
-rec["sample_ordinary_lines"]=[re.sub(r'\s+',' ',line.strip())[:85] for line in text.splitlines()
+            rec["sample_ordinary_lines"]=[re.sub(r'\s+',' ',line.strip())[:85] for line in text.splitlines()
                                           if 3<len(line.strip())<100][:9]
             if shutil.which("pdfinfo"):
                 info=subprocess.run(["pdfinfo",str(path)],capture_output=True,timeout=15)
