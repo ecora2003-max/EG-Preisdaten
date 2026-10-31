@@ -83,10 +83,10 @@ def store_products(payload:Mapping[str,Any],*,store_key:str,day:str,offset:int=0
     if not isinstance(payload,dict) or not isinstance(payload.get("products"),list):
         raise ValueError("Lidl response lacks products")
     rows=payload["products"]
-    if limit is not None and (limit<1 or len(rows)>limit):
+    if limit is not None and (type(limit) is not int or limit<1 or len(rows)>limit):
         raise ValueError("Product page length exceeds requested limit")
     total=payload.get("totalProducts")
-    if not isinstance(total,int) or total<0 or offset<0 or offset>total:
+    if type(total) is not int or total<0 or type(offset) is not int or offset<0 or offset>total:
         raise ValueError("Lidl page total/offset inconsistent")
     items=[]
     for row in rows:

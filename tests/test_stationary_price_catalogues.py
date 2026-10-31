@@ -49,6 +49,25 @@ class PriceCatalogueTest(unittest.TestCase):
         ]}
         self.assertTrue(aldi_sued(raw, "B384")["catalogue_complete"])
 
+    def test_aldi_inconsistent_page_totals_do_not_claim_full_coverage(self):
+        def item(sku, price):
+            return {"sku":sku,"name":"Synthetic","price":{"amount":price}}
+        cases=[
+            ([item("A",99),item("B",199)],1),
+            ([item("A",99),item("B",199)],3),
+            ([item("A",99),item("A",199)],2),
+            ([item(None,99),item("B",199)],2),
+            ([item("A",99),item("B",None)],2),
+        ]
+        for products,total in cases:
+            with self.subTest(total=total,products=products):
+                out=aldi_sued({"meta":{"pagination":{"totalCount":total}},
+                               "data":products},"B384")
+                self.assertIs(out["catalogue_complete"],False)
+        good=aldi_sued({"meta":{"pagination":{"totalCount":2}},
+                        "data":[item("A",99),item("B",199)]},"B384")
+        self.assertIs(good["catalogue_complete"],True)
+
     def test_not_list_is_error(self):
         with self.assertRaises(ValueError):
             rewe_stationary({"errors": []}, "840174")

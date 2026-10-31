@@ -113,6 +113,11 @@ def aldi_sued(payload: Any, store_id: str) -> dict:
         "retailer": "ALDI Süd", "store_id": str(store_id),
         "listed_count": len(listings), "source_count": len(payload["data"]),
         "total_count": total,
-        "catalogue_complete": (len(payload["data"]) >= total) if total is not None else None,
+        "catalogue_complete": (
+            len(payload["data"]) == total
+            and len(listings) == total
+            and all(x["product_id"] is not None for x in listings)
+            and len({x["product_id"] for x in listings}) == total
+        ) if total is not None else None,
         "listings": listings,
     }

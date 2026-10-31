@@ -35,4 +35,17 @@ class LidlPriceTests(unittest.TestCase):
         b=store_products(page,store_key="DE7434",day="2026-10-31",offset=1)
         with self.assertRaises(ValueError):merge_store_category_pages([a,b])
 
+    def test_boolean_pagination_fields_are_not_integer_counts(self):
+        good={"totalProducts":1,"products":[{"id":"a","title":"Milch",
+                                             "price":{"price":"1.29"}}]}
+        for payload,offset,limit in [
+            ({**good,"totalProducts":True},0,1),
+            (good,False,1),
+            (good,0,True)
+        ]:
+            with self.subTest(payload=payload,offset=offset,limit=limit):
+                with self.assertRaises(ValueError):
+                    store_products(payload,store_key="DE7434",day="2026-10-31",
+                                   offset=offset,limit=limit)
+
 if __name__=="__main__":unittest.main()
