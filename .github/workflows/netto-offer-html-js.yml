@@ -1,0 +1,26 @@
+name: Netto offer tile and JavaScript API path inspection
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_offer_markup_and_js_paths.py
+      - .github/workflows/netto-offer-html-js.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Read offer tile markup and public frontend route references
+        run: python3 tools/netto_offer_markup_and_js_paths.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-offer-api-route-evidence
+          path: results/netto_offer_markup_and_js_paths_20261031.json
+          retention-days: 7
