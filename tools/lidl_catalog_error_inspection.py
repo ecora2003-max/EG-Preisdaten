@@ -27,7 +27,7 @@ for url in urls:
     if robot=="unknown" or (robot is not None and not robot.can_fetch(UA,url)):
         row["result"]="skipped, robots not allowing";results.append(row);continue
     req=Request(url,headers={"User-Agent":UA,"Accept":"application/json",
-             "Accept-Language":"de-DE,de;q=0.9",
+             "Accept-Language":"de",
              "X-Client-Version":"17.0.5","X-Client-Platform":"android"})
     try:
         with urlopen(req,timeout=17) as resp:
