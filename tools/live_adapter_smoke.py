@@ -35,7 +35,7 @@ def fetch(label,url,headers=None):
     rule=robots[host]
     if (isinstance(rule,str) and rule!="allow") or (not isinstance(rule,str) and not rule.can_fetch(UA,url)):
         raise RuntimeError("disallowed or unknown robots status: "+str(rule))
-    with urlopen(Request(url,headers={"User-Agent":UA,"Accept":"application/json,text/html",**(headers or {})}),timeout=24) as resp:
+    with urlopen(Request(url,headers={"User-Agent":UA,"Accept":"application/json","Accept-Language":"de-DE,de;q=0.9",**(headers or {})}),timeout=24) as resp:
         data=resp.read(12_000_001)
         if len(data)>12_000_000:raise RuntimeError("response exceeds test bound")
         return data.decode("utf-8","replace")
