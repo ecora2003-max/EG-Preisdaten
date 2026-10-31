@@ -51,3 +51,14 @@ Damit **bislang 0 nachgewiesene aktuelle Netto-Filialpreise über `productSearch
 [Erfolgreiche, gezielte dekompilierte DTO-Prüfung](https://github.com/ecora2003-max/Try/actions/runs/41202820169) bestätigt: `ProductSearchResponse.getContent(): Product[]`; der darin enthaltene Typ `org.openapitools.client.models.Product` bietet Getter für `ArticleId`, `ArticleIdCheckNumber`, `Category`, `CategoryNr`, `CategorySortOrder`, `Ean`, `HandlingType`, `ImageUrl`, `Name`. **Kein `Price`-, `CurrentPrice`- oder `Amount`-Feld in diesem DTO.**
 
 Die gesuchte reine Preissuche ist damit **noch nicht bewiesen**. Technisch realistischer Datenpfad: `productSearch(searchString,storeId)` → Produkt mit EAN → `mpos/{storeId}/itemInfo(itemEAN,...)`. Ob das zweite Interface den aktuellen Verkaufspreis als Antwort liefert und für normale Suchanfragen erreichbar ist, muss gesondert bestätigt werden. Weder Kundensitzungen noch Transaktionsmethoden wurden verwendet.
+
+## Weiterer wichtiger APK-Nachweis: POS-Antwort hat tatsächliche Preisstruktur
+
+[Erfolgreicher MPOS-Modell-Scan, Live-API dabei nicht aufgerufen](https://github.com/ecora2003-max/Try/actions/runs/41203123741), [Prüfcode](../tools/netto_price_dto_static.py):
+
+- `GET api/v1/mpos/{storeId}/itemInfo?itemEAN=...` hat im generierten App-SDK das Response-Modell `ItemInfoResponse`.
+- `ItemInfoResponse.getItemInfo(): ItemInfoResponseItemInfo[]`.
+- Einträge tragen `ItemID`, `Bontext`, `AuthorizedForSaleFlag`, `UomCode`, `Tax` und **`ValidPrice`**.
+- `ValidPrice.getAmount(): String` und `ValidPrice.getCurrency(): String`, JSON-Felder `Amount`, `Currency`.
+
+**Schlussfolgerung:** Jetzt ist im Netto-App-Code ein vollständiger fachlicher Datenpfad erkennbar: `productSearch` → Produkt `Ean` → `mpos/{storeId}/itemInfo` → `ValidPrice.Amount/Currency`. `Amount` ist **String**; erst nach erfolgreichem echten Preisabruf kann die Einheit (Euro oder Cent) zuverlässig festgelegt werden. Der Preiszugang ist weiterhin **nur durch die App-Datentypen plausibel, nicht per öffentlichem GET bestätigt**. Basis-Host und nötiger Session-/Marktkontext bleiben offen.
