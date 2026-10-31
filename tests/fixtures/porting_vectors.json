@@ -1296,6 +1296,196 @@
           }
         ]
       }
+    },
+    {
+      "name": "rights-untrusted-permitted-claim-still-blocked",
+      "request": {
+        "retailerIds": [
+          "LIDL"
+        ],
+        "shoppingDate": "2026-10-31",
+        "maxResults": 20,
+        "usageMode": "APP_DISPLAY"
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "origin": "official-retailer",
+          "sourceUrl": "https://www.lidl.de/angebote",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "httpStatus": 200,
+          "contentType": "application/json",
+          "rightsStatus": "PERMITTED",
+          "licenseRef": "synthetic-unverified-claim",
+          "body": {}
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "RIGHTS_NOT_CLEARED"
+        ],
+        "coverageStatuses": [
+          "ERROR"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "app-display-synthetic-and-external-rights-mixed",
+      "request": {
+        "retailerIds": [
+          "LIDL"
+        ],
+        "shoppingDate": "2026-10-31",
+        "maxResults": 20,
+        "usageMode": "APP_DISPLAY"
+      },
+      "datasets": [
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "DEMO",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06"
+            }
+          ]
+        },
+        {
+          "retailerId": "LIDL",
+          "channel": "SALE",
+          "origin": "official-retailer",
+          "sourceUrl": "https://www.lidl.de/angebote",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "httpStatus": 200,
+          "contentType": "application/json",
+          "body": {}
+        }
+      ],
+      "expect": {
+        "matchedCount": 1,
+        "errorCodes": [
+          "RIGHTS_NOT_CLEARED"
+        ],
+        "coverageStatuses": [
+          "PARSED_PARTIAL",
+          "ERROR"
+        ],
+        "observations": [
+          {
+            "article": {
+              "retailerArticleId": "DEMO"
+            },
+            "source": {
+              "origin": "synthetic-fixture",
+              "rightsStatus": "UNVERIFIED"
+            },
+            "priceKind": "SALE"
+          }
+        ]
+      }
+    },
+    {
+      "name": "regional-feed-without-store-region-proof-rejected",
+      "request": {
+        "retailerIds": [
+          "PENNY"
+        ],
+        "shoppingDate": "2026-10-31",
+        "maxResults": 20,
+        "storeSelections": {
+          "PENNY": {
+            "storeId": "S1"
+          }
+        }
+      },
+      "datasets": [
+        {
+          "retailerId": "PENNY",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "R1",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "scope": "REGION_CONFIRMED",
+              "scopeId": "R1"
+            }
+          ],
+          "regionId": "R1",
+          "scopeProof": {
+            "regionId": "R1",
+            "sourceRef": "synthetic-region"
+          }
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [],
+        "coverageStatuses": [
+          "OUT_OF_SCOPE",
+          "NO_MATCHING_SCOPE"
+        ],
+        "observations": []
+      }
+    },
+    {
+      "name": "offer-only-netto-regular-price-kind-in-sale-rejected",
+      "request": {
+        "retailerIds": [
+          "NETTO_MD"
+        ],
+        "shoppingDate": "2026-10-31",
+        "maxResults": 20
+      },
+      "datasets": [
+        {
+          "retailerId": "NETTO_MD",
+          "channel": "SALE",
+          "fixture": true,
+          "format": "synthetic-fixture",
+          "origin": "synthetic-fixture",
+          "observedAt": "2026-10-31T12:00:00+01:00",
+          "body": [
+            {
+              "id": "N1",
+              "label": "Haferflocken",
+              "price": "1.29",
+              "pack": "500 g",
+              "fromDate": "2026-10-31",
+              "untilDate": "2026-11-06",
+              "sourcePriceKind": "CURRENT_DISPLAYED"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "matchedCount": 0,
+        "errorCodes": [
+          "INVALID_PRICE_KIND"
+        ],
+        "coverageStatuses": [
+          "ERROR"
+        ],
+        "observations": []
+      }
     }
   ],
   "retailerCapabilityPolicyVersion": "1.0.1"
