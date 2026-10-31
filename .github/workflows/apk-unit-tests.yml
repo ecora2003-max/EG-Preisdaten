@@ -1,0 +1,20 @@
+name: APK static endpoint extraction security contract
+on:
+  push:
+    branches: [main]
+    paths:
+      - tests/test_apk_static.py
+      - tools/real_apk_static_analysis.py
+      - .github/workflows/apk-unit-tests.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s tests -p test_apk_static.py -v
