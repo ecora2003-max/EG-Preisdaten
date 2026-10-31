@@ -1,0 +1,25 @@
+name: Full assortment and regular price API feasibility
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/full_catalogue_feasibility.py
+      - .github/workflows/full-catalogue-feasibility.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/full_catalogue_feasibility.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-catalogue-feasibility-20261031
+          path: results/full_catalogue_feasibility.json
+          retention-days: 7
