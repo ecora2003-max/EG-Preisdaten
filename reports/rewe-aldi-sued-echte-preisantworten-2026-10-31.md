@@ -46,3 +46,16 @@ Am **31.10.2026 11:02:37 UTC** wurden genau **zwei** lesende Suchabfragen auf de
 - Im Ergebnis wurden nur Aggregat- und Preisangaben gespeichert, keine Kunden- oder Login-Daten.
 
 **Interpretation:** Damit ist durch einen eigenen aktuellen Test nachgewiesen, dass REWEs stationäre Suchschnittstelle **je `wwIdent` tatsächlich unterschiedliche Produktpreise und Treffer** liefern kann. Das ist stärker als bloß ein Filial-Parameter im Quellcode. Es bestätigt noch keine Vollständigkeit, Kassenbon-Gleichheit, Lizenz oder vertraglich erlaubte Dauernutzung.
+
+## Zusätzlicher Live-Beleg: ALDI Süd meldet 3.538 Artikel im paginierten Suchkatalog
+
+[Dritter erfolgreicher GitHub-Actions-Lauf 41195314409](https://github.com/ecora2003-max/Try/actions/runs/41195314409) · [Prüfcode](../tools/aldi_sued_catalogue_one_page.py) · Artefakt `aldi-single-catalogue-page`.
+
+Am **31.10.2026 11:04:32 UTC** lieferte die bekannte ALDI-SÜD-Produktsuche für `servicePoint=B384`, `serviceType=walk-in`, **leeren Suchtext `q=`**, `limit=12`, `offset=0` und `currency=EUR`:
+
+- **HTTP 200, JSON**
+- `meta.pagination.totalCount = 3538` (**vom API-Server gemeldete Artikelgesamtzahl für diese Suche/Filialauswahl**)
+- `meta.pagination.offset = 0`, `limit = 12`
+- **12 Produkte auf erster Seite, alle 12 mit numerischem `price.amountRelevant` in Cent und Währung EUR**
+
+**Entscheidend:** Damit ist ein **paginiert durchsuchbarer bepreister Sortimentskatalog** direkt und ohne Händlerlogin live bestätigt. Das demonstriert eine gute technische Möglichkeit, sämtliche vom Endpunkt gemeldeten Artikel abzurufen. **Nicht** nachgewiesen ist, dass alle 3.538 tatsächlich paginiert abrufbar sind, jeden realen Ladenartikel abbilden, die Kassenpreise korrekt sind oder eine komplette bzw. dauerhafte Datenextraktion erlaubt ist. Aus Rücksicht auf Zugriffsbelastung und Datenrechte wurden **nicht** 3.538 Artikel heruntergeladen, sondern nur die erste Seite mit 12 Exemplaren.
