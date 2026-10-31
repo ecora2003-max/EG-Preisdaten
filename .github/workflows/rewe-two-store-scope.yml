@@ -1,0 +1,26 @@
+name: Two-market REWE stationarity proof
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/rewe_two_store_scope_probe.py
+      - .github/workflows/rewe-two-store-scope.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Read-only bounded two-store REWE product search, respecting robots
+        run: python3 tools/rewe_two_store_scope_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rewe-two-stores-one-term
+          path: results/rewe_two_store_price_scope.json
+          retention-days: 7
