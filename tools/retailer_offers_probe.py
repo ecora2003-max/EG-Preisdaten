@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""One-shot, read-only public supermarket offer probe. No login, no bypass."""
+import json
+import re
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from urllib.parse import urlencode, urlparse
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError
+from urllib.robotparser import RobotFileParser
+
+UA = "Ernaehrungsgedaechtnis-Research/0.1 (public offer API validation)"
+TIMEOUT = 13
+MAX_BYTES = 12_000_000
+robots = {}
+tests = []
+
+def safe_request(label, url, post=None):
+    host = urlparse(url)
+    origin = host.scheme + "://" + host.netloc
+    entry = {"provider": label, "url": url, "method": "POST" if post else "GET"}
+    if origin not in robots:
+        try:
+            with urlopen(Request(origin + "/robots.txt", headers={"User-Agent": UA}), timeout=TIMEOUT) as r:
+                raw = r.read(300000).decode("utf-8", "replace")
+                rp = RobotFileParser()
+                rp.parse(raw.splitlines())
+                robots[origin] = rp
+        except HTTPError as e:
+            robots[origin] = "allow" if e.code == 404 else "blocked: robots HTTP " + str(e.code)
+        except Exception as e:
+            robots[origin] = "blocked: robots " + type(e).__name__ + ": " + str(e)[:110]
+    rule = robots[origin]
+    if isinstance(rule, str) and rule != "allow":
+        entry["result"] = "skipped"; entry["reason"] = rule
+        tests.append(entry); return None
+    if not isinstance(rule, str) and not rule.can_fetch(UA, url):
+        entry["result"] = "skipped"; entry["reason"] = "robots disallows"
+        tests.append(entry); return None
+    try:
+        headers = {"User-Agent": UA, "Accept": "application/json,text/html;q=0.9,*/*;q=0.5"}
+        if post is not None:
+            headers["Content-Type"] = "application/x-www-form-urlencoded"
+        data = urlencode(post).encode() if post else None
+        req = Request(url, data=data, headers=headers)
+        with urlopen(req, timeout=TIMEOUT) as r:
+            entry["http_status"] = r.status
+            entry["content_type"] = r.headers.get("Content-Type", "")[:90]
+            entry["final_url"] = r.geturl()
+            if urlparse(r.geturl()).netloc != host.netloc:
+                entry["result"] = "cross-domain redirect"; tests.append(entry); return None
+            content = r.read(MAX_BYTES + 1)
+        entry["bytes"] = len(content)
+        if len(content) > MAX_BYTES:
+            entry["result"] = "too large"; tests.append(entry); return None
+        try:
+            obj = json.loads(content)
+            entry["result"] = "json"
+            entry["root_type"] = type(obj).__name__
+            if isinstance(obj, dict):
+                entry["root_keys"] = list(obj)[:30]
+                for key in ("docs", "offers", "markets", "data", "store_items", "items", "results"):
+                    if isinstance(obj.get(key), list):
+                        entry["items_key"] = key
+                        entry["items_count"] = len(obj[key])
+                        if obj[key] and isinstance(obj[key][0], dict):
+                            entry["first_item_keys"] = list(obj[key][0])[:60]
+                            fields = ("name", "title", "titel", "preis", "price", "packaging",
+                                      "sellingSize", "quantityUnit", "startValidityDate",
+                                      "endValidityDate", "gueltig_von", "gueltig_bis",
+                                      "validFrom", "validUntil", "basicPrice",
+                                      "nextWeekSellingRegion", "sellingRegion", "wwIdent")
+                            entry["samples"] = [{k: it[k] for k in fields if k in it}
+                                                for it in obj[key][:2] if isinstance(it, dict)]
+                        break
+            elif isinstance(obj, list):
+                entry["items_count"] = len(obj)
+                if obj and isinstance(obj[0], dict):
+                    entry["first_item_keys"] = list(obj[0])[:60]
+                    fields = ("storeKey", "locality", "postalCode", "wwIdent",
+                              "sellingRegion", "nextWeekSellingRegion", "nextWeekFlippingBookURL")
+                    entry["samples"] = [{k: it[k] for k in fields if k in it}
+                                        for it in obj[:1] if isinstance(it, dict)]
+            entry["future_date_text_in_response"] = any(
+                x in content.decode("utf-8", "replace") for x in
+                ("2026-11-02", "02.11.2026", "2026-11-09", "09.11.2026"))
+            tests.append(entry)
+            time.sleep(0.7)
+            return obj
+        except (ValueError, UnicodeError):
+            html = content.decode("utf-8", "replace")
+            entry["result"] = "html_or_other"
+            entry["has_next_data"] = "__NEXT_DATA__" in html
+            entry["has_ld_json"] = "application/ld+json" in html
+            entry["has_future_date"] = bool(re.search(
+                r"2026-11-02|02[.]11[.]2026|2026-11-09|09[.]11[.]2026", html))
+            entry["euro_signs"] = html.count("€")
+            tests.append(entry)
+            time.sleep(0.7)
+            return None
+    except HTTPError as e:
+        entry["result"] = "http_error"; entry["http_status"] = e.code; tests.append(entry)
+    except Exception as e:
+        entry["result"] = "error"
+        entry["reason"] = type(e).__name__ + ": " + str(e)[:160]
+        tests.append(entry)
+    return None
+
+# One request per documented public endpoint; extra product requests only if
+# a relevant store ID was obtained from an actual, successful public response.
+ed = safe_request("EDEKA store search", "https://www.edeka.de/api/marketsearch/markets?size=5&searchstring=10115")
+if isinstance(ed, dict):
+    ls = next((ed[k] for k in ("markets","docs","items") if isinstance(ed.get(k), list)), [])
+    mid = next((str(m.get("id") or m.get("marketId") or m.get("wwIdent"))
+                for m in ls if isinstance(m,dict) and (m.get("id") or m.get("marketId") or m.get("wwIdent"))), None)
+    if mid:
+        safe_request("EDEKA offers", "https://www.edeka.de/eh/service/eh/offers?" +
+                     urlencode({"marketId": mid, "limit": 15}))
+
+safe_request("Netto Marken-Discount public offers HTML", "https://www.netto-online.de/angebote/")
+safe_request("Netto Marken-Discount public store finder", "https://www.netto-online.de/INTERSHOP/web/WFS/Plus-NettoDE-Site/de_DE/-/EUR/ViewMMPStoreFinder-GetStoreItems",
+             post={"s": "52.45","n":"52.55","w":"13.30","e":"13.50",
+                   "netto":"true","city":"true","service":"true","beverage":"true","nonfood":"true"})
+
+li = safe_request("Lidl store catalog", "https://stores.lidlplus.com/api/v4/DE")
+if isinstance(li, list):
+    store = next((s for s in li if isinstance(s,dict) and str(s.get("locality","")).lower()=="berlin" and s.get("storeKey")), None)
+    if store:
+        safe_request("Lidl offers Berlin store", "https://offers.lidlplus.com/app/api/v4/DE/"+str(store["storeKey"])+"/offers")
+
+safe_request("REWE public offers HTML", "https://www.rewe.de/angebote/nationale-angebote/")
+penny = safe_request("PENNY public store catalog", "https://www.penny.de/.rest/market")
+if isinstance(penny, list):
+    berlin = next((s for s in penny if isinstance(s,dict) and str(s.get("city","")).lower()=="berlin"), None)
+    if berlin:
+        tests.append({"provider":"PENNY Berlin market metadata","result":"derived_from_live_json",
+                      "fields":{k:berlin.get(k) for k in
+                                ("wwIdent","city","zipCode","sellingRegion","nextWeekSellingRegion",
+                                 "flippingBookURL","nextWeekFlippingBookURL")}})
+
+safe_request("ALDI Nord next-week HTML", "https://www.aldi-nord.de/angebote-vorschau.html")
+safe_request("ALDI Sued future structured offers",
+             "https://api.aldi-sued.de/v3/product-search?serviceType=walk-in&servicePoint=B384&currency=EUR&limit=12&offset=0&sort=relevance&promotionKey=2026-11-02")
+safe_request("Kaufland next-week HTML", "https://filiale.kaufland.de/angebote/naechste-woche.html")
+
+summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),
+         "purpose":"read-only snapshot of public retailer offering APIs",
+         "limitations":"No authentication, impersonation, CAPTCHA bypass or retries; skip when robots unavailable",
+         "tests":tests}
+Path("results").mkdir(exist_ok=True)
+Path("results/retailer-offers.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2,default=str)+"\n",encoding="utf-8")
+print(json.dumps(summary,ensure_ascii=False,indent=2,default=str))
