@@ -1,0 +1,26 @@
+name: Netto official store-prospect adapter live validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/netto_official_links_smoke.py'
+      - '.github/workflows/netto-links-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify two real Netto store-specific official prospects
+        run: python3 tools/netto_official_links_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-store-specific-prospect-links
+          path: results/netto_official_links_smoke.json
+          retention-days: 7
