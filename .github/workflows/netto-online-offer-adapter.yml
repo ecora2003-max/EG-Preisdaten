@@ -1,0 +1,27 @@
+name: Netto Onlineshop targeted price adapter - live contract
+on:
+  push:
+    branches: [main]
+    paths:
+      - catalogues/netto_online.py
+      - tools/netto_online_adapter_live_check.py
+      - .github/workflows/netto-online-offer-adapter.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate live JSON-LD Offer from official Netto product page
+        run: python3 tools/netto_online_adapter_live_check.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-online-live-offer-proof
+          path: results/netto_online_offer_adapter_live_20261031.json
+          retention-days: 7
