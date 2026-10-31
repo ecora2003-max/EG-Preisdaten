@@ -45,3 +45,9 @@ Damit **bislang 0 nachgewiesene aktuelle Netto-Filialpreise über `productSearch
 ### Validierung des Response-Typs
 
 [Erneute gezielte JADX-Auswertung](https://github.com/ecora2003-max/Try/actions/runs/41202592843) bestätigt die tatsächliche Java-Signatur `public final Product[] getContent()`. Die vermutete reine Status-/Textantwort wäre damit **zu kurz gegriffen**. Die Suche ist technisch geeignet, strukturierte Produktobjekte zurückzugeben, sofern der korrekte Host erreichbar ist.
+
+## Vertiefung: Produktobjekt ohne Preisfeld
+
+[Erfolgreiche, gezielte dekompilierte DTO-Prüfung](https://github.com/ecora2003-max/Try/actions/runs/41202820169) bestätigt: `ProductSearchResponse.getContent(): Product[]`; der darin enthaltene Typ `org.openapitools.client.models.Product` bietet Getter für `ArticleId`, `ArticleIdCheckNumber`, `Category`, `CategoryNr`, `CategorySortOrder`, `Ean`, `HandlingType`, `ImageUrl`, `Name`. **Kein `Price`-, `CurrentPrice`- oder `Amount`-Feld in diesem DTO.**
+
+Die gesuchte reine Preissuche ist damit **noch nicht bewiesen**. Technisch realistischer Datenpfad: `productSearch(searchString,storeId)` → Produkt mit EAN → `mpos/{storeId}/itemInfo(itemEAN,...)`. Ob das zweite Interface den aktuellen Verkaufspreis als Antwort liefert und für normale Suchanfragen erreichbar ist, muss gesondert bestätigt werden. Weder Kundensitzungen noch Transaktionsmethoden wurden verwendet.
