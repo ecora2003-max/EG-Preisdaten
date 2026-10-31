@@ -40,13 +40,14 @@ try:
     if choose:
         sid=quote(str(choose["id"]),safe="")
         p=f"/api/app/v1/DE/store/DE7434/categories/1004/categories/{sid}/products?"
-        p+=urlencode({"skip":0,"limit":10,"date":"2026-10-31"})
+        p+=urlencode({"skip":0,"limit":30,"date":"2026-10-31"})
         status,data=get(p)
         products=data.get("products") or []
         out["product_page_http"]=status
         out["category"]=choose.get("name")
         out["advertised_total"]=data.get("totalProducts")
         out["received_products"]=len(products)
+        out["subcategory_complete"]=data.get("totalProducts")==len(products)
         out["priced_products"]=sum(isinstance(p,dict) and isinstance(p.get("price"),dict) and isinstance(p["price"].get("price"),(int,float)) for p in products)
         out["examples"]=[{"title":p.get("title"),"price_eur":p.get("price",{}).get("price"),
                           "old_price":p.get("price",{}).get("oldPrice")} for p in products[:2] if isinstance(p,dict)]
