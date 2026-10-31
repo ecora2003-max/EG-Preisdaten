@@ -1,7 +1,7 @@
 # Android-/Codex-Portierungsmatrix (Stand 31.10.2026)
 
 Architektur: 1.0.0-draft, SHA d22862739bd0e3ef8451ce029e54f7c33ee53e40.
-Python-Fachkern: fe580013c619c366ec749ac98e1a630a91a86231; CI 41220821950: 77 Tests PASS.
+Python-Fachkern: a60359c8ca11f95330e51ff4e1129ff191f1868a; CI 41223853921: 85 Tests PASS.
 
 Diese Matrix ist eine Testvorgabe für Codex, keine erfolgte Android-Integration.
 
@@ -24,3 +24,11 @@ Money als ganzzahlige Cents und BigDecimal, ISO LocalDate/OffsetDateTime mit Zon
 Kein Cloudserver, keine Bezahl-API und keine eigenständige zweite Datenbank.
 Erst nach App-Regressions-, Migrations- und Gerätetests darf Codex INTEGRATED melden.
 Bis rechtliche Quellenfreigaben vorliegen, bleiben produktive Live-Feeds gesperrt.
+
+## Maschinenlesbare Portierungsfälle
+
+Die Datei [`tests/fixtures/porting_vectors.json`](../tests/fixtures/porting_vectors.json) enthält **16 unabhängige synthetische Fälle** mit `request`, `datasets` und `expect`. `expect.observations` enthält **Teilprojektionen** der Vertrags-`payload`s; die angegebenen Felder sind exakt zu vergleichen, zusätzliche optionale/namespaced Felder sind erlaubt. `matchedCount`, `errorCodes`, Reihenfolge/Anzahl der Beobachtungen und bei Bedarf `coverageStatuses` sowie eindeutige `observationId` sind ebenfalls verbindliche Erwartungen. Diese Tests werden von `tests/test_porting_vectors.py` in der Python-CI ausgeführt, nicht von Kotlin.
+
+**Kotlin-JVM-Übernahme:** JSON als Ressourcen laden; `PriceService.search(request,datasets)` semantisch portieren; jede erwartete Teilprojektion rekursiv prüfen, vollständige Ausgaben gegen `contracts/v1/contract.schema.json` der Architektur validieren und Eingabeimmutabilität sicherstellen. Fehlercodes statt lokalisierter Fehlermeldungen vergleichen. `observationId`-Eindeutigkeit ist verpflichtend, sprachübergreifend identische Hash-Bytes sind nicht spezifiziert; dies ist eine interne Implementierungsentscheidung, kein Architektur-Vertragsfeld. Erst echte Kotlin-Tests und App-/Gerätetests gelten als Integrationsnachweis.
+
+Testbefehl: `python3 -m unittest tests.test_porting_vectors -v` oder vollständige Suite `python3 -m unittest discover -s tests -v`. Die Vektoren enthalten keine Live-Händlerpreise und sind keine Rechtefreigabe.

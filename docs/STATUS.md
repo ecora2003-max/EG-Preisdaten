@@ -1,10 +1,18 @@
 # Preisdaten – Wiederaufnahmestand (31.10.2026)
 
 **Grad:** `PARTIAL_READY / OFFLINE_VERIFIED` (Fachkern); **nicht** `READY_FOR_INTEGRATION` für produktive Händler-Livefeeds und nicht `INTEGRATED`. Das maßgebliche Ziel steht in `docs/ACCEPTANCE.md`.
-**Letzter vollständig geprüfter Code-Commit:** `fe580013c619c366ec749ac98e1a630a91a86231`. GitHub Actions [#41220821950](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220821950): **77/77 Offline-Tests PASS**, CLI und Kompilierung PASS.
+**Letzter vollständig geprüfter Code-Commit:** `a60359c8ca11f95330e51ff4e1129ff191f1868a`. GitHub Actions [#41223853921](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223853921): **85/85 Offline-Tests PASS**, inklusive 16 portierbarer JSON-Paritätsvektoren, Compile und CLI PASS. Vorgänger [#41223829550](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223829550) auf `0c959c59d4a7b33ad33b7e5c8d2ca6db49a10dee`: **83/83 PASS**.
 **Architekturvertrag:** `1.0.0-draft`, gelesen `d22862739bd0e3ef8451ce029e54f7c33ee53e40`; lokale Vertragsschema- und Beispiel-Fixures übernommen.
 **Haupt-App:** nur gelesen, `6ba419ed2875c1988f45afee65e2708e7895cacf`; kein anderer Repo-Write.
 **Historische Forschung:** ehemals `Try`, via GitHub-Redirect identisch mit `EG-Preisdaten`. Forschungsberichte bleiben erhalten.
+
+## Neueste Implementierungs- und Abnahmeprüfung (31.10.2026)
+
+- **Code `a85dc60056248a600a10c95000e59b77dfc8873c`**: Preisbeobachtungs-IDs berücksichtigen nun Gebindemenge, Pfand, konditionale Preise und Quellmetadaten statt nur Artikel/Preis. ALDI-Nord-Quellgültigkeit bleibt erhalten; Kanal-/Preisart-Widersprüche, Cent-Überläufe und falsche Rabatt-Flags werden atomar abgewiesen. CI [#41223722580](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223722580) PASS (82 Tests).
+- **Code `0c959c59d4a7b33ad33b7e5c8d2ca6db49a10dee`**: `tests/fixtures/porting_vectors.json` enthält **16 vollständig synthetische Kotlin-/Python-Paritätsfälle** mit manuell festgelegten Erwartungsprojektionen: Preis-null/0, Mehrfachgebinde/Grundpreis, Pfand/Apppreis, Zukunft/Verfall, Scope-/Regionbindung, Rechte-/Host-Sperren, atomare Ablehnung, Preisart, identische SKU mit unterschiedlichem Gebinde, REWE-Preisarten, alle acht Händler. `tests/test_porting_vectors.py` validiert Ausgabe gegen Architektur-JSON-Schema, Erwartungsfelder und unveränderte Eingaben. CI [#41223829550](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223829550): **83/83 PASS**, Compile + CLI PASS. **Noch keine Kotlin-JVM-Ausführung**; die JSON-Vektoren sind portierbare Testeingaben für Codex.
+- **Code `a60359c8ca11f95330e51ff4e1129ff191f1868a`**: ALDI-Süd meldet nur bei lückenlosen, eindeutig bepreisten und identifizierten Ergebnissen `catalogue_complete=true`; Lidl-Pagination akzeptiert keine booleschen Seitenzähler. CI [#41223853921](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223853921): **85/85 PASS**, Compile + CLI PASS, Paritätsvektoren eingeschlossen.
+- **Prüfkommando (CI Python 3.12):** `pip install -r requirements-dev.lock && python3 -m compileall -q adapters catalogues price_module tests && python3 -m unittest discover -s tests -v && python3 -m price_module < examples/synthetic-price-query.json`. Tatsächliche Ausführung: GitHub Actions, Run-IDs oben; nicht als lokale Ausführung ausgegeben.
+- **Quellen-/Rechtestand unverändert:** keine neuen Händler-GETs, keine App-Darstellungs-/Caching-/Redistributionsrechte bestätigt; 8/8 Provider technisch benannt, aber nicht 8/8 produktive Live-Quellen freigegeben. Vertragsversion `1.0.0-draft`, Architektur-SHA `d22862739bd0e3ef8451ce029e54f7c33ee53e40`. Android-Portierung, echte Geräte- und Haupt-App-Regression weiterhin **nicht getestet**.
 
 ## Anbieter- und Abnahmematrix
 `LIVE_VERIFIED` bedeutet **frühere begrenzte GitHub-Live-Tests vom 31.10.2026**, nicht gegenwärtig wiederholte Tests, allgemeine Exportberechtigung, Vollständigkeit oder bestätigten Kassenpreis.
@@ -23,9 +31,9 @@
 Weitere Details: [Quellen- und Rechtsmatrix](SOURCES.md), alte `reports/` und [Tests](TEST_REPORT.md). **Für keinen der acht Händler liegt hier eine für die App verifizierte laufende Datenübernahme-/Redistributionsfreigabe vor.** Auch bei EDEKA ist eine zuvor berichtete Einzelfreigabe für Forschungs- oder Snapshot-Schritte nicht gleichbedeutend mit einer belegten allgemeinen App-Verwertungslizenz.
 
 
-## Aktueller Entwicklungsmeilenstein – Commit `b201eed8cd9b5ab5de0db54cfa1cefd43727f234`
+## Frühere Entwicklungsmeilensteine – ab Commit `b201eed8cd9b5ab5de0db54cfa1cefd43727f234`
 
-- **77/77 Tests grün**, inkl. 8-Händler-Offlinematrix, Architektur-JSON-Schema, alle bisherigen Händlerparser, Netto-Live-HTML-Fixures, negative Fehler- und Scope-Szenarien.
+- **Bis Commit `fe58001` 77/77 Tests grün**, inkl. 8-Händler-Offlinematrix, Architektur-JSON-Schema, alle bisherigen Händlerparser, Netto-Live-HTML-Fixures, negative Fehler- und Scope-Szenarien.
 - Preisarten fachlich sauber getrennt: Lidl Plus und Netto App als **gesonderte konditionale Preisbelege ohne bestätigte Zugangsvoraussetzungen**, PENNY-Fußnotenpreis als Originaltext; Streich-/Referenzpreise keine früheren real bezahlten Preise.
 - Der Fachkern erfasst Einzelpreise, Quellen-Grundpreisbelege, Pfand, bekannte Mengen und *unsichere* Mengen. Eine Netto-Grundpreisanzeige `1 kg = …` wird **nicht** fälschlich als Packungsgewicht 1 kg gedeutet.
 - `storeSelections` und Reihenfilter verhindern Übernahme fremder Märkte/Verkaufsregionen; unterschiedliche Beobachtungszeitpunkte bleiben getrennte Beobachtungen. `shoppingDate` (nicht der Fensteranfang) ist für `targetDateStatus` ausschlaggebend.
@@ -79,6 +87,6 @@ Zusätzliche Code- und CI-Meilensteine:
 3. Mengen-/Grundpreisfelder aus Roh-APIs sind teilweise nicht genau genug strukturiert; mehr Paket-/Pfand-/Apppreis-Sonderfälle, nachweisbare Mengenbasis und eindeutige Quellenstatus ergänzen.
 4. Unabhängige Kategorie-/Filialabdeckung nur für einige API-interne Teilmengen; keine Händler-Vollsortiment- oder Preisänderungs-/Kassentreue-Garantie. Eigenständiger Store-Lookup ist bisher nur ein exact-match-Port, kein zugelassener Live-Store-Directory-Client.
 5. Android/Kotlin-Code, Hardware-/App-Regression und offizielle Vertragsfreigabe nur durch Architektursteuerung/Codex; für das externe Modul weiterhin offen.
-6. **Unmittelbar nächste Aktion:** Die [Kotlin-Portierungs-Testmatrix](PORTING_TEST_MATRIX.md) für Codex gegen den aktuellen Architekturvertrag validieren und bei Bedarf ausführbare Kotlin-JVM-Testfixtures ergänzen. Weitere Händler-Schemas nur offline und ohne erneute unbegründete Forschung härten. Rechtlich produktive Händler-Live-Feeds bleiben bis gesonderter Genehmigung gesperrt.
+6. **Unmittelbar nächste Aktion:** Die [16 JSON-Paritätsvektoren](../tests/fixtures/porting_vectors.json) gegen einen tatsächlichen Kotlin-JVM-Port durch Codex ausführen lassen; im eigenen Python-Repository als Nächstes die Quell-Scope-/Vollständigkeits-Negativmatrix der acht Provider offline erweitern und jede unbewiesene Filial-/Zukunftsbehauptung fail-closed halten. Rechtlich produktive Händler-Live-Feeds bleiben bis gesonderter Genehmigung gesperrt.
 
 **Kein Abschluss des Gesamtmandats:** `PARTIAL_READY`; nur synthetischer Offlinekern derzeit als Integrationstestvorlage geeignet. `INTEGRATED` nur Codex.

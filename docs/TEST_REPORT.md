@@ -36,3 +36,11 @@ Neue fachliche Invarianten: bedingte und unbedingte Preise nicht vertauschen; Re
 ## 31.10.2026 – defensive Eingabevalidierung
 
 Code-Commit `fe580013c619c366ec749ac98e1a630a91a86231`. [CI-Lauf #41220821950](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220821950): **77/77 Offline-Tests bestanden**, Compile und synthetische CLI bestanden. Neue Tests für ungültige Artikel-/Markenfelder, fehlerhafte IDs, ungültige Anfragen, Herkunft und Scope sowie extreme Packmengen. Bei beschädigten Datensätzen erfolgt vollständiger Rollback der betroffenen Quelle. Keine neuen Live-GET-Tests und keine produktive Nutzungsrechtsfreigabe.
+
+## 31.10.2026 – Portierbare Paritätsvektoren und Pagination-Härtung
+
+- `a85dc60056248a600a10c95000e59b77dfc8873c`, [CI #41223722580](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223722580): **82/82 PASS**; Beobachtungsidentität, ALDI-Nord-Gültigkeit, Kanal-/Preisart-/Cents-Validierung.
+- `0c959c59d4a7b33ad33b7e5c8d2ca6db49a10dee`, [CI #41223829550](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223829550): **83/83 PASS**, zusätzlich 16 eigenständig erwartete synthetische JSON-Paritätsvektoren (`tests/fixtures/porting_vectors.json`), Schema-Draft-2020-12-Validierung, unveränderte Eingaben, Compile/CLI.
+- `a60359c8ca11f95330e51ff4e1129ff191f1868a`, [CI #41223853921](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223853921): **85/85 PASS**, ALDI-Süd-Seitenvollständigkeit und Lidl-bool-Pagination-Negativtests; Paritätsvektoren weiter grün. Keine Fehler oder übersprungenen Tests in den ausgewiesenen Suites.
+
+Prüfbefehl in GitHub Actions (Python 3.12): `pip install -r requirements-dev.lock; python3 -m compileall -q adapters catalogues price_module tests; python3 -m unittest discover -s tests -v; python3 -m price_module < examples/synthetic-price-query.json`. **Keine neuen Live-GETs, keine rechtliche Quellenfreigabe, keine Kotlin-JVM- oder Android-Gerätetests.**
