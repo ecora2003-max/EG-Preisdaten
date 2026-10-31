@@ -9,14 +9,18 @@ from pathlib import Path
 from datetime import datetime,timezone
 base="https://product-catalog.lidlplus.com"
 ua="Ernaehrungsgedaechtnis-Research/2.8 (two-store product price validity check)"
-with urlopen(Request(base+"/robots.txt",headers={"User-Agent":ua}),timeout=12) as f:
-    rp=RobotFileParser();rp.parse(f.read(200000).decode("utf8","replace").splitlines())
+try:
+    with urlopen(Request(base+"/robots.txt",headers={"User-Agent":ua}),timeout=12) as f:
+        rp=RobotFileParser();rp.parse(f.read(200000).decode("utf8","replace").splitlines())
+except HTTPError as e:
+    if e.code != 404:raise
+    rp=None
 checks=[]
 product="8824326891371_DE"
 for store in ("DE7434","DE7602"):
     url=base+"/api/app/v1/DE/store/"+store+"/products/"+quote(product,safe="")+"?"+urlencode({"date":"2026-10-31"})
     rec={"store":store,"product_id":product}
-    if not rp.can_fetch(ua,url):
+    if rp is not None and not rp.can_fetch(ua,url):
         rec["outcome"]="SKIP robots";checks.append(rec);continue
     req=Request(url,headers={"User-Agent":ua,"Accept-Language":"de","Accept":"application/json",
                             "X-Client-Version":"17.0.5","X-Client-Platform":"android"})
