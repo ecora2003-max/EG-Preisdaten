@@ -1,0 +1,26 @@
+name: Lidl direct store-offer schema verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/lidl_stores_live.py'
+      - '.github/workflows/lidl-stores-live.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Inspect current branch offers (read-only)
+        run: python3 tools/lidl_stores_live.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lidl-two-store-schema
+          path: results/lidl_stores_live.json
+          retention-days: 7
