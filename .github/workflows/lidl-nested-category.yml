@@ -1,0 +1,24 @@
+name: Lidl nested category current shelf price verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/lidl_subcategory_price_probe.py
+      - .github/workflows/lidl-nested-category.yml
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/lidl_subcategory_price_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lidl-nested-category-price
+          path: results/lidl_subcategory_price_probe.json
+          retention-days: 7
