@@ -1,0 +1,26 @@
+name: Lidl direct regular store price catalog integration
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/lidl_real_price_catalogue.py
+      - .github/workflows/lidl-real-prices.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate 2 store price catalogues and category pagination
+        run: python3 tools/lidl_real_price_catalogue.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lidl-instore-price-catalogue
+          path: results/lidl_real_prices_20261031.json
+          retention-days: 7
