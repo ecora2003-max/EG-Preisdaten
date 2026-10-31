@@ -54,3 +54,7 @@ Die eingebundenen Feldparsers sind Referenzcode. Die Original-Android-App im sep
 ## Neue Scan&Go-Preisstruktur (31.10.2026)
 
 [Untersuchung: PENNY/REWE teilen das shopreme-SDK, dessen DataHub marktbezogene Produkt- und Preisimporte umfasst; EDEKA bietet ein offizielles B2C-Gateway nur auf Zugangsanfrage.](reports/scan-go-gemeinsame-preis-infrastruktur-2026-10-31.md) **Wichtig:** Dies beweist die Existenz der Händlerpreis-Infrastruktur, nicht eine öffentlich nutzbare Vollpreis-API. [Öffentlicher Dokumentationstest](https://github.com/ecora2003-max/Try/actions/runs/41190033352).
+
+## Eigene Android-APK-Analyse (31.10.2026)
+
+[Fünf echte APK/XAPK-Dateien statisch untersucht und Kaufland/Netto gezielt mit JADX dekompiliert](reports/eigene-apk-binaeranalyse-2026-10-31.md). **Neue Kandidaten:** Kaufland-K-SCAN `GET v1/products/{countryId}/{storeId}`; Netto Marken-Discount `GET rest/api/v2/productSearch` und `GET api/v1/mpos/{storeId}/itemInfo`. Diese Methodensignaturen sind direkt aus den APKs nachgewiesen, aber vollständige Preisabdeckung, externe Erreichbarkeit und Nutzungsrechte sind noch nicht bestätigt. Keine Binärdateien, Tokens oder dekompilierten App-Quelltexte im Repository. [Binäranalyse](https://github.com/ecora2003-max/Try/actions/runs/41191014066) · [JADX-Live-Lauf](https://github.com/ecora2003-max/Try/actions/runs/41191207477).
