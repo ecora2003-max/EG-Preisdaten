@@ -1,0 +1,27 @@
+name: ALDI Süd alternate page-size completeness check
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/full_catalogue_access_aldi_sued_48.py
+      - .github/workflows/aldi-sued-alternate-slicing.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compare 48-item pages against reported catalogue count
+        run: python3 tools/full_catalogue_access_aldi_sued_48.py
+      - name: Save alternative pagination counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aldi-sued-48-item-pages
+          path: results/full_catalogue_access_20261031/aldi_sued_48.json
+          retention-days: 7
