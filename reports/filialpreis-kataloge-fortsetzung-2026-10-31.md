@@ -11,7 +11,7 @@
 [GitHub Actions: Lidl nested category price](https://github.com/ecora2003-max/Try/actions/runs/41188018700)
 
 - `GET https://product-catalog.lidlplus.com/api/app/v1/DE/store/DE7434/categories/1004/categories` mit `Accept-Language: de` → HTTP 200, **sechs Milchprodukt-Unterkategorien** (Milch & Sahne, Joghurt, Käse, Butter, Eier, Nachtisch).
-- Für die ausgewählte Unterkategorie Milch & Sahne liefert `.../categories/1004/categories/1001/products?skip=0&limit=10&date=2026-10-31` → HTTP 200, **27 gemeldete Produkte, zehn von zehn in der Stichprobe mit Preis** (z. B. Crème fraîche 1,09 €).
+- Für die ausgewählte Unterkategorie Milch & Sahne liefert `.../categories/1004/categories/1001/products?skip=0&limit=30&date=2026-10-31` → HTTP 200, **alle 27 von 27 gemeldeten Produkten mit Preis** (z. B. Crème fraîche 1,09 €). [Bestandener Vollständigkeitstest](https://github.com/ecora2003-max/Try/actions/runs/41188277397).
 - Bereits zuvor: eine komplette Kategorie Fisch & Meeresfrüchte **29/29** Produkte mit aktuellen Preisfeldern sowie differierende Produktsuche in Berlin und Hannover. Deshalb ist jetzt **auch die mehrstufige Kategoriestruktur** nachgewiesen, nicht nur ein einfacher Prospekt.
 - **Noch offen:** sämtliche 18 Hauptkategorien und alle Untergruppen auf Vollständigkeit einschließlich Nicht-Lebensmitteln prüfen; Ergebnisse mit tatsächlichen Kassenpreisen verifizieren, Rabattbedingungen korrekt unterscheiden, rechtlich zulässige Wiederverwendung klären.
 
@@ -57,7 +57,7 @@
 
 | Händler | Ein aktuell angezeigter Katalogpreis technisch nachgewiesen? | Filialfilter des *Produktkatalogs*? | Vollständige Gesamtdeckung bestätigt? |
 |---|---|---|---|
-| Lidl | **Ja** | **Ja** | Nein; komplette Einzelkategorie und Unterkategorie-Stichprobe |
+| Lidl | **Ja** | **Ja** | Nein; zwei komplette Einzel-/Unterkategorien (29/29 und 27/27) |
 | ALDI Nord | **Ja** | Nicht nachgewiesen | Nein; zwei Kategorien |
 | PENNY | **Nein** (nur Aktionen) | Nicht nachgewiesen | Nein |
 | Kaufland | **Nein** (nur Aktionen) | Nicht nachgewiesen | Nein |
