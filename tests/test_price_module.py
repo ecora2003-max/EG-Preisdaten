@@ -284,5 +284,38 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(result["observations"][0]["payload"]["scope"]["scopeType"],"ONLINE")
         self.assertEqual(result["observations"][0]["payload"]["priceCents"],189)
 
+
+    def test_lidl_two_pages_complete_only_when_contiguous(self):
+        def item(i):
+            return {"id":str(i)+"_DE","title":"Demo"+str(i),
+                    "price":{"price":1.29}}
+        p1={"payload":{"totalProducts":3,"products":[item(1),item(2)]},
+            "offset":0,"limit":2}
+        p2={"payload":{"totalProducts":3,"products":[item(3)]},
+            "offset":2,"limit":2}
+        ds=source("LIDL","REGULAR",[p1,p2],
+                  "https://product-catalog.lidlplus.com/api/app/v1/DE/store/DE7434/categories/x/products",
+                  storeId="DE7434",mode="category-pages",snapshotDate=DAY)
+        out=self.service.search_catalog_prices(REQUEST,[ds])
+        self.assertTrue(out["coverage"][0]["complete"])
+        self.assertEqual(len(out["observations"]),3)
+        ds["body"]=[p2,p1]
+        out=self.service.search_catalog_prices(REQUEST,[ds])
+        self.assertFalse(out["coverage"][0]["complete"])
+        self.assertEqual(out["errors"][0]["code"],"SCHEMA_CHANGED")
+        self.assertEqual(out["observations"],[])
+
+    def test_unproven_future_price_is_never_reported_as_valid_forecast(self):
+        ds=fixture([{"id":"n","label":"Nudeln","priceCents":90}],channel="REGULAR")
+        out=self.service.search_catalog_prices(
+            {**REQUEST,"shoppingDate":"2026-11-05"},[ds])
+        self.assertEqual(out["observations"][0]["payload"]["eg-preisdaten:targetDateStatus"],
+                         "OBSERVED_ONLY_NO_VALIDITY_PROOF")
+        ds=fixture([r(id="offer",fromDate="2026-11-02",untilDate="2026-11-07")])
+        out=self.service.search_offers(
+            {**REQUEST,"shoppingDate":"2026-11-05"},[ds])
+        self.assertEqual(out["observations"][0]["payload"]["eg-preisdaten:targetDateStatus"],
+                         "PUBLISHED_WINDOW")
+
 if __name__=="__main__":
     unittest.main()

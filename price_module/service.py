@@ -160,7 +160,20 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
                      "reportedTotal":data["total_count"],"complete":data["catalogue_complete"] is True}
     if r=="LIDL":
         from catalogues.lidl import store_products,search_products
-        if ds.get("mode")=="category":
+        if ds.get("mode")=="category-pages":
+            from catalogues.lidl import merge_store_category_pages
+            if not isinstance(body,list) or not body:
+                raise DataError("INVALID_PAGINATION","Nonempty page list required")
+            parsed_pages=[]
+            for page in body:
+                if not isinstance(page,dict) or not isinstance(page.get("payload"),dict):
+                    raise DataError("INVALID_PAGINATION","Page payload and offset required")
+                parsed_pages.append(store_products(page["payload"],store_key=store,
+                    day=ds["snapshotDate"],offset=page["offset"],limit=page.get("limit")))
+            items=merge_store_category_pages(parsed_pages)
+            cov={"received":len(items),"parsed":len(items),"complete":True,
+                 "reportedTotal":len(items),"pages":len(parsed_pages)}
+        elif ds.get("mode")=="category":
             items,meta=store_products(body,store_key=store,day=ds["snapshotDate"],
                                       offset=ds.get("offset",0),limit=ds.get("limit"))
             cov={"received":meta["received"],"parsed":meta["parsed"],"complete":meta["complete"],
@@ -168,7 +181,7 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
         elif ds.get("mode")=="search":
             items=search_products(body,store_key=store,day=ds["snapshotDate"])
             cov={"received":len(body["results"]),"parsed":len(items),"complete":False}
-        else:raise DataError("INVALID_REQUEST","Lidl catalogue needs mode=category/search")
+        else:raise DataError("INVALID_REQUEST","Lidl catalogue needs mode=category/category-pages/search")
         return [dict(id=x.product_id,label=x.name,brand=x.brand,price=x.current_price_eur,
                      deposit=x.deposit_eur,scope="STORE_CONFIRMED",scopeId=store,
                      sourcePriceKind="CURRENT_DISPLAYED") for x in items],cov
@@ -251,6 +264,13 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
     identity=json.dumps([retailer,sid,raw_id,name,kind_out,value,start,end,ds.get("sourceUrl")],ensure_ascii=False)
     obs_id="PRICE-"+hashlib.sha256(identity.encode()).hexdigest()[:24]
     qty=parse_quantity(row.get("pack"))
+    # A snapshot observed today is not proof of a future checkout price.
+    if start is not None and end is not None:
+        temporal="PUBLISHED_WINDOW" if start<=requested_start<=end else "OUTSIDE_TARGET_DATE"
+    elif start is not None or end is not None:
+        temporal="PARTIAL_VALIDITY_UNKNOWN"
+    else:
+        temporal="OBSERVED_ONLY_NO_VALIDITY_PROOF"
     return {"contractVersion":CONTRACT_VERSION,"messageType":"price.observation",
             "meta":{"producer":"EG-Preisdaten/"+VERSION,"createdAt":time,"traceId":obs_id,
                     "coverageNote":"Snapshot only; store rights and completeness require independent checks"},
@@ -266,7 +286,7 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
                                  "evidenceKind":"UNKNOWN" if ds.get("fixture") else "OFFICIAL_WEB",
                                  "rightsStatus":_REGISTRY[retailer][3],"dataQuality":"UNKNOWN" if ds.get("fixture") else "SOURCED",
                                  "parserVersion":VERSION},
-                       "availability":"UNKNOWN"}}
+                       "availability":"UNKNOWN","eg-preisdaten:targetDateStatus":temporal}}
 
 class PriceService:
     """All functions are synchronous pure snapshot transforms. No network requests."""
