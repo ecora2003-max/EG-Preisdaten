@@ -1,0 +1,53 @@
+{
+  "authorization_basis": "User confirmed on 2026-10-31 that download and GitHub storage were authorized; contractual scope not independently inspected.",
+  "complete_product_catalog_downloaded": false,
+  "data_source": "EDEKA.de official public market offer API",
+  "fetched_at_utc": "2026-10-31T15:25:22.980561+00:00",
+  "regular_prices_verified": false,
+  "repository_scope": "ecora2003-max/Try (public)",
+  "snapshot_kind": "MARKET_PROMOTION_PRICE_NOT_FULL_PRODUCT_CATALOG",
+  "stores": [
+    {
+      "city": "Berlin",
+      "files": [
+        "data/edeka/2026-10-31/offers_10003451_raw.json",
+        "data/edeka/2026-10-31/offer_products_10003451.json"
+      ],
+      "market_id": "10003451",
+      "national": false,
+      "numeric_price_count": 256,
+      "price_missing_count": 0,
+      "queried_at_utc": "2026-10-31T15:25:22.980752+00:00",
+      "reported_offer_count": 256,
+      "saved_offer_count": 256,
+      "source_bytes": 365677,
+      "source_lastModified": 0,
+      "source_sha256": "efd3928a74734b7ce9058b945ce832f6e32bc0fa6142ac259156addd3c1adc8f",
+      "status": "SAVED",
+      "url": "https://www.edeka.de/eh/service/eh/offers?marketId=10003451&limit=800",
+      "valid_from_utc": "2026-10-26T00:00:00+00:00",
+      "valid_to_utc": "2026-10-31T00:00:00+00:00"
+    },
+    {
+      "city": "Hamburg",
+      "files": [
+        "data/edeka/2026-10-31/offers_913988_raw.json",
+        "data/edeka/2026-10-31/offer_products_913988.json"
+      ],
+      "market_id": "913988",
+      "national": false,
+      "numeric_price_count": 40,
+      "price_missing_count": 0,
+      "queried_at_utc": "2026-10-31T15:25:24.358254+00:00",
+      "reported_offer_count": 40,
+      "saved_offer_count": 40,
+      "source_bytes": 62309,
+      "source_lastModified": 0,
+      "source_sha256": "435946ceecc86aaad8363609e4a8cfb3c2b6c0fedf5c605f23feaf5cdaec98a5",
+      "status": "SAVED",
+      "url": "https://www.edeka.de/eh/service/eh/offers?marketId=913988&limit=800",
+      "valid_from_utc": "2026-10-26T00:00:00+00:00",
+      "valid_to_utc": "2026-10-31T00:00:00+00:00"
+    }
+  ]
+}

@@ -1,0 +1,1318 @@
+{
+  "checked_at_utc": "2026-10-31T15:25:24.358254+00:00",
+  "market_id": "913988",
+  "raw_response": {
+    "anzahl": 40,
+    "docs": [
+      {
+        "angebotid": 6428924,
+        "basicPrice": "1 kg = 6,63 - 5,24",
+        "beschreibung": "tiefgefroren, versch. Sorten, 300 - 380 g",
+        "bild_app": "https://offer-images.api.edeka/5603462c-784f-41fe-ab73-29e5d154486f_c1_r812018_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/bcfa2c3e-342c-448a-abe4-76c829e1a1f6_c1_r812018_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/ed59af55-f925-4d19-b0a7-7158bf603c9b_c1_r812018_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-43%",
+        "national": false,
+        "preis": 1.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Wagner Steinofen-Pizza oder Flammkuchen",
+        "warengruppe": "Tiefkühl",
+        "warengruppeid": 5,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6428964,
+        "basicPrice": "1 kg = 8,60",
+        "beschreibung": "versch. Sorten, 150 g",
+        "bild_app": "https://offer-images.api.edeka/31a9668c-ea15-478a-a589-1688bfd5104a_c1_r174103_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/0d3b3421-5896-44c3-9ddc-9aff299a7a54_c1_r174103_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/5378cd23-c101-40a3-83a2-9c9258e40375_c1_r174103_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-50%",
+        "national": false,
+        "preis": 1.29,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Milram dt. Schnittkäse oder Reibekäse",
+        "warengruppe": "Molkerei & Käse",
+        "warengruppeid": 3,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429200,
+        "basicPrice": "1 kg = 11,10 - 5,69",
+        "beschreibung": "versch. Sorten, 100 - 195 g",
+        "bild_app": "https://offer-images.api.edeka/29ebd552-7086-40c1-8c44-fb708c8dbc70_c1_r573147_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/b0c2b831-66da-4c8f-88e7-efa2dc787026_c1_r573147_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/268b8c41-564e-45f5-9801-1ca95ad58edd_c1_r573147_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-52%",
+        "national": false,
+        "preis": 1.11,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Philadelphia Frischkäsezubereitung, Cottage Cheese oder Hüttenkäse",
+        "warengruppe": "Molkerei & Käse",
+        "warengruppeid": 3,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429220,
+        "basicPrice": "1 kg = 6,97",
+        "beschreibung": "versch. Sorten, 185 g",
+        "bild_app": "https://offer-images.api.edeka/73ae728f-650c-4156-b9e9-37de7ab841bc_c1_r424566_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/dc65a937-b827-4056-bb2a-1690e552dfee_c1_r424566_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/c4017a6d-8e82-42f7-90b6-0cd75c5e664a_c1_r424566_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-32%",
+        "national": false,
+        "preis": 1.29,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Brunch Brotaufstrich",
+        "warengruppe": "Molkerei & Käse",
+        "warengruppeid": 3,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429230,
+        "basicPrice": "1 kg = 3,71 - 2,45",
+        "beschreibung": "versch. Sorten, 132 - 200 g",
+        "bild_app": "https://offer-images.api.edeka/327ea3bb-ba3f-41b4-bdca-7f38a12c00b1_c1_r77020_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/7dd5bd63-172a-415a-898e-d9f2b88e319f_c1_r77020_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/d98639f5-4f67-4381-952f-da94d3cb400d_c1_r77020_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-51%",
+        "national": false,
+        "preis": 0.49,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Müller Milchreis oder Grießpudding",
+        "warengruppe": "Molkerei & Käse",
+        "warengruppeid": 3,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429336,
+        "basicPrice": "1 kg = 18,71 - 17,96",
+        "beschreibung": "französischer Camembert, versch. Sorten, 240 - 250 g",
+        "bild_app": "https://offer-images.api.edeka/83cf3caf-ec8a-4067-ab85-51d00a37c7b4_c1_r332026_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/a02e3448-ccee-493a-a2a9-2d1cce38ef25_c1_r332026_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/8fd2b3a0-7889-46ab-a3d6-9c8883e47a0d_c1_r332026_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 4.49,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Le Rustique Camembert",
+        "warengruppe": "Molkerei & Käse",
+        "warengruppeid": 3,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429346,
+        "basicPrice": "1 kg = 5,93",
+        "beschreibung": "versch. Sorten, 150 g",
+        "bild_app": "https://offer-images.api.edeka/347b2c93-4672-4254-87b7-895deb3cf856_c1_r130980_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/6d597db8-d073-4363-b388-1e3c2cb1cbf0_c1_r130980_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/4af47dc5-2828-4268-9493-b1cf52233138_c1_r130980_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 0.89,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Ehrmann Almighurt Joghurt",
+        "warengruppe": "Molkerei & Käse",
+        "warengruppeid": 3,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429356,
+        "basicPrice": "1 kg = 12,24 - 11,82",
+        "beschreibung": "versch. Sorten, 228 - 236 g",
+        "bild_app": "https://offer-images.api.edeka/16bb44dc-f12c-453d-99e8-2ef89e03c213_c1_r171604_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/17140607-84f9-41b7-b513-56a75f4e5cc4_c1_r171604_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/f53a1eab-b09e-4faa-ae0c-a0be211eb3c9_c1_r171604_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 2.79,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Nestlé Gold Mousse",
+        "warengruppe": "Molkerei & Käse",
+        "warengruppeid": 3,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429366,
+        "basicPrice": "1 l = 11,32 - 9,96",
+        "beschreibung": "versch. Sorten, 220 - 250 ml",
+        "bild_app": "https://offer-images.api.edeka/a12f9516-fca3-4991-80d6-fe8fe74f0cb2_c1_r447011_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/ecf50cbb-3424-494b-bf8e-1494d4b88431_c1_r447011_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/df446dbe-0547-4795-8d23-f3653c1f05ec_c1_r447011_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 2.49,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Starbucks Coffee oder Frappuccino",
+        "warengruppe": "Molkerei & Käse",
+        "warengruppeid": 3,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429743,
+        "basicPrice": "1 kg = 33,17",
+        "beschreibung": "versch. Sorten, 60 g",
+        "bild_app": "https://offer-images.api.edeka/f6fc2a22-2b59-45ee-be86-d156ecb3e777_c1_r588075_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/e5e56bcc-60b4-4935-bfb9-bddecdab884a_c1_r588075_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/e4d66b31-7d48-4f16-be44-752a56506ce9_c1_r588075_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 1.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": [
+          {
+            "bild": "https://offer-images.api.edeka/49c774c7-d9ca-4a7e-824d-78d9aad82089_bio_offiziell_connect.jpg"
+          }
+        ],
+        "titel": "Koro Bio Flapjack oder Oat Bar",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429753,
+        "basicPrice": "1 kg = 12,45 - 6,64",
+        "beschreibung": "versch. Sorten, 200 - 375 g",
+        "bild_app": "https://offer-images.api.edeka/a3f2504e-bd6f-4651-9516-0e5c85504972_c1_r482022_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/ee9a6bc0-fea9-4c29-b17a-4897cfa1aba2_c1_r482022_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/eff7ae67-e5ec-4b48-9dc5-ae474ff939f5_c1_r482022_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-34%",
+        "national": false,
+        "preis": 2.49,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Nestle Cerealien",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429769,
+        "basicPrice": "1 kg = 8,30",
+        "beschreibung": "versch. Sorten, (Abtropfg.: 300 g), 530 g",
+        "bild_app": "https://offer-images.api.edeka/02e8a5b7-e69d-45cf-8098-878c38fdb834_c1_r144479_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/408a1641-2f24-4b2c-8024-a98edbc49ed7_c1_r144479_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/60d9a6d6-2feb-4290-b1c6-01c15a73f2f8_c1_r144479_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-29%",
+        "national": false,
+        "preis": 2.49,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Kühne Schlemmertöpfchen Gürkchen",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429779,
+        "basicPrice": "1 kg = 6,98",
+        "beschreibung": "450 g + 50 g gratis dazu = 500 g",
+        "bild_app": "https://offer-images.api.edeka/f6ee6ab8-0bfe-49a0-925f-159540ce208f_c1_r419177_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/7cb0462a-7e9b-4424-b502-87840110eb23_c1_r419177_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/b45d4a3c-7644-4bca-9b9e-33c82a359882_c1_r419177_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-13%",
+        "national": false,
+        "preis": 3.49,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Nutella Nuss-Nugat-Creme",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429821,
+        "basicPrice": "1 kg = 1,98",
+        "beschreibung": "versch. Sorten, 500 g",
+        "bild_app": "https://offer-images.api.edeka/c5ca47cb-26a0-4821-a525-f5a44f0e4424_c1_r166689_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/94ea3155-5de4-49dd-828c-7c51e9caca3f_c1_r166689_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/edc85a5f-4ecb-4715-8d5f-496138edc544_c1_r166689_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-48%",
+        "national": false,
+        "preis": 1.0,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Delverde Pasta",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429867,
+        "basicPrice": "1 kg = 4,77 - 4,48",
+        "beschreibung": "versch. Sorten, 375 - 400 g",
+        "bild_app": "https://offer-images.api.edeka/62a12d98-3539-4fa5-9dfc-458ace9dfed3_c1_r417005_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/54952b80-2b1d-433b-80de-be1261d673a9_c1_r417005_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/7688d912-1fc2-44a6-a424-27b9cc1eefe9_c1_r417005_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-31%",
+        "national": false,
+        "preis": 1.79,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Homann Salate",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429887,
+        "basicPrice": "1 kg = 61,48 - 49,80",
+        "beschreibung": "versch. Sorten, 40,5 - 50 g",
+        "bild_app": "https://offer-images.api.edeka/7bad9e4c-f64c-4c5f-82c0-e63f87a8bde8_c1_r454133_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/fe515a96-e4c8-448d-88b6-8debf1446488_c1_r454133_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/08529bad-0296-4ae0-b6ba-0627f5fb03a5_c1_r454133_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 2.49,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Teekanne Wintertee",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429907,
+        "basicPrice": null,
+        "beschreibung": "ganze Bohnen, versch. Sorten, 1000 g",
+        "bild_app": "https://offer-images.api.edeka/7ab756b9-8885-4ce4-bb76-4708c76a324d_c1_r413552_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/bccaa79b-d1ae-4ee3-b769-3491d029f421_c1_r413552_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/5b267ed3-4573-42ec-b260-e3ccb84247bd_c1_r413552_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-28%",
+        "national": false,
+        "preis": 12.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Melitta Bella Crema",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429923,
+        "basicPrice": "1 kg = 38,63 - 22,53",
+        "beschreibung": "versch. Sorten, 43,75 - 75 g",
+        "bild_app": "https://offer-images.api.edeka/d368115c-d2de-48d2-936e-eff733736308_c1_r343131_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/72ce81e7-7454-4c69-8d86-fcccc734ea4f_c1_r343131_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/d8bfeb23-2a94-4f46-8093-8d9d8e48db53_c1_r343131_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-28%",
+        "national": false,
+        "preis": 1.69,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Meßmer Kräutertee oder Früchtetee",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429939,
+        "basicPrice": "1 kg = 48,29 - 30,73",
+        "beschreibung": "versch. Sorten, 35 - 55 g",
+        "bild_app": "https://offer-images.api.edeka/416aa715-c586-4274-a057-c15098754e94_c1_r343166_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/11fa290d-41d4-4b7f-94d8-85414e7efd9d_c1_r343166_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/4b1d5d80-11e1-4aaa-aa6e-3a71776c066c_c1_r343166_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-29%",
+        "national": false,
+        "preis": 1.69,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Meßmer verfeinerter Früchtetee",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429957,
+        "basicPrice": "1 l = 9,26",
+        "beschreibung": "versch. Sorten, 485 ml",
+        "bild_app": "https://offer-images.api.edeka/0f05b04e-6117-4817-8b3a-55d76ad1a2b3_c1_r773306_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/9af6e3ab-a512-4890-8407-930387d0d5df_c1_r773306_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/7548057f-2c74-41a9-b462-cb446c84509e_c1_r773306_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-25%",
+        "national": false,
+        "preis": 4.49,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Jacobs Kaffeekonzentrat",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6429967,
+        "basicPrice": "1 kg = 3,78",
+        "beschreibung": "versch. Sorten, 500 g",
+        "bild_app": "https://offer-images.api.edeka/e3e0b60c-1f01-4f0a-85c3-6089172423a3_c1_r153290_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/a235fd14-8a15-4f09-b20d-18be590df5fa_c1_r153290_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/f6aa5a5c-db47-479c-ab0d-ff03d09bf265_c1_r153290_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 1.89,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Harry Schnittbrot",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430027,
+        "basicPrice": "1 kg = 9,84 - 7,43",
+        "beschreibung": "tiefgefroren, versch. Sorten, 385 - 510 g",
+        "bild_app": "https://offer-images.api.edeka/c68e8bfb-5ec6-4c3e-8944-f50284126e56_c1_r847138_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/cc403d87-e611-48f7-8cd5-266fe85f7b5f_c1_r847138_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/58a91525-afb1-44c4-b5cb-4b0542ed37b0_c1_r847138_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-24%",
+        "national": false,
+        "preis": 3.79,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Gustavo Gusto Steinofenpizza",
+        "warengruppe": "Tiefkühl",
+        "warengruppeid": 5,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430087,
+        "basicPrice": "1 kg = 3,58 - 2,39",
+        "beschreibung": "tiefgefroren, versch. Sorten, 500 - 750 g",
+        "bild_app": "https://offer-images.api.edeka/e4782435-a972-4da2-800f-9fb71fb4de4e_c1_r692090_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/e6c6d3b0-e30c-40a0-ac68-2488385c03c9_c1_r692090_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/6d221c26-227d-4ce8-9202-2d9e299addff_c1_r692090_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-36%",
+        "national": false,
+        "preis": 1.79,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "McCain 1·2·3 Frites",
+        "warengruppe": "Tiefkühl",
+        "warengruppeid": 5,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430097,
+        "basicPrice": "1 kg = 30,93",
+        "beschreibung": "tiefgefroren, 420 g",
+        "bild_app": "https://offer-images.api.edeka/49c6ac8f-0b90-443e-9ad8-147541fd40f8_c1_r605053_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/f6e64664-765a-4616-a386-f13fb274bc1c_c1_r605053_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/13a24cd5-ef98-4354-8c37-95bd37536bc1_c1_r605053_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-23%",
+        "national": false,
+        "preis": 12.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Costa Lachsfilets",
+        "warengruppe": "Tiefkühl",
+        "warengruppeid": 5,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430139,
+        "basicPrice": "1 l = 49,99",
+        "beschreibung": "42,70%, 0,7 L",
+        "bild_app": "https://offer-images.api.edeka/20571bf9-a21d-4467-88c4-5be31cde797d_c1_r44120_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/91f53115-1d43-4c83-ab01-a1023b53db79_c1_r44120_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/a73a0af7-ce6b-4aae-930e-43a7a41b092c_c1_r44120_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-13%",
+        "national": false,
+        "preis": 34.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Gin Mare Dry Gin",
+        "warengruppe": "Getränke",
+        "warengruppeid": 7,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430149,
+        "basicPrice": "1 l = 5,96",
+        "beschreibung": "versch. Sorten, 250 ml zzgl. 0,25 Pfand",
+        "bild_app": "https://offer-images.api.edeka/be25d759-aa89-48d4-be2e-405aac052a03_c1_r803157_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/0f8d9b43-4534-4672-909c-96dc428c5e6a_c1_r803157_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/8e2091e5-dd30-4cd6-9953-db20ee19f865_c1_r803157_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 1.49,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Red Bull Energy Drink",
+        "warengruppe": "Getränke",
+        "warengruppeid": 7,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430238,
+        "basicPrice": "1 l = 0,79",
+        "beschreibung": "versch. Sorten, 1,5 L zzgl. 0,25 Pfand",
+        "bild_app": "https://offer-images.api.edeka/31ad2938-ebba-4e76-a67c-c82d2c64202a_c1_r166028_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/bba20ff5-7fcb-43c4-9e26-4efc7d05fa3e_c1_r166028_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/24f1c042-9960-49b5-8d6c-7922908a50c0_c1_r166028_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-37%",
+        "national": false,
+        "preis": 1.19,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Volvic Tee oder Touch",
+        "warengruppe": "Getränke",
+        "warengruppeid": 7,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430287,
+        "basicPrice": "1 l = 1,10",
+        "beschreibung": "versch. Sorten, 20 x 0,5 L zzgl. 3,10 Pfand",
+        "bild_app": "https://offer-images.api.edeka/386aa1bc-afed-4230-9553-f7cc515da1cb_c1_r421260_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/31b76576-d325-48f2-81a1-07b960a2b0f9_c1_r421260_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/04c792dd-7a20-4346-8e4c-92fddb4a5901_c1_r421260_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-39%",
+        "national": false,
+        "preis": 10.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Warsteiner Bier",
+        "warengruppe": "Getränke",
+        "warengruppeid": 7,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430296,
+        "basicPrice": "1 l = 1,39",
+        "beschreibung": "versch. Sorten, 24 x 0,33 L zzgl. 3,42 Pfand",
+        "bild_app": "https://offer-images.api.edeka/134547e5-5859-4096-a1a7-b87443dd6840_c1_r506029_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/caff4a60-d06a-4bec-bc22-cd1b988d8f89_c1_r506029_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/2e9586f8-9277-4638-9714-72dab957a257_c1_r506029_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-39%",
+        "national": false,
+        "preis": 10.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Warsteiner Bier",
+        "warengruppe": "Getränke",
+        "warengruppeid": 7,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430317,
+        "basicPrice": "1 l = 6,65",
+        "beschreibung": "aus Südafrika, versch. Sorten, 0,75 L",
+        "bild_app": "https://offer-images.api.edeka/f8577d3b-5ee4-49ad-92d3-f5c5c3555b36_c1_r143905_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/9b3a1c32-76db-4d5a-80ae-3cf26bd84a62_c1_r143905_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/8da24eb2-3f8b-4580-be2b-f82bf548df55_c1_r143905_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-17%",
+        "national": false,
+        "preis": 4.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Nederburg Wein",
+        "warengruppe": "Getränke",
+        "warengruppeid": 7,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430462,
+        "basicPrice": "1 kg = 19,95",
+        "beschreibung": "200 g",
+        "bild_app": "https://offer-images.api.edeka/7b30706d-ffb6-4322-8ff6-9648744db37b_c1_r186333_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/52471060-1714-49ee-b9b2-d5c42918f60f_c1_r186333_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/a4ee5051-4bd1-4aee-a50a-eb06e2800e78_c1_r186333_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 3.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Nestlé After Eight",
+        "warengruppe": "Knabbern & Naschen",
+        "warengruppeid": 10,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430472,
+        "basicPrice": "1 kg = 20,64",
+        "beschreibung": "versch. Sorten, 140 g",
+        "bild_app": "https://offer-images.api.edeka/4c50d5dc-33c0-4164-b347-25a94e1671ba_c1_r424376_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/26d88a87-ec58-4bbe-8a5c-fe2a404b9fba_c1_r424376_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/d5559034-bd3c-4896-9428-0d86caa2435c_c1_r424376_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 2.89,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Alpia Schoko Brezeln",
+        "warengruppe": "Knabbern & Naschen",
+        "warengruppeid": 10,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430628,
+        "basicPrice": null,
+        "beschreibung": "versch. Sorten, 100 g",
+        "bild_app": "https://offer-images.api.edeka/5f148fb1-deb9-4f37-96cc-f76eed7d9d8c_c1_r142699_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/8af20eae-e9f0-4953-9593-02aa6ce98f2c_c1_r142699_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/fc1ea7f3-24bd-43d4-8146-dd59eb530221_c1_r142699_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-40%",
+        "national": false,
+        "preis": 2.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Lindt Tafelschokolade Excellence",
+        "warengruppe": "Knabbern & Naschen",
+        "warengruppeid": 10,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430648,
+        "basicPrice": "1 kg = 22,22",
+        "beschreibung": "versch. Sorten, 90 g",
+        "bild_app": "https://offer-images.api.edeka/de4821d6-4718-4ed0-9939-a759939968b6_c1_r425335_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/6e0667fa-31fc-4146-9236-d32fe008e3d0_c1_r425335_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/e75b2529-aa80-41c5-90f5-9d62532d1d0e_c1_r425335_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-13%",
+        "national": false,
+        "preis": 2.0,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Tony's Chocolonely Tafelschokolade",
+        "warengruppe": "Knabbern & Naschen",
+        "warengruppeid": 10,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430678,
+        "basicPrice": null,
+        "beschreibung": "100 g",
+        "bild_app": "https://offer-images.api.edeka/dde750c9-eea3-4edd-b69e-1a0b7a292259_c1_r420041_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/12c025fe-2a53-4cfe-895d-b4f8e3991732_c1_r420041_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/bd3fb8d2-8cef-4491-8ae8-c0a10b42e89f_c1_r420041_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 1.19,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Dr. Quendt Russisch Brot",
+        "warengruppe": "Knabbern & Naschen",
+        "warengruppeid": 10,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430796,
+        "basicPrice": "1 kg = 33,13 - 31,80",
+        "beschreibung": "versch. Sorten, 48 - 50 g",
+        "bild_app": "https://offer-images.api.edeka/dd271b1b-efe6-4d4a-ad6b-a3ce390a667f_c1_r407848_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/d77b1a81-a416-49a6-a6cf-fcdba52cfcb4_c1_r407848_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/7ef2dd4a-9de8-4df3-a548-0355b9d3af1f_c1_r407848_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 233,
+            "name": "PAYBACK",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": null,
+        "national": false,
+        "preis": 1.59,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Domestos WC Stein Power 5",
+        "warengruppe": "Drogerie",
+        "warengruppeid": 9,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430812,
+        "basicPrice": "1 l = 7,98",
+        "beschreibung": "versch. Sorten, 500 ml",
+        "bild_app": "https://offer-images.api.edeka/f794121d-d9f1-43b3-9516-5d2eef1e7a7e_c1_r763086_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/a239212d-1a2c-4c2a-960e-68f4c01e2fb5_c1_r763086_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/03a79d0b-ebec-4a16-a7ad-09c209ace1e8_c1_r763086_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-20%",
+        "national": false,
+        "preis": 3.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Listerine Mundspülung Total Care oder Advanced",
+        "warengruppe": "Drogerie",
+        "warengruppeid": 9,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430822,
+        "basicPrice": "1 kg = 4,71 - 4,44 / 3,93 - 3,70",
+        "beschreibung": "versch. Sorten, 10 / 12 x 80 - 85 g",
+        "bild_app": "https://offer-images.api.edeka/c2dc5090-978a-402b-91c5-81036e6fd113_c1_r168075_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/9d57972f-9c09-482d-845e-efebe925fb15_c1_r168075_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/de5173bc-6427-4151-8eba-4769da9d9e00_c1_r168075_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-18%",
+        "national": false,
+        "preis": 3.77,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Felix Katzen Nassnahrung",
+        "warengruppe": "Tiernahrung",
+        "warengruppeid": 12,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430924,
+        "basicPrice": "1 kg = 36,36",
+        "beschreibung": "versch. Sorten, 55 g",
+        "bild_app": "https://offer-images.api.edeka/e2bf1a3e-ca08-481d-b6b9-cb0bd34b4b5a_c1_r403344_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/808c8694-44b8-4d53-9988-9ef2360ffd4e_c1_r403344_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/e7114666-68ab-4693-84a2-ee94c29463ab_c1_r403344_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-26%",
+        "national": false,
+        "preis": 2.0,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Barebells Riegel",
+        "warengruppe": "Grundnahrung",
+        "warengruppeid": 6,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      },
+      {
+        "angebotid": 6430984,
+        "basicPrice": "1 kg = 24,88",
+        "beschreibung": "versch. Sorten, 40 % Fett i. Tr., 4 x 20 g",
+        "bild_app": "https://offer-images.api.edeka/1b06bbfd-182b-4066-9f78-22d56888e5f3_c1_r6072_1136x1136.jpg",
+        "bild_web130": "https://offer-images.api.edeka/3b037e7a-0d29-4ee0-ba6f-2d619bc7a106_c1_r6072_1136x1136.jpg",
+        "bild_web90": "https://offer-images.api.edeka/e86f6bb1-9a7f-4e90-817a-84b5feda8d8b_c1_r6072_1136x1136.jpg",
+        "externeid": null,
+        "genussplus": null,
+        "gueltig_bis": 1793404800000,
+        "kriterien": [
+          {
+            "id": 232,
+            "name": "Superknüller",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 1081,
+            "name": "App-Preis",
+            "schieneTyp": "E"
+          },
+          {
+            "id": 490,
+            "name": "Angebote aus der Tageszeitung",
+            "schieneTyp": "E"
+          }
+        ],
+        "nachlass": "-13%",
+        "national": false,
+        "preis": 1.99,
+        "punkte_deutschlandcard": "0",
+        "sonderkennzeichen": null,
+        "titel": "Cheestrings Käsesnack",
+        "warengruppe": "Molkerei & Käse",
+        "warengruppeid": 3,
+        "zusatztext": "Diese Artikel sind in den mit dieser Werbung gekennzeichneten Märkten erhältlich. Frischblumen-Angebote sind nicht in allen Märkten erhältlich. Alle weiteren Informationen der Firma und Anschrift Ihres teilnehmenden EDEKA-Marktes finden Sie unter www.edeka.de/marktsuche oder unter der Telefonnummer 0800 333 52 11 (kostenfrei aus dem dt. Fest- und Mobilfunknetz). Wir haben uns für diesen Zeitraum ausreichend bevorratet. Bitte entschuldigen Sie, wenn die Artikel auf Grund der großen Nachfrage dennoch im Einzelfall ausverkauft sein sollten. Abgabe in haushaltsüblichen Mengen. Bio-Ware kontrolliert durch DE-KO-039. Für Darstellungsfehler übernehmen wir keine Haftung. EDEKA Nordwest Stiftung & Co. KG, Edekaplatz 1, 47445 Moers.",
+        "zutaten": null
+      }
+    ],
+    "gueltig_bis": 1793404800000,
+    "gueltig_von": 1792972800000,
+    "lastModified": 0,
+    "national": false
+  },
+  "source_url": "https://www.edeka.de/eh/service/eh/offers?marketId=913988&limit=800"
+}
