@@ -327,6 +327,27 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
         if not isinstance(x,dict) or type(x.get("priceCents")) is not int or x["priceCents"]<0 or x["priceCents"]>100_000_000 or x.get("access") not in ("NETTO_APP","LIDL_PLUS") or x.get("termsVerified") is not False:
             raise DataError("INVALID_CONDITION","Unsupported or unverified conditional price")
         normalized_conditions.append(dict(x))
+    # Source-supplied base prices are comparison evidence, never inferred
+    # pack weights or proof of a till price. Check only physically compatible
+    # units and *displayed* net quantity, with a one-cent rounding allowance.
+    base_price_check="NO_REPORTED_BASE_PRICE"
+    if reported_base:
+        if value is None:
+            base_price_check="PRICE_UNKNOWN"
+        elif dep is not None and dep>0:
+            base_price_check="DEPOSIT_UNCERTAIN"
+        elif qty is None or qty["amount"] is None or qty["basis"]!="NET":
+            base_price_check="NOT_COMPARABLE"
+        else:
+            usable=[b for b in reported_base if (b["basis"]=="kg" and qty["unit"]=="g")
+                   or (b["basis"]=="l" and qty["unit"]=="ml")]
+            if not usable:
+                base_price_check="NOT_COMPARABLE"
+            else:
+                computed=(Decimal(value)*1000)/Decimal(qty["amount"])
+                checks=[abs(computed-(Decimal(b["priceEur"])*100))<=Decimal("1")
+                        for b in usable]
+                base_price_check="CONSISTENT_WITH_DISPLAYED_QUANTITY" if all(checks) else "MISMATCH"
     # A snapshot observed today is not proof of a future checkout price.
     if start is not None and end is not None:
         temporal="PUBLISHED_WINDOW" if start<=(shopping_date or requested_start)<=end else "OUTSIDE_TARGET_DATE"
@@ -359,6 +380,7 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
                        "eg-preisdaten:advertisedBenefitText":row.get("advertisedBenefitText"),
                        "eg-preisdaten:advertisedUnitPrice":row.get("advertisedUnitPrice"),
                        "eg-preisdaten:reportedBaseUnitPrices":reported_base,
+                       "eg-preisdaten:basePriceCheck":base_price_check,
                        "eg-preisdaten:priceWithoutDepositCents":cents(row.get("priceWithoutDeposit"))}}
 
 class PriceService:

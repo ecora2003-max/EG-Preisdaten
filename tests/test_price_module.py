@@ -610,5 +610,33 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(out["errors"][0]["code"],"INVALID_ID")
         self.assertEqual(out["observations"],[])
 
+
+    def test_base_price_crosscheck_exact_arithmetic_and_rounding(self):
+        def item(id,price,pack,basis,value,deposit=None):
+            return r(id=id,price=price,pack=pack,deposit=deposit,
+                     reportedBaseUnitPrices=[{"basis":basis,"priceEur":value}])
+        rows=[
+            item("correct","0.99","500 g","kg","1.98"),
+            item("different","1.99","500 g","kg","1.98"),
+            item("volume","1.20","0,75 l","l","1.60"),
+            item("piece","1.00","1 Stück","kg","1.00"),
+            item("deposit","1.20","0,75 l","l","1.60","0.25"),
+            item("unknown",None,"500 g","kg","1.98")
+        ]
+        out=self.service.search_offers(REQUEST,[fixture(rows)])
+        by_id={p["payload"]["article"]["retailerArticleId"]:
+               p["payload"]["eg-preisdaten:basePriceCheck"] for p in out["observations"]}
+        self.assertEqual(by_id,{"correct":"CONSISTENT_WITH_DISPLAYED_QUANTITY",
+                                "different":"MISMATCH","volume":"CONSISTENT_WITH_DISPLAYED_QUANTITY",
+                                "piece":"NOT_COMPARABLE","deposit":"DEPOSIT_UNCERTAIN",
+                                "unknown":"PRICE_UNKNOWN"})
+
+    def test_bad_reported_base_price_rejects_source_dataset_atomically(self):
+        ds=fixture([r(id="good"),r(id="bad",reportedBaseUnitPrices=[
+            {"basis":"kg","priceEur":"NaN"}])])
+        out=self.service.search_offers(REQUEST,[ds])
+        self.assertEqual(out["observations"],[])
+        self.assertEqual(out["errors"][0]["code"],"INVALID_QUANTITY")
+
 if __name__=="__main__":
     unittest.main()
