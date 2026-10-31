@@ -27,8 +27,8 @@ PACKAGES={
     "kaufland":"com.kaufland.Kaufland",
 }
 MAX_DOWNLOAD=240_000_000
-MAX_ARCHIVE_ENTRY=120_000_000
-MAX_SCAN_BYTES=240_000_000
+MAX_ARCHIVE_ENTRY=240_000_000
+MAX_SCAN_BYTES=400_000_000
 URL_RE=re.compile(rb'https?://[a-zA-Z0-9_.-]{4,120}(?::[0-9]{2,5})?(?:/[a-zA-Z0-9._~/%+{}\[\]:;!?=&-]{0,140})?',re.I)
 PATH_RE=re.compile(rb'/(?:api|v[0-9]|mpos|items?|products?|catalog(?:ue)?|search|prices?|offers?|scan(?:-and-go|go)?|stores?|baskets?|checkouts?|markets?|ean|barcodes?|master-data)[a-zA-Z0-9._~/%+{}?=&/-]{2,160}',re.I)
 INTEREST=re.compile(r'price|product|catalog|mpos|iteminfo|barcode|ean|scan|store|market|basket|search|master|offer|artikel|preis',re.I)
@@ -133,7 +133,9 @@ def download_public(package:str,path:Path):
             total+=len(chunk)
             if total>MAX_DOWNLOAD:raise ValueError("Package above bounded max")
             out.write(chunk);digest.update(chunk)
-    if total<50000 or path.read_bytes()[:4]!=b"PK\x03\x04":
+    with path.open("rb") as check:
+        magic=check.read(4)
+    if total<50000 or magic!=b"PK\x03\x04":
         raise ValueError("Response is not a ZIP/APK archive")
     meta.update({"download_bytes":total,"sha256":digest.hexdigest()})
     return meta
@@ -156,7 +158,15 @@ def study(retailer,package):
         "scanned_files":stats["scanned_files"],
         "files_sample":stats["files"],
         "hostnames":sorted(stats["hosts"],key=lambda k:-stats["hosts"][k])[:70],
-        "api_route_candidates":sorted(stats["paths"],key=lambda k:(-stats["paths"][k],k))[:85],
+        "api_route_candidates":sorted(
+            (p for p in stats["paths"] if not re.search(
+              r"^/(?:scandit|android|google|okhttp|com/|storemgmt|store/|barcode/(?:sdk|internal))",p,re.I)),
+            key=lambda p:(
+                -int(bool(re.match(r"^/(?:api/|v[0-9]+/|mpos/)",p,re.I))),
+                -int(bool(re.search(r"/(?:itemInfo|product-search|catalog|itemEAN|prices|master-data|barcode-mapping|offers/grouped)",p,re.I))),
+                -int(bool(re.search(r"api|mpos|price|product|catalog|store|basket",p,re.I))),
+                -stats["paths"][p],len(p),p)
+        )[:180],
         "feature_signal_counts":dict(stats["signal_hits"].most_common()),
     }
     return result
