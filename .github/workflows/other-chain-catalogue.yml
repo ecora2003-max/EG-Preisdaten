@@ -1,0 +1,24 @@
+name: Verify ordinary price evidence in other chain assortments
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/other_chain_catalogue_price_check.py
+      - .github/workflows/other-chain-catalogue.yml
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/other_chain_catalogue_price_check.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: non-offer-product-price-signals
+          path: results/other_chain_catalogue_price_check.json
+          retention-days: 7
