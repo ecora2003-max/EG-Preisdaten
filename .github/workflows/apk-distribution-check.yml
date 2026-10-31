@@ -1,0 +1,25 @@
+name: Public retailer APK acquisition feasibility
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/apk_distribution_check.py
+      - .github/workflows/apk-distribution-check.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/apk_distribution_check.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: apk-package-distribution-diagnostics
+          path: results/apk_public_distribution_sources.json
+          retention-days: 7
