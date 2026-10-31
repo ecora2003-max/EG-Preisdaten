@@ -132,6 +132,25 @@ def penny_offers(payload: Mapping[str, Any], *, region: str, week_start: str) ->
     return result
 
 
+
+def penny_merge_categories(category_payloads: Mapping[str, Mapping[str, Any]], *,
+                           region: str, week_start: str) -> list[Offer]:
+    """Merge verified category responses, remove repeated offer UUIDs.
+
+    Conflicting prices under the same UUID fail closed instead of hiding a
+    regional or offer-type discrepancy.
+    """
+    by_id: dict[str, Offer] = {}
+    for slug, payload in category_payloads.items():
+        for offer in penny_offers(payload, region=region, week_start=week_start):
+            previous = by_id.get(offer.product_id)
+            if previous is not None and (
+                previous.price_eur != offer.price_eur or previous.title != offer.title
+            ):
+                raise ValueError(f"PENNY conflicting offer fields for UUID in category {slug}")
+            by_id[offer.product_id] = offer
+    return list(by_id.values())
+
 def _decode_aldi_data(payload: str | Mapping[str, Any]) -> Any:
     if isinstance(payload, str):
         # HTML __NEXT_DATA__, or the apiData JSON string directly
