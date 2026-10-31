@@ -1,0 +1,23 @@
+name: Supermarket adapters contract tests
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'adapters/**'
+      - 'tests/**'
+      - '.github/workflows/adapter-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compile Python sources
+        run: python3 -m compileall -q adapters tests
+      - name: Offline contract tests
+        run: python3 -m unittest discover -s tests -v
