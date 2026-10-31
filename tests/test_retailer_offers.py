@@ -4,7 +4,7 @@ import unittest
 from decimal import Decimal
 from adapters.retailer_offers import (
     Scope, Offer, money, penny_store, penny_offers, penny_merge_categories, aldi_nord_next,
-    kaufland_offers, lidl_flyer, lidl_store_offers, edeka_offers, netto_status
+    kaufland_offers, lidl_flyer, lidl_store_offers, edeka_offers, netto_store_prospects, netto_status
 )
 
 
@@ -139,6 +139,22 @@ class RetailerContracts(unittest.TestCase):
         self.assertEqual(len(offers),1)
         self.assertEqual(offers[0].scope,Scope.CHAIN)
         self.assertIsNone(offers[0].scope_id)
+
+    def test_netto_official_store_specific_prospects(self):
+        snippet='''<div class="your-store__info__address">
+           Netto Marken-Discount<br/>Wilmersdorfer Str. 46<br/>10627 Berlin
+           </div><a id="filialangebote-KW45"
+            href="https://wochenprospekt.netto-online.de/hz45_besb/?storeid=7679">Prospekt</a>'''
+        got=netto_store_prospects(snippet,store_id="7679")
+        self.assertEqual(len(got),1)
+        self.assertEqual(got[0]["iso_week"],45)
+        self.assertEqual(got[0]["store_id"],"7679")
+        self.assertEqual(got[0]["applicability"],"STORE_PROSPECT_CONFIRMED")
+        self.assertFalse(got[0]["offers_parsed"])
+        with self.assertRaises(ValueError):
+            netto_store_prospects(snippet,store_id="8135")
+        with self.assertRaises(ValueError):
+            netto_store_prospects(snippet.replace("wochenprospekt.netto-online.de","untrusted.example"),store_id="7679")
 
     def test_netto_fails_closed(self):
         self.assertEqual(netto_status()["status"],"NOT_IMPLEMENTATION_READY")
