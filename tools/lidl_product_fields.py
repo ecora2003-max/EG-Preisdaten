@@ -6,9 +6,12 @@ from pathlib import Path
 ua="Ernaehrungsgedaechnis-Research/0.3 (read-only)"
 host="https://endpoints.leaflets.schwarz"
 url=host+"/v4/flyer?"+urlencode({"flyer_identifier":"aktionsprospekt-02-11-2026-07-11-2026-fbfd28","client":"lidl"})
-with urlopen(Request(host+"/robots.txt",headers={"User-Agent":ua}),timeout=15) as f:
-    r=RobotFileParser();r.parse(f.read(200000).decode("utf-8","replace").splitlines())
-assert r.can_fetch(ua,url),"robots disallows"
+try:
+    with urlopen(Request(host+"/robots.txt",headers={"User-Agent":ua}),timeout=15) as f:
+        r=RobotFileParser();r.parse(f.read(200000).decode("utf-8","replace").splitlines())
+    assert r.can_fetch(ua,url),"robots disallows"
+except HTTPError as e:
+    if e.code != 404:raise
 with urlopen(Request(url,headers={"User-Agent":ua}),timeout=20) as f:doc=json.load(f)
 flyer=doc.get("flyer") or {}
 ps=flyer.get("products") or {}
