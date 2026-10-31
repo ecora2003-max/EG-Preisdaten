@@ -1,0 +1,26 @@
+name: One-shot public price endpoint feasibility
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/one_shot_public_price_probe.py
+      - .github/workflows/one-shot-price-probe.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Respect robots then perform at most one read-only product search per retailer
+        run: python3 tools/one_shot_public_price_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: one-shot-price-feasibility
+          path: results/one_shot_retailer_prices.json
+          retention-days: 7
