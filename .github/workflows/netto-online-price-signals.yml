@@ -1,0 +1,27 @@
+name: Netto online product prices targeted evidence
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_online_price_signal_20261031.py
+      - .github/workflows/netto-online-price-signals.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Probe three official Netto webshop pages for machine-readable price fields
+        run: python3 tools/netto_online_price_signal_20261031.py
+      - name: Save proof of actual price data availability
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: netto-online-price-signal-check
+          path: results/netto_online_price_signal_20261031.json
+          retention-days: 7
