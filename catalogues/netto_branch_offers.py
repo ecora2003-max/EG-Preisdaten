@@ -58,9 +58,9 @@ def _visible_euros(tag):
 def _offer_section(soup):
     heading=soup.find("h2",string=lambda s:isinstance(s,str) and s.strip()=="Filial-Angebote")
     if heading is None:return None,None
-    root=heading.find_parent(class_=lambda c:c and "store-offers" in (c if isinstance(c,str) else " ".join(c)))
-    if root is None:
-        root=heading.find_parent("section")
+    # Header alone has 'store-offers__header'; choose the nearest parent
+    # actually containing product cards, not merely the heading wrapper.
+    root=next((node for node in heading.parents if node.select_one(".tc-store-product-tile")),None)
     if root is None:return None,None
     date_el=root.select_one(".store-offers__header__date")
     return root,(date_el.get_text(" ",strip=True) if date_el else None)
