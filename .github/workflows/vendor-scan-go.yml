@@ -1,0 +1,25 @@
+name: EDEKA and PENNY Scan Go vendor API documentation feasibility
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/vendor_scan_go_feasibility.py
+      - .github/workflows/vendor-scan-go.yml
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test public vendor documentation and gateway landing without auth
+        run: python3 tools/vendor_scan_go_feasibility.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vendor-scan-go-price-api-feasibility
+          path: results/vendor_scan_go_feasibility.json
+          retention-days: 7
