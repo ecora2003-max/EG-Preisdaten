@@ -24,7 +24,7 @@ try:
         if not m:out["result"]="No __NEXT_DATA__"
         else:
             node=json.loads(m.group(1))
-            page=node.get("props",{}).get("pageProps",{}).get("page",{})
+            page=node.get("props",{}).get("pageProps",{})
             price_records=[]
             sampled_paths=[]
             kinds=Counter()
