@@ -1,0 +1,24 @@
+name: Lidl actual flyer-to-product linkage
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/lidl_product_linkage.py
+      - .github/workflows/lidl-product-linkage.yml
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/lidl_product_linkage.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lidl-product-linkage
+          path: results/lidl_product_linkage.json
+          retention-days: 7
