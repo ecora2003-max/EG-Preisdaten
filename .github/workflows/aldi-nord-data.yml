@@ -1,0 +1,26 @@
+name: ALDI Nord embedded data verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/aldi_nord_data_probe.py'
+      - '.github/workflows/aldi-nord-data.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/aldi_nord_data_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-nord-embedded-data
+          path: results/aldi-nord.json
+          if-no-files-found: warn
+          retention-days: 7
