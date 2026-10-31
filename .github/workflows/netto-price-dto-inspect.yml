@@ -1,0 +1,26 @@
+name: Netto MPOS item price DTO inspection
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_price_dto_static.py
+      - .github/workflows/netto-price-dto-inspect.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Static trace of Netto item price model and scan response
+        run: python3 tools/netto_price_dto_static.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-item-info-price-model-fields
+          path: results/netto_price_dtos_20261031.json
+          retention-days: 7
