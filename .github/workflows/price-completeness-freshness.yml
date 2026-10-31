@@ -1,0 +1,46 @@
+name: Price data completeness and freshness (four retailers)
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/check_price_completeness_*.py
+      - .github/workflows/price-completeness-freshness.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  analyze:
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - retailer: aldi_sued
+            tool: check_price_completeness_aldi_sued.py
+          - retailer: rewe
+            tool: check_price_completeness_rewe.py
+          - retailer: lidl
+            tool: check_price_completeness_lidl.py
+          - retailer: aldi_nord
+            tool: check_price_completeness_aldi_nord.py
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check script syntax
+        run: python3 -m py_compile tools/${{ matrix.tool }}
+      - name: Test completeness and price freshness
+        run: python3 tools/${{ matrix.tool }}
+      - name: Save measured data quality metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: price-data-quality-${{ matrix.retailer }}
+          path: results/completeness_freshness/${{ matrix.retailer }}.json
+          if-no-files-found: warn
+          retention-days: 7
