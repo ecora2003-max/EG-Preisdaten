@@ -50,3 +50,7 @@ Die eingebundenen Feldparsers sind Referenzcode. Die Original-Android-App im sep
 ## Wichtige Händleridentität
 
 **Netto Marken-Discount** (`netto-online.de`, EDEKA-Gruppe) ist **nicht** der gleichnamige Netto mit Scottie-Hund (`netto.de`, Salling Group). App-/Preisscanner-Daten und APIs dieser Ketten dürfen nicht vermischt werden. [Neue Recherche und EDEKA-Shop-Zugriffstest](reports/preiskatalog-recherche-2026-10-31-zusatz.md).
+
+## Neue Scan&Go-Preisstruktur (31.10.2026)
+
+[Untersuchung: PENNY/REWE teilen das shopreme-SDK, dessen DataHub marktbezogene Produkt- und Preisimporte umfasst; EDEKA bietet ein offizielles B2C-Gateway nur auf Zugangsanfrage.](reports/scan-go-gemeinsame-preis-infrastruktur-2026-10-31.md) **Wichtig:** Dies beweist die Existenz der Händlerpreis-Infrastruktur, nicht eine öffentlich nutzbare Vollpreis-API. [Öffentlicher Dokumentationstest](https://github.com/ecora2003-max/Try/actions/runs/41190033352).
