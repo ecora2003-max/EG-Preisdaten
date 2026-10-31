@@ -224,6 +224,7 @@ def _records(ds: dict[str,Any], typ: str) -> tuple[list[dict[str,Any]], dict[str
         items,meta=aldi_nord_catalogue_from_html(body)
         return [dict(id=x.product_id,label=x.name,brand=x.brand,pack=x.pack,
                      price=x.displayed_price_eur,scope="CHAIN_WIDE_REPORTED",
+                     fromDate=x.price_valid_from,untilDate=x.price_valid_to,
                      reportedBaseUnitPrices=[{"basis":unit,"priceEur":str(value)}
                                              for unit,value in x.unit_prices if unit in ("kg","l")],
                      sourcePriceKind="CURRENT_DISPLAYED") for x in items],{
@@ -294,13 +295,13 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
     elif source_scope=="CHAIN_WIDE_REPORTED":scope["storeId"]=None
     raw_amount=row.get("regularCents") if regular else row.get("priceCents")
     if regular or "priceCents" in row:
-        if raw_amount is not None and (type(raw_amount) is not int or raw_amount<0):raise DataError("INVALID_PRICE","Integer cents expected")
+        if raw_amount is not None and (type(raw_amount) is not int or not 0<=raw_amount<=100_000_000):raise DataError("INVALID_PRICE","Integer cents out of bounds")
         value=raw_amount
     else:value=cents(row.get("price"))
     if regular and value is None:return None
     if "depositCents" in row:
         dep=row["depositCents"]
-        if dep is not None and (type(dep) is not int or dep<0):raise DataError("INVALID_PRICE","Invalid deposit cents")
+        if dep is not None and (type(dep) is not int or not 0<=dep<=100_000_000):raise DataError("INVALID_PRICE","Invalid deposit cents")
     else:dep=cents(row.get("deposit"))
     # Explicit unknowns remain null; do not convert missing deposit to zero.
     name=row["label"].strip()
@@ -308,11 +309,13 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
     if not isinstance(condition,list) or any(not isinstance(v,str) for v in condition):
         raise DataError("INVALID_CONDITION","Conditions must be strings")
     kind_out="LISTED_REGULAR" if regular else row.get("sourcePriceKind") or ("SALE" if kind=="SALE" else "CURRENT_DISPLAYED")
-    if kind_out not in ("SALE","CURRENT_DISPLAYED","LISTED_REGULAR","REFERENCE_OLD","ONLINE_LISTED","UNKNOWN"):
+    if kind_out not in ("SALE","CURRENT_DISPLAYED","LISTED_REGULAR","ONLINE_LISTED","UNKNOWN"):
         raise DataError("INVALID_PRICE_KIND","Unexpected price kind")
-    identity=json.dumps([retailer,source_scope,sid,raw_id,name,kind_out,value,start,end,
-                         time,ds.get("sourceUrl"),condition],ensure_ascii=False)
-    obs_id="PRICE-"+hashlib.sha256(identity.encode()).hexdigest()[:24]
+    if (kind=="SALE" and kind_out!="SALE") or (kind=="REGULAR" and kind_out=="SALE"):
+        raise DataError("INVALID_PRICE_KIND","Retailer price kind contradicts source channel")
+    for flag in ("hasDiscount","hasConditionalOffer"):
+        if row.get(flag) is not None and type(row[flag]) is not bool:
+            raise DataError("INVALID_FIELD",f"{flag} must be a boolean or null")
     qty=parse_quantity(row.get("pack"))
     reference_old=cents(row.get("referenceOldPrice"))
     if row.get("referenceOldPriceCents") is not None:
@@ -357,6 +360,26 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
                 checks=[abs(computed-(Decimal(b["priceEur"])*100))<=Decimal("1")
                         for b in usable]
                 base_price_check="CONSISTENT_WITH_DISPLAYED_QUANTITY" if all(checks) else "MISMATCH"
+    # Fingerprint the *normalized observation*, not just article ID and base
+    # amount. Otherwise two offers with different packs, deposit or app terms
+    # in one snapshot silently collapse into one observation.
+    identity=json.dumps({
+        "retailer":retailer,"scope":scope,"sourceScope":source_scope,
+        "sourceScopeId":sid,"storeId":ds.get("storeId"),"regionId":ds.get("regionId"),
+        "retailerArticleId":str(raw_id) if raw_id is not None else None,
+        "label":name,"foodTypeId":row.get("foodTypeId"),"brand":row.get("brand"),
+        "gtin":_gtin(row.get("gtin")),"quantity":qty,"kind":kind_out,
+        "priceCents":value,"depositCents":dep,"validFrom":start,"validUntil":end,
+        "conditions":condition,"conditionalPrices":normalized_conditions,
+        "reportedBaseUnitPrices":reported_base,"referenceOldPriceCents":reference_old,
+        "referenceOldText":row.get("referenceOldText"),
+        "advertisedBenefitText":row.get("advertisedBenefitText"),
+        "advertisedUnitPrice":row.get("advertisedUnitPrice"),
+        "priceWithoutDeposit":row.get("priceWithoutDeposit"),
+        "hasDiscount":row.get("hasDiscount"),"hasConditionalOffer":row.get("hasConditionalOffer"),
+        "observedAt":time,"sourceUrl":ds.get("sourceUrl")
+    },ensure_ascii=False,sort_keys=True,default=str)
+    obs_id="PRICE-"+hashlib.sha256(identity.encode()).hexdigest()[:24]
     # A snapshot observed today is not proof of a future checkout price.
     if start is not None and end is not None:
         temporal="PUBLISHED_WINDOW" if start<=(shopping_date or requested_start)<=end else "OUTSIDE_TARGET_DATE"

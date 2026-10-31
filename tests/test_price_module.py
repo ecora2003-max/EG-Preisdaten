@@ -667,5 +667,70 @@ class ModuleTests(unittest.TestCase):
         self.assertIsNone(parse_quantity("1001 x 200 g"))
         self.assertIsNone(parse_quantity("999999999 kg"))
 
+
+    def test_same_article_and_price_with_different_pack_and_deposit_stays_distinct(self):
+        source_rows=[
+            r(id="SKU1",pack="250 g",deposit=None,conditions=["normal"]),
+            r(id="SKU1",pack="500 g",deposit=None,conditions=["normal"]),
+            r(id="SKU1",pack="250 g",deposit="0.25",conditions=["normal"]),
+            r(id="SKU1",pack="250 g",deposit=None,conditions=["requires card"]),
+        ]
+        out=self.service.search_offers(REQUEST,[fixture(source_rows)])
+        self.assertEqual(out["errors"],[])
+        self.assertEqual(len(out["observations"]),4)
+        ids=[x["payload"]["observationId"] for x in out["observations"]]
+        self.assertEqual(len(ids),len(set(ids)))
+        dupe=self.service.search_offers(REQUEST,[fixture([source_rows[0],source_rows[0]])])
+        self.assertEqual(len(dupe["observations"]),1)
+
+    def test_different_app_price_same_public_price_does_not_collapse(self):
+        rows=[r(id="SKU1",conditionalPrices=[
+             {"priceCents":79,"access":"LIDL_PLUS","evidence":"lidlPlusOffer.price",
+              "termsVerified":False}]),
+              r(id="SKU1",conditionalPrices=[
+             {"priceCents":89,"access":"LIDL_PLUS","evidence":"lidlPlusOffer.price",
+              "termsVerified":False}])]
+        out=self.service.search_offers(REQUEST,[fixture(rows)])
+        self.assertEqual(len(out["observations"]),2)
+        self.assertEqual({x["payload"]["priceCents"] for x in out["observations"]},{125})
+
+    def test_aldi_nord_catalogue_dates_not_discarded(self):
+        import datetime
+        start=int(datetime.datetime(2026,11,2,12,tzinfo=datetime.timezone.utc).timestamp())
+        end=int(datetime.datetime(2026,11,8,12,tzinfo=datetime.timezone.utc).timestamp())
+        product={"objectID":"A","name":"Hafer","currentPrice":{
+                 "priceValue":0.99,"validFrom":start,"validUntil":end}}
+        data={"props":{"pageProps":{"algoliaState":{"initialResults":{
+              "an_prd_de_de_products2":{"results":[{"nbHits":1,"nbPages":1,
+                  "page":0,"hits":[product]}]}}}}}}
+        ds=source("ALDI_NORD","REGULAR",'<script id="__NEXT_DATA__" type="application/json">'+json.dumps(data)+'</script>',
+                  "https://www.aldi-nord.de/sortiment/hafer",contentType="text/html")
+        out=self.service.search_catalog_prices(
+             {**REQUEST,"retailerIds":["ALDI_NORD"],"shoppingDate":"2026-11-05",
+              "windowStart":"2026-11-02","windowEnd":"2026-11-09"},[ds])
+        self.assertEqual(out["errors"],[])
+        p=out["observations"][0]["payload"]
+        self.assertEqual((p["validFrom"],p["validUntil"]),("2026-11-02","2026-11-08"))
+        self.assertEqual(p["eg-preisdaten:targetDateStatus"],"PUBLISHED_WINDOW")
+
+    def test_conflicting_price_kind_and_out_of_range_cents_fail_closed(self):
+        for bad_kind,channel in [("REFERENCE_OLD","SALE"),("ONLINE_LISTED","SALE"),
+                                 ("SALE","REGULAR"),("HISTORICAL_PAID","REGULAR")]:
+            ds=fixture([r(sourcePriceKind=bad_kind)],channel=channel)
+            out=self.service.search({**REQUEST},[ds])
+            self.assertEqual(out["observations"],[])
+            self.assertEqual(out["errors"][0]["code"],"INVALID_PRICE_KIND")
+        for field in ("priceCents","depositCents"):
+            ds=fixture([r(**{field:100_000_001})])
+            out=self.service.search_offers(REQUEST,[ds])
+            self.assertEqual(out["errors"][0]["code"],"INVALID_PRICE")
+            self.assertEqual(out["observations"],[])
+
+    def test_malformed_source_discount_flags_rejected(self):
+        ds=fixture([r(id="safe"),r(id="bad",hasDiscount="false")])
+        out=self.service.search_offers(REQUEST,[ds])
+        self.assertEqual(out["errors"][0]["code"],"INVALID_FIELD")
+        self.assertEqual(out["observations"],[])
+
 if __name__=="__main__":
     unittest.main()
