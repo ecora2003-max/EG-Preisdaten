@@ -1,0 +1,38 @@
+name: EDEKA bounded authorized product page snapshot
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/edeka_product_linkgraph_snapshot.py
+      - .github/workflows/edeka-product-linkgraph-snapshot.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      EDEKA_PERMISSION_CONFIRMED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download bounded product page index and record actual coverage
+        run: python3 tools/edeka_product_linkgraph_snapshot.py
+      - name: Commit discovered products to Try
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/edeka/2026-10-31/product_page_subset*
+          if ! git diff --cached --quiet; then
+            git commit -m "Snapshot accessible EDEKA product page subset with unknown prices"
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: edeka-product-page-subset
+          path: data/edeka/2026-10-31/product_page_subset*
+          retention-days: 7
