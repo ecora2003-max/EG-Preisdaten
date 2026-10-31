@@ -8,6 +8,7 @@ import hashlib
 import json
 import re
 from datetime import date, datetime
+from zoneinfo import ZoneInfo
 from decimal import Decimal, InvalidOperation
 from importlib.resources import files
 from urllib.parse import urlsplit, parse_qsl
@@ -402,6 +403,13 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
         temporal="PARTIAL_VALIDITY_UNKNOWN"
     else:
         temporal="OBSERVED_ONLY_NO_VALIDITY_PROOF"
+    # Observing an offer after the requested historic shopping day cannot prove
+    # it had been published at the earlier time. Offset-aware timestamps are
+    # normalized to the retailer's German local calendar date.
+    observed_local_day=datetime.fromisoformat(time).astimezone(
+        ZoneInfo("Europe/Berlin")).date().isoformat()
+    if shopping_date is not None and observed_local_day>shopping_date:
+        temporal="OBSERVED_AFTER_TARGET_DATE"
     return {"contractVersion":CONTRACT_VERSION,"messageType":"price.observation",
             "meta":{"producer":"EG-Preisdaten/"+VERSION,"createdAt":time,"traceId":obs_id,
                     "coverageNote":"Snapshot only; store rights and completeness require independent checks"},

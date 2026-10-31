@@ -872,5 +872,30 @@ class ModuleTests(unittest.TestCase):
                 self.assertEqual(out["errors"][0]["code"],"CAPABILITY_NOT_ALLOWED")
                 self.assertEqual(out["coverage"][0]["status"],"POLICY_DENIED")
 
+
+    def test_historical_price_avoids_hindsight_when_record_seen_later(self):
+        past=fixture([r(id="past",fromDate="2026-10-29",untilDate="2026-11-06")],
+                     observedAt="2026-11-02T11:00:00+01:00")
+        result=self.service.search_offers({**REQUEST,"shoppingDate":"2026-10-31"},[past])
+        self.assertEqual(result["errors"],[])
+        self.assertEqual(result["observations"][0]["payload"]["eg-preisdaten:targetDateStatus"],
+                         "OBSERVED_AFTER_TARGET_DATE")
+        future=self.service.search_offers(
+            {**REQUEST,"shoppingDate":"2026-11-05","windowEnd":"2026-11-06"},[past])
+        self.assertEqual(future["observations"][0]["payload"]["eg-preisdaten:targetDateStatus"],
+                         "PUBLISHED_WINDOW")
+
+    def test_observation_offset_normalizes_to_german_shop_calendar(self):
+        # 2026-10-31T23:30Z is already 2026-11-01 in Germany.
+        record=fixture([r(fromDate="2026-10-30",untilDate="2026-11-02")],
+                       observedAt="2026-10-31T23:30:00Z")
+        result=self.service.search_offers(REQUEST,[record])
+        self.assertEqual(result["observations"][0]["payload"]["eg-preisdaten:targetDateStatus"],
+                         "OBSERVED_AFTER_TARGET_DATE")
+        record["observedAt"]="2026-10-31T21:30:00Z"
+        allowed=self.service.search_offers(REQUEST,[record])
+        self.assertEqual(allowed["observations"][0]["payload"]["eg-preisdaten:targetDateStatus"],
+                         "PUBLISHED_WINDOW")
+
 if __name__=="__main__":
     unittest.main()
