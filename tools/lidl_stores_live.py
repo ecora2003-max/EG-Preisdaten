@@ -55,6 +55,8 @@ if isinstance(s,list):
                 "validity_starts":dict(collections.Counter(str(o.get("startValidityDate"))[:10] for o in offers if isinstance(o,dict))),
                 "validity_ends":dict(collections.Counter(str(o.get("endValidityDate"))[:10] for o in offers if isinstance(o,dict))),
                 "offer_types":dict(collections.Counter(str(o.get("offerType")) for o in offers if isinstance(o,dict))),
+                "redemption_channels":dict(collections.Counter(str(o.get("redemptionChannel")) for o in offers if isinstance(o,dict))),
+                "category_values":dict(collections.Counter(str(o.get("category")) for o in offers if isinstance(o,dict))),
                 "samples":[]}
         for o in offers[:5]:
             if not isinstance(o,dict):continue
