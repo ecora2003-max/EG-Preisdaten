@@ -589,5 +589,26 @@ class ModuleTests(unittest.TestCase):
         out=self.service.search_offers(req,[ds])
         self.assertEqual([x["payload"]["article"]["retailerArticleId"] for x in out["observations"]],["A"])
 
+
+    def test_exact_gtin_filter_only_matches_valid_verified_barcode(self):
+        ds=fixture([r(id="v",gtin="4000540200300"),r(id="i",gtin="4000540200301"),
+                    r(id="none",gtin=None)])
+        out=self.service.search_offers({**REQUEST,"gtin":"4000540200300"},[ds])
+        self.assertEqual([x["payload"]["article"]["retailerArticleId"] for x in out["observations"]],["v"])
+        with self.assertRaises(DataError) as c:
+            self.service.search_offers({**REQUEST,"gtin":"4000540200301"},[ds])
+        self.assertEqual(c.exception.code,"INVALID_GTIN")
+
+    def test_exact_foodtype_filter_without_invented_category_assignment(self):
+        ds=fixture([r(id="a",foodTypeId="oats-fine"),r(id="b",foodTypeId="rice"),
+                    r(id="c",foodTypeId=None)])
+        out=self.service.search_offers({**REQUEST,"foodTypeId":"oats-fine"},[ds])
+        self.assertEqual([x["payload"]["article"]["retailerArticleId"] for x in out["observations"]],["a"])
+        self.assertEqual(out["observations"][0]["payload"]["article"]["foodTypeId"],"oats-fine")
+        ds=fixture([r(foodTypeId=42)])
+        out=self.service.search_offers(REQUEST,[ds])
+        self.assertEqual(out["errors"][0]["code"],"INVALID_ID")
+        self.assertEqual(out["observations"],[])
+
 if __name__=="__main__":
     unittest.main()

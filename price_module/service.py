@@ -259,6 +259,10 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
     if start and start>requested_end or end and end<requested_start:return None
     if not isinstance(row.get("label"),str) or not row["label"].strip():
         raise DataError("MISSING_FIELD","Product label is required")
+    if row.get("foodTypeId") is not None and (
+        not isinstance(row["foodTypeId"],str) or not row["foodTypeId"].strip()
+    ):
+        raise DataError("INVALID_ID","FoodType ID must remain source-verified")
     retailer=ds["retailerId"]
     source_scope=row.get("scope") or "UNKNOWN"
     if source_scope not in ("STORE_CONFIRMED","REGION_CONFIRMED","CHAIN_WIDE_REPORTED","ONLINE","UNKNOWN"):
@@ -335,6 +339,7 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
                     "coverageNote":"Snapshot only; store rights and completeness require independent checks"},
             "payload":{"observationId":obs_id,
                        "article":{"label":name,"retailerArticleId":str(raw_id) if raw_id is not None else None,
+                                  "foodTypeId":row.get("foodTypeId"),
                                   "gtin":_gtin(row.get("gtin")),"brandName":row.get("brand"),
                                   "brandKind":"UNKNOWN","organic":None,"quantity":qty},
                        "scope":scope,"priceCents":value,"currency":"EUR",
@@ -389,6 +394,12 @@ class PriceService:
         article_filter=request.get("retailerArticleId")
         if article_filter is not None and (not isinstance(article_filter,str) or not article_filter.strip()):
             raise DataError("INVALID_REQUEST","Invalid retailer article ID filter")
+        gtin_filter=request.get("gtin")
+        if gtin_filter is not None and _gtin(gtin_filter)!=gtin_filter:
+            raise DataError("INVALID_GTIN","Barcode must have valid digits, length and check digit")
+        food_type_filter=request.get("foodTypeId")
+        if food_type_filter is not None and (not isinstance(food_type_filter,str) or not food_type_filter.strip()):
+            raise DataError("INVALID_REQUEST","FoodType ID must be a nonempty identifier")
         found=[]; errors=[]; coverage=[]; seen=set()
         for retailer in dict.fromkeys(retailers):
             store_selection=selections.get(retailer,{})
@@ -465,8 +476,13 @@ class PriceService:
                         for regular in ((False,True) if channel=="REGULAR" and retailer=="REWE" else (False,)):
                             payload=_payload(row,ds,channel,when,idx,begin,end,regular,day)
                             if payload is None:continue
+                            article=payload["payload"]["article"]
+                            if term is not None and term.casefold() not in article["label"].casefold():continue
+                            if article_filter is not None and article["retailerArticleId"]!=article_filter:continue
+                            if gtin_filter is not None and article["gtin"]!=gtin_filter:continue
+                            if food_type_filter is not None and article["foodTypeId"]!=food_type_filter:continue
                             oid=payload["payload"]["observationId"]
-                            if oid not in seen and (term is None or term.casefold() in payload["payload"]["article"]["label"].casefold()) and (article_filter is None or payload["payload"]["article"]["retailerArticleId"]==article_filter):
+                            if oid not in seen:
                                 found.append(payload);seen.add(oid)
                     if received!=parsed:complete=False
                     coverage.append(dict(retailerId=retailer,channel=channel,received=received,parsed=parsed,
