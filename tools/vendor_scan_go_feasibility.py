@@ -21,6 +21,8 @@ urls=[
  ("shopreme store price import docs","https://docs.shopreme.com/kb/management-console/overview"),
  ("shopreme basket price evaluation","https://docs.shopreme.com/kb/datahub/outbound-api/baskets-and-pricing"),
  ("shopreme product catalog docs","https://docs.shopreme.com/kb/management-console/product-catalogue"),
+ ("shopreme DataHub store-specific product/price jobs","https://docs.shopreme.com/kb/management-console/datahub-import-jobs"),
+ ("shopreme product detail with default and market prices","https://docs.shopreme.com/kb/management-console/product-detail-page"),
 ]
 class TextParser(HTMLParser):
  def __init__(self):super().__init__();self.fragments=[]
@@ -57,6 +59,10 @@ for label,url in urls:
    "shopreme_prices_by_store":bool(re.search(r"each product.s prices for each store|specific store|per.store",prose,re.I)),
    "shopreme_cart_evaluate":bool(re.search(r"/evaluate",text,re.I)),
    "shopreme_management_console":bool(re.search(r"Management Console",prose,re.I)),
+   "shopreme_store_price_field":bool(re.search(r"storePrices",prose,re.I)),
+   "shopreme_price_update_delta":bool(re.search(r"delta updates|price import is quicker",prose,re.I)),
+   "shopreme_strike_price_field":bool(re.search(r"strikePrice",prose,re.I)),
+   "shopreme_api_authentication_required":bool(re.search(r"API Tokens|basic authentication|sign in",prose,re.I)),
   }
   rec["signals"]=signals
   rec["result"]="PUBLIC_DOCS_HTTP_OK"
