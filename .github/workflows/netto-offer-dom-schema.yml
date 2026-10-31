@@ -1,0 +1,29 @@
+name: Netto store-offer DOM price structure
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_store_offer_dom_schema.py
+      - .github/workflows/netto-offer-dom-schema.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install public HTML parser
+        run: python3 -m pip install --disable-pip-version-check beautifulsoup4
+      - name: Extract offer card fields from public HTML
+        run: python3 tools/netto_store_offer_dom_schema.py
+      - name: Archive card schema inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: netto-branch-offer-dom-schema
+          path: results/netto_store_offer_dom_schema_20261031.json
+          retention-days: 7
