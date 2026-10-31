@@ -1,95 +1,66 @@
-# Ernährungsgedächtnis: Implementierungsstand der Supermarkt-Angebotsquellen
+# Technischer Test- und Implementierungsstand: Filialangebote
 
-**Live-Stichtag:** 31.10.2026 · **Testumgebung:** GitHub Actions Ubuntu-Runner · **Repository:** `ecora2003-max/Try`
+**Stand:** 31. Oktober 2026 (historischer Snapshot; keine Live-Zusage für spätere Wochen) · **Ausführung:** GitHub Actions (Linux, Python) · **Ziel:** Angebot *gilt grundsätzlich* im ausgewählten Markt, nicht Prüfung des Lagerbestands.
 
-## Zweck und Grenze
+## 1. Verifizierte Datenquellen
 
-Gesucht ist, ob ein **beworbenes Angebot grundsätzlich für die ausgewählte Filiale gilt**. Es geht nicht um deren Echtzeit-Warenbestand. Eine HTTP-200-Antwort belegt technische Abrufbarkeit, **keine Erlaubnis zur automatisierten Weiterverwendung**. Es wurden weder Zugriffsbarrieren umgangen noch Händler-App-Credentials benutzt. Bei nicht abrufbarer `robots.txt` wurden direkte Abfragen vorsorglich ausgelassen.
+| Händler | Verifizierter Zugriff | Ergebnis und Geltung | Implementierungsgrenze |
+|---|---|---|---|
+| **PENNY** | `/.rest/market`; `/.rest/offers/by-category/{KW}/{slug}?region={sellingRegion}` | 193 eindeutige preislich interpretierbare Artikel aus 223 Rohkacheln/12 Kategorien für KW45. Berliner Region `15A-01-56` gehört zu 63 getesteten Märkten. `REGION_CONFIRMED`. | Einzelne Filialausnahmen und produktgenaue Enddaten noch nicht bestätigt |
+| **Kaufland** | `/.kloffers.storeName=DE5220.json` und Angebotsübersicht `offerData` mit `x-aem-variant=DE5220` | 511 bepreiste Aktionsartikel im offiziellen Filial-Angebotszeitraum (KW45). `STORE_CONFIRMED`. | Card-XTRA/Mehrfachpreise und freie Filialsuche weiter verbessern |
+| **ALDI Nord** | `__NEXT_DATA__` → `apiData` → `OFFER_GET,week=next` | 276 bepreiste Angebote. `CHAIN_WIDE_REPORTED`. | Keine bestätigte Abbildung von lokalen Filialausnahmen |
+| **Lidl** | `stores.lidlplus.com/api/v4/DE` und `offers.lidlplus.com/app/api/v4/DE/{storeKey}/offers` | Filiale DE7434: 78 Angebotsobjekte, davon 65 direkte `StoreSpecialPriceDiscount` mit Preis und Datum. `STORE_CONFIRMED`. Hannover DE7602 72 Objekte, sechs nur in Berlin. | Weitere Rabattmechaniken nicht als gewöhnliche Einzelpreise interpretieren; Vorschau der Folgewoche ggf. erst später verfügbar |
+| **EDEKA** | `edeka.de/api/marketsearch/markets`; `edeka.de/eh/service/eh/offers?marketId=...` | Berlin-ID 10003451: 256 Angebote, Hamburg-ID 913988: 40, beide `national:false`. Fallback `marketId=1`: 28, `national:true`. Technisch `STORE_CONFIRMED` nur für `national:false`. | **Kein regulärer automatisierter Betrieb ohne ausdrückliche EDEKA-Zustimmung**; EDEKA.de-Nutzungsbedingungen untersagen automatisierte Datenübernahme |
+| **Netto Marken-Discount** | Offizielle Prospektübersicht mit einfachem HTTP 200; Filialseiten mit 403 | Konkrete Filialseiten auch in gewöhnlichem Headless Chrome `Access Denied`. Keine bestätigte Produkt-/Filial-API. | Blockiert; schriftlich autorisierte Datenquelle oder klar als manuell gekennzeichneter Import nötig |
 
-## Ergebnis: Status pro Händler
+Diese Ergebnisse belegen **technische Erreichbarkeit und Parserfunktion**, keine Nutzungsrechte. Ein Betrieb und insbesondere eine öffentliche Weiterverwertung sind separat mit den Händlern abzuklären.
 
-| Händler | Datenquelle live verifiziert | Produktparser auf echten Daten getestet | Angebotsgeltung / Filiale | Entwicklungsstand |
-|---|---|---|---|---|
-| **PENNY** | Ja, `/.rest/market` und `/.rest/offers/by-category/{KW}/{slug}?region=...` | **193 gültige Preisobjekte** aus 12 Kategorien, 223 Rohkacheln | **Verkaufsregion bestätigt** durch offizielle `wwIdent`/ `nextWeekSellingRegion`; 63 Berliner Filialen im Test derselben Region | Implementierbarer Regionaladapter, keine Einzelmarkt-Ausnahmegarantie |
-| **Kaufland** | Ja, `offerData` im HTML und `.kloffers.storeName={store}.json` | **511** Artikel mit Preis und gültiger Artikelkennung für DE5220 / KW45 | **Konkrete Filiale bestätigt** über `klNr` und Gültigkeitsintervalle; Cookie `x-aem-variant` für regionale Preise | Filialadapter als Prototyp einsatzbereit; Filialsuche/Mehrfachpreise weiter validieren |
-| **ALDI Nord** | Ja, `__NEXT_DATA__` → `apiData` → `OFFER_GET`, `week=next` | **276** Preisobjekte mit Start-/Enddatum | **Kein Filialparameter** im beobachteten Request; nationale/kettenweite Vorschau, mögliche lokale Ausnahmen | Kettenweiter Adapter, Einschränkung sichtbar halten |
-| **Lidl** | Ja, Prospekt `endpoints.leaflets.schwarz/v4/flyer` | **191** verlinkte Produktobjekte für 02.–07.11., teilweise Onlineshop/Nonfood | **Nicht bewiesen:** Filialseite zeigt Prospektbereich, aber es fehlt technisch verifizierte Verknüpfung zwischen StoreKey und regionalem Flyer; Lidl-Plus-Angebots-API gab HTTP 400 | Nur Prospekt-/Trenddaten als UNKNOWN, nicht als filialbestätigte Lebensmittelpreise |
-| **EDEKA** | In Fremdprojekten als Filialsuche und `/eh/service/eh/offers?marketId` dokumentiert, **nicht im Runner live verifiziert** | Offline-Schemaadapter vorhanden, keine Live-Prüfung | Ein Markt-ID-Parameter ist dokumentiert; Bestätigung der konkreten Markt-Gültigkeit fehlt | **Blockiert** durch fehlende nachgewiesene öffentliche Abrufmöglichkeit / Freigabe |
-| **Netto Marken-Discount** | In Fremdprojekt Filialfinder-API dokumentiert, offizieller Filialauftritt zeigt Angebote; keine strukturierte Produkt-API live verifiziert | **Kein** ehrlicherweise nutzbarer offizieller JSON-Angebotsadapter | Filialauswahl erforderlich und angebotsrelevant | **Blockiert**; Adapter verweigert unbestätigte Daten |
+## 2. Reproduzierbare Live-Tests
 
-## Reproduzierbare Beweise und Dateien
+- **[Live-Adaptertest PASS für Penny/Kaufland/ALDI Nord/Lidl](https://github.com/ecora2003-max/Try/actions/runs/41183799427)**. [Code](../tools/live_adapter_smoke.py).
+- **[Lidl DE7434 vs. DE7602 – Original-JSON-Schema, Filialdifferenz](https://github.com/ecora2003-max/Try/actions/runs/41183580801)**. [Code](../tools/lidl_stores_live.py).
+- **[EDEKA Berlin/Hamburg und national fallback – abgeschlossener Forschungslauf](https://github.com/ecora2003-max/Try/actions/runs/41183681778)**. [Code](../tools/edeka_live_adapter.py). EDEKA-Code ist danach durch eine Freigabebedingung geschützt und darf nicht ohne Erlaubnis erneut ausgeführt werden.
+- **[Kaufland konkrete Angebotskennungen je Filiale](https://github.com/ecora2003-max/Try/actions/runs/41181939368)**.
+- **[PENNY 12 Kategorien als JSON](https://github.com/ecora2003-max/Try/actions/runs/41182906512)**.
+- **[Netto ohne Umgehung in normalem Chrome geblockt](https://github.com/ecora2003-max/Try/actions/runs/41183768242)**.
+- **[Offline-Unit-Tests](https://github.com/ecora2003-max/Try/actions)** [Quellcode](../tests/test_retailer_offers.py).
 
-- [Letzter bestandener Live-Integrationstest (PENNY/Kaufland/ALDI Nord/Lidl)](https://github.com/ecora2003-max/Try/actions/runs/41182962632), JSON-Artifact `retailer-adapter-live-compatibility`.
-- [Bestandene Offline-Adaptertests](https://github.com/ecora2003-max/Try/actions/runs/41182891433).
-- [PENNY weitere Kategorien, aktueller Test](https://github.com/ecora2003-max/Try/actions/runs/41182906512).
-- [PENNY erste zusätzliche Kategorien](https://github.com/ecora2003-max/Try/actions/runs/41182827144).
-- [Kaufland Region-/Filialgültigkeit und Lidl Prospekte](https://github.com/ecora2003-max/Try/actions/runs/41181939368).
-- [Lidl: 191 Produktdatensätze auf 75 Prospektseiten verlinkt](https://github.com/ecora2003-max/Try/actions/runs/41182733785).
-- [Lidl: drei konkrete Berliner Filialseiten](https://github.com/ecora2003-max/Try/actions/runs/41182671688), HTML abrufbar, aber keine eindeutigen Prospekt-IDs im statischen HTML.
-- Quellcode: [Parser und Datentypen](../adapters/retailer_offers.py), [Offline-Tests](../tests/test_retailer_offers.py), [Live-Smoke](../tools/live_adapter_smoke.py).
+Die Tests wurden auf realen Daten durchgeführt und die Ergebnisse in GitHub Actions als JSON-Artefakte protokolliert. Skripte und Parser benötigen keine privaten Händler-Credentials. Einige unabhängige Bestands- und Prospektquellen wurden recherchiert, **aber nicht als freie Weiterverwendungslizenz anerkannt**.
 
-## Angebotsmodell für die Android-App
+## 3. Technische Details und Vorsichtsmaßnahmen
 
-Die einheitliche Python-Prototypstruktur `Offer` hat `retailer`, `product_id`, `title`, `price_eur`, `quantity`, `valid_from`, `valid_to`, `scope`, `scope_id`, `price_condition`, `note`; `Offer.to_dict()` ist für die JSON-Übertragung vorbereitet.
+### PENNY
 
-- **STORE_CONFIRMED:** Offizielle Angebotsartikel-ID für die explizit ausgewählte Filiale über Datumsfenster belegt (derzeit Kaufland).
-- **REGION_CONFIRMED:** Offizieller Katalog der Region, der die ausgewählte Filiale angehört (derzeit PENNY).
-- **CHAIN_WIDE_REPORTED:** Kettenweite Prospektdaten ohne individuellen Filialfilter (ALDI Nord); lokale Ausnahmen ausdrücklich möglich.
-- **UNKNOWN:** Keine belastbare Filialgeltung (derzeit Lidl, EDEKA-Schema).
-- Netto: fail-closed / keine erfundenen Treffer.
-
-**Nicht alle Preise gleich behandeln:** Normale Angebotspreise und App-/Mitgliedspreise müssen getrennt bleiben, bei PENNY etwa 1,49 € versus 1,29 € mit Fußnoten. Keine Rabattpreis- oder Ausverkaufsannahme ohne ausreichenden Beleg.
-
-## Details nach Anbieter
-
-### PENNY: 12 bestätigte Kategorienslugs für KW45 / Berliner Region 15A-01-56
+Offizieller Filialkatalog `GET https://www.penny.de/.rest/market` liefert `wwIdent`, `sellingRegion`, `nextWeekSellingRegion`. Für den nächsten Angebotszeitraum die **`nextWeekSellingRegion` der explizit ausgewählten Filiale** verwenden. Tests belegten 44 verschiedene Regionskennungen, jedoch nicht alle Kategorien vollständig. Verifizierte Slugs:
 
 `top-angebote`, `kuehlregal`, `getraenke`, `weitere-angebote`, `obst-und-gemuese`, `fleisch-und-wurst`, `drogerie-und-haushalt`, `suessigkeiten-und-snacks`, `penny-ready`, `puda`, `best-moments`, `pflanzen`.
 
-Die Filial-Metadaten enthalten `wwIdent`, `sellingRegion`, `nextWeekSellingRegion`, `nextWeekFlippingBookURL`. Für nächste Woche **`nextWeekSellingRegion` nicht durch `sellingRegion` ersetzen, wenn es abweicht**.
+Alle Kacheln über eindeutige `uuid` zusammenführen und widersprüchliche Preisangaben abweisen. **Beispiel:** Leerdammer 140 g 1,49 €, möglicher App-Preis 1,29 € mit Fußnoten. Nicht als allgemein geltenden Kassenpreis behandeln. Die URL-Kalenderwoche liefert **kein garantiertes individuelles Enddatum**, darum `valid_to=null`, solange nicht gesondert belegt.
 
-223 Rohkacheln wurden auf 193 eindeutige bepreiste Einträge normalisiert (andere Einträge waren unbepreist/ungeeignet oder redundant). Die Kategorieabdeckung ist **noch nicht als vollständig** nachgewiesen; andere Aktionskategorien könnten existieren. Ein `week`-Enddatum (Sonntag) ist **kein Beleg** für individuelle Gültigkeit bis Sonntag; deshalb setzt der Parser ohne Einzelquellendatum `valid_to=null`.
+### Kaufland
 
-### Kaufland: genaue Filialgeltung und Preisquelle
+Nur Artikel aus der aktiven filialbezogenen Liste `https://filiale.kaufland.de/.kloffers.storeName=DE5220.json` (jeweils `klNr`, `dateFrom`, `dateTo`) mit den Preis- und Produktobjekten aus `offerData` kombinieren. Für die Angebotspreise Filialauswahl `Cookie: x-aem-variant=DE5220`. Unterschiede zwischen Filialen explizit festgestellt (z. B. DE5220 vs. DE4620: 70 bzw. 43 exklusive Artikel-IDs für KW45).
 
-`GET https://filiale.kaufland.de/.kloffers.storeName=DE5220.json` enthält `klNr`, `dateFrom`, `dateTo`; im Test 520 Aktionsartikelkennungen für KW45. Für die regionalen Preise wird `GET https://filiale.kaufland.de/angebote/uebersicht.html?kloffer-week=next` mit `Cookie: x-aem-variant=DE5220` verwendet; der Parser bildet den Schnitt der `klNr`-IDs und gültigen Zeitfenster. Das letzte Live-Ergebnis waren **511** passende Preisobjekte.
+### ALDI Nord
 
-Gegenüber Filiale DE4620 unterschieden sich die offiziellen Artikel-ID-Sets für KW45: 70 IDs ausschließlich bei DE5220, 43 ausschließlich bei DE4620. So lässt sich die Filialgeltung **tatsächlich** unterscheiden. Ausnahmen und widersprüchliche Promo-/Verkaufsdatumsfelder werden konservativ behandelt. Ein vollständiger Filial-Resolver für freie Adresssuche und robustes Multibuy-/Card-XTRA-Parsing sind noch Integrationsaufgaben.
+In `__NEXT_DATA__` liegt `apiData` als JSON-String vor. `OFFER_GET` mit `req={"locale":"de","week":"next"}` liefert `res.algoliaDataMap`, Preis `currentPrice.priceValue` und ggf. Promotion-Gültigkeitszeiten als Unix-Timestamps (Berlin-Zeitzone). Kein Marktfilter im beobachteten Request; entsprechende Artikel nur als allgemeine Vorschau kennzeichnen.
 
-### ALDI Nord: korrektes verschachteltes Preisformat
+### Lidl
 
-`props.pageProps.apiData` ist zunächst eine als String kodierte JSON-Liste; Element `OFFER_GET` enthält `req={"locale":"de","week":"next"}` und `res.algoliaDataMap`. Jeder Artikel besitzt `name`, `objectID`, `currentPrice.priceValue` und teils `currentPrice.validFrom/validUntil` als Unix-Zeitstempel bzw. `promotionPrices`. Der Adapter wandelt Zeitstempel in **Europe/Berlin** um und gibt für Erdnüsse beispielsweise **1,39 € / 180-g-Dose / 02.–07.11.2026** zurück. Insgesamt 276 gültige Objekte.
+Der direkte Angebots-Endpoint liefert mit **öffentlicher** StoreKey aus dem Filialkatalog und den dokumentierten Kompatibilitäts-Headern `X-Client-Version: 17.0.5`, `X-Client-Platform: android`, `Accept-Language: de-DE,de;q=0.9`, `Accept: application/json` in zwei Tests HTTP 200. Keine Benutzeranmeldung oder OAuth im Test erforderlich.
 
-Eine tatsächliche Filialzuordnung jenseits der allgemeinen Kettenwerbung ist **nicht nachgewiesen**. Das Produktfeld `isAvailable` allein ist keine Filial-Gültigkeitsbestätigung.
+StoreKeys DE7434 (Berlin) und DE7602 (Hannover) lieferten 78 bzw. 72 Aktionen. Angebotsobjekte haben `id`, `title`, `brand`, `offerType`, `category`, `redemptionChannel`, `priceBox.largePartNumeric`, `startValidityDate`, `endValidityDate`. Die ersten 65 Berliner Einträge vom Typ `StoreSpecialPriceDiscount` wurden normalisiert, Onlineaktionen und Rabattmechaniken ohne sicheren Einzelstückpreis werden ausgelassen. Beispielsweise 1,49 € statt 3,99 € für Mövenpick Eis; die Beispielaktion endet 31.10.2026. Die zusätzliche öffentliche Leaflet-API liefert 191 Produktlinks aus 75 Prospektseiten, aber ohne gesicherte individuelle Filialzuordnung; diese Quellen nicht vermischen.
 
-### Lidl: neue öffentlich erreichbare API, aber bislang keine marktsichere Lebensmittelliste
+### EDEKA: wichtiger rechtlicher Stopp
 
-Die Prospektseite `https://www.lidl.de/c/online-prospekte/s10005610` verlinkt Prospektkennungen für die laufende und folgende Wochen. `GET https://endpoints.leaflets.schwarz/v4/flyer?flyer_identifier=aktionsprospekt-02-11-2026-07-11-2026-fbfd28&client=lidl` lieferte HTTP 200, Prospektseiten, 191 Produktkarten mit Preis, Bezeichnung und Link. Alle 191 waren mit Seitenlinks verknüpft; teils zeigen sie auf Lidl.de-Onlineshop-Produkte, daher keine belastbare Filialgültigkeit aus dieser Zuordnung allein.
+Die API ist technisch arbeitsfähig (Markt-ID, Preisfelder, `national:false`, Start-/Enddatumswerte in Unix-Millisekunden). **Aktuelle [EDEKA.de Website-Inhaltsbedingungen](https://www.edeka.de/services/nutzungsbedingungen/) verbieten jedoch automatisiertes Erfassen, Speichern, Zusammenführen und Wiederverwenden der Webseiteninhalte ohne ausdrückliche vorherige Zustimmung.** Aus HTTP 200 folgt keine Genehmigung. Deshalb sind `tools/edeka_live_adapter.py`, `tools/edeka_netto_basic_http.py` und `tools/edeka_netto_market_source.py` gegen unbeabsichtigte Aufrufe geschützt (ohne `EDEKA_PERMISSION_CONFIRMED=1` keine neue Anfrage). Ein produktiver Entwickler muss eine gültige Erlaubnis/vertragliche API-Nutzung klären.
 
-Das ebenfalls verfügbare Prospektfenster 09.–14.11. war zum Testzeitpunkt als JSON mit 29 Seiten und **0** Produktobjekten vorhanden. Die Lidl-Plus-StoreKey-Angebots-API gab bei zwei unproblematischen Testvarianten HTTP 400. Drei konkrete Berliner Lidl-Filialseiten lieferten HTTP 200, aber keinen im getesteten statischen HTML identifizierbaren Prospekt-Slug. Die offizielle Lidl-Website bestätigt, dass Prospekte nach Filialauswahl erhältlich sind, was gerade gegen ein pauschales Verallgemeinern eines überregionalen Prospekts spricht.
+### Netto Marken-Discount: verbleibender technischer Zugangsblocker
 
-### EDEKA
+Offizielle Einzel-Filialangebote existieren, aber aus GitHub Actions blockiert die Filial-URL mit 403; normaler Headless Chrome wird aktiv mit „Access Denied“ beantwortet. Eine Intershop-Filialfinder-API ist in Drittcodes dokumentiert, aber **kein zuverlässig erreichbarer, freigegebener filialspezifischer Angebotsfeed**. Kein Browser-Fingerprinting/Stealth, kein CAPTCHA-Bypass und kein Übernehmen fremder API-Credentials implementiert. Marktguru/KaufDA sind keine pauschal zulässigen Ersatzdatenquellen für eine Drittanbieter-App.
 
-Quellcodebelege:
-- [FaserF/ha-edeka – Filialsuche `/api/marketsearch/markets` und Angebote `/eh/service/eh/offers`](https://github.com/FaserF/ha-edeka/blob/main/custom_components/edeka/api.py)
-- [ByteSizedMarius/edekompile – alternative App-REST-API](https://github.com/ByteSizedMarius/edekompile)
+## 4. Nächste Implementierungsschritte in der Android-App
 
-Der App-REST-Weg benötigt App-level OAuth; aus der Veröffentlichung der Clientdaten in einer fremden Software entsteht **keine Nutzungserlaubnis**. Diese Daten wurden nicht übernommen oder benutzt. Die Web-APIs wurden im GitHub-Runner nicht live bestätigt (`robots.txt` HTTP 403); technische Nutzbarkeit und Bedingungen bleiben offen.
+[Parser und Angebotsdatentyp](../adapters/retailer_offers.py) und [Vertragstests](../tests/test_retailer_offers.py) sind in Python als Referenz implementiert, **noch nicht nach Kotlin portiert**. Zu implementieren bleiben: Nutzer-Filialauswahl und persistierte Store-/Regionskennungen, eine kontrollierte Abfrage-/Cache-Schicht, fehlertoleranter JSON-Import, Preis-/Packungsnormalisierung, Unterscheidung App-Preis/Kassenpreis und tagesgenauer Gültigkeit, UI für verbleibende Angebotsunsicherheit und Datenschutz/Lizenzen.
 
-### Netto Marken-Discount
-
-Die offizielle Filialsuche ist aus [Korbunio `netto_marken.py`](https://github.com/lesecuritae/Korbunio/blob/main/src/supermarkt/sources/netto_marken.py) dokumentiert. [Offizielle Netto-Filialbeispielseite](https://www.netto-online.de/filialen/berlin-charlottenburg/wilmersdorfer-str-46/7679/?stores_id=7679) zeigt ausdrücklich aktuelle Filialangebote und den Prospekt der Folgewoche. Das ist ein Beleg, dass das **Angebotskonzept filialbezogen** ist; es ist kein nachgewiesener strukturierter Datenfeed. `robots.txt` von `www.netto-online.de` war vom GitHub-Runner mit HTTP 403 nicht abrufbar. Eine unlizenzierte Drittanbieter-Aggregation würde die Filialgeltung nicht automatisch absichern.
-
-## Offene, nicht durch bloßes Programmieren behebbare Punkte
-
-1. **EDEKA / Netto:** Autorisierter und technisch funktionierender Abruf inklusive expliziter Filialzuordnung. Ohne echte Zugriffsfreigabe kann keine belastbare Produktivabdeckung behauptet werden.
-2. **Lidl:** Produktfilter Lebensmittel-vor-Ort vs. Onlineshop, Filialzuordnung des Prospekts oder legale Lidl-Plus-API-Nutzung. Andernfalls Kennzeichnung UNKNOWN.
-3. **ALDI Nord:** Kettenweite Angebote dürfen nicht als garantiert in jedem Markt gelten, bis eine offizielle Ausnahmeregel bzw. lokaler Filter nachgewiesen ist.
-4. **PENNY:** Zusätzliche Kategorien und produktspezifische Verkaufsintervalle erfassen. Die bisherigen 12 Kategorien sind empirisch verifiziert, nicht als vollständig nachgewiesen.
-5. **Alle:** Nutzungsbedingungen, Drittverwertung und ggf. kommerzielle Weiterverwendung rechtlich klären; Ratenbegrenzungen, Caching, Fehlerfälle und Datenprovenienz definieren.
-
-## Übergabe an Codex / Android-Implementierung
-
-Die Python-Adapter sind **Referenzimplementierung**, keine bereits eingebauten Kotlin-Dateien. In die Android-App lassen sich Datentypen, Parser und scope-Klassen portieren. Für bestätigte Datensätze die ausgewählte Filiale bzw. Regionskennung zusammen mit dem Datenabrufzeitpunkt speichern. Für unbestätigte Märkte Treffer als `UNKNOWN` zeigen oder in der gefilterten Einkaufsempfehlung ausschließen.
-
-Die Codebasis der Android-App im anderen Repository wurde bei diesen Tests **nicht** verändert.
+**Weder EDEKA noch Netto sind ohne weitere Klärung betriebsbereit**. Technisch erreichbare Daten sind nicht automatisch legal in eigene Produkte übertragbar. Eine vollständige, verlässliche Sechs-Händler-Produktion kann deshalb derzeit nicht seriös als abgeschlossen bezeichnet werden.
