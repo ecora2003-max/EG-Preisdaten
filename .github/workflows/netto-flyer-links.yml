@@ -1,0 +1,24 @@
+name: Netto actual chosen-store flyer link check
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_brochure_ids.py
+      - .github/workflows/netto-flyer-links.yml
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/netto_brochure_ids.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-flyer-links
+          path: results/netto_brochure_ids.json
+          retention-days: 7
