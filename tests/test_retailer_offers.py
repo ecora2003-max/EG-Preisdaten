@@ -35,19 +35,20 @@ class RetailerContracts(unittest.TestCase):
         self.assertEqual(len(offers),1)
         self.assertEqual(offers[0].price_eur,Decimal("1.49"))
         self.assertEqual(offers[0].price_condition,"1.29²")
-        self.assertEqual(offers[0].valid_to,"2026-11-08")
+        self.assertIsNone(offers[0].valid_to)
         self.assertEqual(offers[0].scope,Scope.REGION)
 
     def test_aldi_nord_embedded_next_week_and_no_store_guarantee(self):
         p={"props":{"pageProps":{"apiData":json.dumps([["OFFER_GET",{
             "req":{"locale":"de","week":"next"},
             "res":{"algoliaDataMap":{"100":{"objectID":"100","name":"Erdnüsse",
-                 "currentPrice":1.49,"salesUnit":"200 g"},"200":{"name":"NotPriced"}}}
+                 "currentPrice":{"priceValue":1.49,"validFromLocalDate":"2026-11-02","validUntilLocalDate":"2026-11-07"},"salesUnit":"200 g"},"200":{"name":"NotPriced"}}}
         }]])}}}
         v=aldi_nord_next(p)
         self.assertEqual(len(v),1)
         self.assertEqual(v[0].title,"Erdnüsse")
         self.assertEqual(v[0].scope,Scope.CHAIN)
+        self.assertEqual(v[0].valid_from,"2026-11-02")
         self.assertIsNone(v[0].scope_id)
 
     def test_aldi_nord_wrong_week_rejected(self):
