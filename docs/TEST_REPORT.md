@@ -44,3 +44,7 @@ Code-Commit `fe580013c619c366ec749ac98e1a630a91a86231`. [CI-Lauf #41220821950](h
 - `a60359c8ca11f95330e51ff4e1129ff191f1868a`, [CI #41223853921](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223853921): **85/85 PASS**, ALDI-Süd-Seitenvollständigkeit und Lidl-bool-Pagination-Negativtests; Paritätsvektoren weiter grün. Keine Fehler oder übersprungenen Tests in den ausgewiesenen Suites.
 
 Prüfbefehl in GitHub Actions (Python 3.12): `pip install -r requirements-dev.lock; python3 -m compileall -q adapters catalogues price_module tests; python3 -m unittest discover -s tests -v; python3 -m price_module < examples/synthetic-price-query.json`. **Keine neuen Live-GETs, keine rechtliche Quellenfreigabe, keine Kotlin-JVM- oder Android-Gerätetests.**
+
+### Nachprüfung der Mengenbasis, Code `6f907892c018e8e66ba2624ae577044c05493a05`
+
+[GitHub Actions #41223933684](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223933684): **88/88 Offline-Tests PASS**, Python-Compile + CLI PASS. Drei zusätzliche Negativ-/Positivtests für explizites Abtropf-/Bruttogewicht, Original-Gebindetext und Nichtvergleichbarkeit mit NET-Grundpreis. Die 16 JSON-Paritätsvektoren bleiben grün. Keine neuen Live-GETs, Rechte- oder Android-Tests.

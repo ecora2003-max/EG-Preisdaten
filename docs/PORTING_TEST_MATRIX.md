@@ -1,7 +1,7 @@
 # Android-/Codex-Portierungsmatrix (Stand 31.10.2026)
 
 Architektur: 1.0.0-draft, SHA d22862739bd0e3ef8451ce029e54f7c33ee53e40.
-Python-Fachkern: a60359c8ca11f95330e51ff4e1129ff191f1868a; CI 41223853921: 85 Tests PASS.
+Python-Fachkern: 6f907892c018e8e66ba2624ae577044c05493a05; CI 41223933684: 88 Tests PASS.
 
 Diese Matrix ist eine Testvorgabe für Codex, keine erfolgte Android-Integration.
 
@@ -10,7 +10,7 @@ Diese Matrix ist eine Testvorgabe für Codex, keine erfolgte Android-Integration
 | Händler | Acht eindeutige Händler-IDs, Herkunft und Rechte getrennt |
 | Preis | 0 von null unterscheiden; SALE, CURRENT_DISPLAYED, LISTED_REGULAR und ONLINE_LISTED nicht vermischen |
 | Bedingung | Lidl Plus, Penny und Netto App nicht als frei verfügbare Normalpreise ausgeben |
-| Menge | 500 g, 2×500 g, 0,75 l, Stück; Grundpreis nicht als Gebindemasse interpretieren |
+| Menge | 500 g, 2×500 g, 0,75 l, Stück; NET/DRAINED/GROSS strikt trennen, Original-Gebindetext bewahren; Grundpreis nicht als Gebindemasse interpretieren |
 | Markt | Zwei Märkte, regionale Ausnahmen, keine erdachte STORE_CONFIRMED-Geltung |
 | Zeitraum | Aktuell, angekündigte Zukunft, abgelaufene Aktionen; beobachtet ist nicht aktualisiert |
 | Vollständigkeit | Unvollständige Pagination und ausgelassene Angebotskacheln sichtbar halten |
