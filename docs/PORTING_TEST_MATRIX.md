@@ -1,7 +1,7 @@
 # Android-/Codex-Portierungsmatrix (Stand 31.10.2026)
 
 Architektur: 1.0.0-draft, SHA d22862739bd0e3ef8451ce029e54f7c33ee53e40.
-Python-Fachkern: 6f907892c018e8e66ba2624ae577044c05493a05; CI 41223933684: 88 Tests PASS.
+Python-Fachkern: 5fefd76299612b0d5559cca771744a58409a5502; CI 41224039268: 89 Tests PASS.
 
 Diese Matrix ist eine Testvorgabe für Codex, keine erfolgte Android-Integration.
 
@@ -16,7 +16,7 @@ Diese Matrix ist eine Testvorgabe für Codex, keine erfolgte Android-Integration
 | Vollständigkeit | Unvollständige Pagination und ausgelassene Angebotskacheln sichtbar halten |
 | Fehler | 204/403/429/500, Timeout, TLS, HTML statt JSON, geänderte Schemas und atomarer Rollback |
 | Identität | Korrekte GTIN-Prüfziffer, bestätigte FoodType-ID, keine geratene Zuordnung |
-| Rechte | Ohne belegte Wiederverwendungsrechte APP_DISPLAY abweisen |
+| Rechte | Ohne belegte Wiederverwendungsrechte APP_DISPLAY abweisen; `fixture=true` darf nur explizit synthetische Provenienz ohne externe `sourceUrl` besitzen |
 | Seiteneffekt | Keine Änderungen an Room, Beständen, Käufen, Bons, Rezepten oder Sheets |
 
 Codex portiert die bestehenden JSON-Beispiele und Python-Tests auf pure Kotlin-JVM-Funktionen.
@@ -27,7 +27,7 @@ Bis rechtliche Quellenfreigaben vorliegen, bleiben produktive Live-Feeds gesperr
 
 ## Maschinenlesbare Portierungsfälle
 
-Die Datei [`tests/fixtures/porting_vectors.json`](../tests/fixtures/porting_vectors.json) enthält **16 unabhängige synthetische Fälle** mit `request`, `datasets` und `expect`. `expect.observations` enthält **Teilprojektionen** der Vertrags-`payload`s; die angegebenen Felder sind exakt zu vergleichen, zusätzliche optionale/namespaced Felder sind erlaubt. `matchedCount`, `errorCodes`, Reihenfolge/Anzahl der Beobachtungen und bei Bedarf `coverageStatuses` sowie eindeutige `observationId` sind ebenfalls verbindliche Erwartungen. Diese Tests werden von `tests/test_porting_vectors.py` in der Python-CI ausgeführt, nicht von Kotlin.
+Die Datei [`tests/fixtures/porting_vectors.json`](../tests/fixtures/porting_vectors.json) enthält **18 unabhängige synthetische Fälle** mit `request`, `datasets` und `expect`. `expect.observations` enthält **Teilprojektionen** der Vertrags-`payload`s; die angegebenen Felder sind exakt zu vergleichen, zusätzliche optionale/namespaced Felder sind erlaubt. `matchedCount`, `errorCodes`, Reihenfolge/Anzahl der Beobachtungen und bei Bedarf `coverageStatuses` sowie eindeutige `observationId` sind ebenfalls verbindliche Erwartungen. Diese Tests werden von `tests/test_porting_vectors.py` in der Python-CI ausgeführt, nicht von Kotlin.
 
 **Kotlin-JVM-Übernahme:** JSON als Ressourcen laden; `PriceService.search(request,datasets)` semantisch portieren; jede erwartete Teilprojektion rekursiv prüfen, vollständige Ausgaben gegen `contracts/v1/contract.schema.json` der Architektur validieren und Eingabeimmutabilität sicherstellen. Fehlercodes statt lokalisierter Fehlermeldungen vergleichen. `observationId`-Eindeutigkeit ist verpflichtend, sprachübergreifend identische Hash-Bytes sind nicht spezifiziert; dies ist eine interne Implementierungsentscheidung, kein Architektur-Vertragsfeld. Erst echte Kotlin-Tests und App-/Gerätetests gelten als Integrationsnachweis.
 

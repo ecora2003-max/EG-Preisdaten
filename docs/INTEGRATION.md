@@ -37,7 +37,7 @@ Die Beispielantwort ist synthetisch leer. `scopeProof` ist **kein kryptografisch
 
 Unterstützte `channel=SALE`: PENNY `offerTiles` mit `regionId,weekStart`; Kaufland `body.page,body.availability,storeId,firstDay,lastDay`; ALDI Nord `OFFER_GET`; Lidl `offers,storeId`; EDEKA `docs,marketId=storeId`; Netto HTML-Angebotskacheln (`contentType=text/html`) ohne bestätigte Einzelmarkt-Geltung. REWE/ALDI-Süd eigene Aktionsfeeds fehlen noch. `channel=REGULAR`: REWE stationäre `products/pricing`; ALDI Süd `data/price.amountRelevant` Cent; Lidl `mode=search`, `mode=category` (offset/limit) oder `mode=category-pages` mit fortlaufender Liste `[{payload,offset,limit}]`; ALDI Nord `__NEXT_DATA__`-HTML; Netto offizielles Shop-Produkt-JSON-LD (`ONLINE_LISTED`). Penny, Kaufland, EDEKA besitzen bislang keinen bestätigten kompletten regulären Filialpreisadapter.
 
-`format=synthetic-fixture`, `fixture=true` und eine synthetische `body`-Zeilenliste sind allein für Offline-Demo-/Vertragstests vorgesehen. Andere Händler-HTML/API-Snapshots werden über die vorhandenen Legacy-Parser normalisiert.
+`format=synthetic-fixture`, `fixture=true` und eine synthetische `body`-Zeilenliste sind allein für Offline-Demo-/Vertragstests vorgesehen. Für diesen Testpfad sind zusätzlich `origin=synthetic-fixture` und das Fehlen einer externen `sourceUrl` verpflichtend; sonst `INVALID_FIXTURE`. Dies ist nur eine Metadaten-Sperre und keine unabhängige Echtheitsprüfung. Andere Händler-HTML/API-Snapshots werden über die vorhandenen Legacy-Parser normalisiert.
 
 ## Ergebnis und Fehlervertrag
 

@@ -48,3 +48,7 @@ Prüfbefehl in GitHub Actions (Python 3.12): `pip install -r requirements-dev.lo
 ### Nachprüfung der Mengenbasis, Code `6f907892c018e8e66ba2624ae577044c05493a05`
 
 [GitHub Actions #41223933684](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41223933684): **88/88 Offline-Tests PASS**, Python-Compile + CLI PASS. Drei zusätzliche Negativ-/Positivtests für explizites Abtropf-/Bruttogewicht, Original-Gebindetext und Nichtvergleichbarkeit mit NET-Grundpreis. Die 16 JSON-Paritätsvektoren bleiben grün. Keine neuen Live-GETs, Rechte- oder Android-Tests.
+
+### 31.10.2026 – Kein synthetisches Rechte-Bypass durch Quellmetadaten
+
+Code `5fefd76299612b0d5559cca771744a58409a5502`; [GitHub Actions #41224039268](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41224039268): **89/89 Offline-Tests PASS**, Compile + CLI PASS. Ein neuer Unit-Test und zwei JSON-Paritätsfälle (nun 18) prüfen, dass `APP_DISPLAY` echte Händlerherkunft oder externe Händler-`sourceUrl` nicht über `fixture=true` als synthetische Demo akzeptiert. Synthetische Testdaten bleiben zugelassen; der Nachweis ist eine Metadatenprüfung, keine Herkunftsauthentisierung. Kein neuer Händler-Live-GET, keine Lizenz- oder App-Freigabe.
