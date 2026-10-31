@@ -1,0 +1,24 @@
+name: ALDI Nord assortment product price HTML
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_rendered_regular_prices.py
+      - .github/workflows/aldi-rendered-regular-prices.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/aldi_rendered_regular_prices.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-rendered-regular-prices
+          path: results/aldi_rendered_regular_prices.json
+          retention-days: 7
