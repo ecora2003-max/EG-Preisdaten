@@ -1,0 +1,26 @@
+name: Original real retailer APK static API analysis
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/real_apk_static_analysis.py
+      - .github/workflows/real-apk-research.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Analyze authentic public Penny, Penny Scan Go, Netto, Kaufland, EDEKA Android binaries
+        run: python3 tools/real_apk_static_analysis.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: actual-apk-endpoint-analysis
+          path: results/real_apk_static_analysis.json
+          retention-days: 7
