@@ -82,6 +82,12 @@ def _text(v: Any) -> str | None:
 
 
 def _iso_date(v: Any) -> str | None:
+    if isinstance(v,(int,float)) and not isinstance(v,bool):
+        try:
+            seconds=v/1000 if v>100_000_000_000 else v
+            return datetime.fromtimestamp(seconds,ZoneInfo("Europe/Berlin")).date().isoformat()
+        except (OverflowError,ValueError,OSError):
+            return None
     if not isinstance(v, str):
         return None
     try:
@@ -373,22 +379,41 @@ def lidl_flyer(payload: Mapping[str,Any], *, expected_start: str,
 
 
 def edeka_offers(payload: Mapping[str,Any], *, market_id: str) -> list[Offer]:
-    """Schema-only adapter: official endpoint unverified from this GitHub runner."""
+    """Official EDEKA marketId offers, distinguished from national fallback.
+
+    Source supports root-wide epoch-millisecond validity intervals and per-item
+    overrides. `national=true` must never be reported as store-confirmed.
+    """
     docs=payload.get("docs")
     if not market_id or not isinstance(docs,list):
         raise ValueError("EDEKA market ID and docs response required")
+    national=payload.get("national")
+    if not isinstance(national,bool):
+        scope=Scope.UNVERIFIED
+    else:
+        scope=Scope.CHAIN if national else Scope.STORE
+    root_start=_iso_date(payload.get("gueltig_von"))
+    root_end=_iso_date(payload.get("gueltig_bis"))
     result=[]
+    seen=set()
     for i,p in enumerate(docs):
         if not isinstance(p,dict):
             continue
         title=_text(p.get("titel"))
         price=money(p.get("preis"))
-        if title and price is not None:
-            result.append(Offer("EDEKA",str(p.get("id") or i),title,price,
-                                _text(p.get("beschreibung")),_iso_date(p.get("gueltig_von")),
-                                _iso_date(p.get("gueltig_bis")),
-                                Scope.UNVERIFIED,market_id,
-                                note="Endpoint unverified live; marketId alone does not prove scope"))
+        oid=str(p.get("angebotid") or p.get("id") or i)
+        valid_start=_iso_date(p.get("gueltig_von")) or root_start
+        valid_end=_iso_date(p.get("gueltig_bis")) or root_end
+        if valid_start and valid_end and valid_start>valid_end:
+            continue
+        if not title or price is None or oid in seen:
+            continue
+        seen.add(oid)
+        result.append(Offer("EDEKA",oid,title,price,
+                            _text(p.get("beschreibung")),valid_start,valid_end,
+                            scope,market_id if scope==Scope.STORE else None,
+                            note=("Marktabhängige Angebote laut offizieller Markt-ID" if scope==Scope.STORE
+                                  else "Nur nationale Ersatzangebote oder Filialgeltung nicht bestätigt")))
     return result
 
 
