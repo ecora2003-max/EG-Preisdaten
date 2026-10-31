@@ -1,0 +1,24 @@
+name: Netto official individual leaflet host availability
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_leaflet_host.py
+      - .github/workflows/netto-leaflet-host.yml
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/netto_leaflet_host.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-leaflet-host
+          path: results/netto_leaflet_host.json
+          retention-days: 7
