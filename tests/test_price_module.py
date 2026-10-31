@@ -406,5 +406,58 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(p["eg-preisdaten:conditionalPrices"][0]["priceCents"],149)
         self.assertEqual(p["priceCents"],199)
 
+
+    def test_request_date_not_window_start_determines_validity(self):
+        ds=fixture([r(fromDate="2026-11-03",untilDate="2026-11-07")])
+        out=self.service.search_offers(
+            {**REQUEST,"shoppingDate":"2026-11-05","windowStart":"2026-11-01",
+             "windowEnd":"2026-11-06"},[ds])
+        self.assertEqual(out["observations"][0]["payload"]["eg-preisdaten:targetDateStatus"],
+                         "PUBLISHED_WINDOW")
+
+    def test_store_selection_rejects_other_market_but_preserves_proper_scope(self):
+        req={**REQUEST,"storeSelections":{"LIDL":{"storeId":"DE1"}}}
+        one=fixture([r(id="a",scope="STORE_CONFIRMED",scopeId="DE1")],
+                    storeId="DE1",scopeProof={"storeId":"DE1","sourceRef":"published-store"})
+        two=fixture([r(id="b",scope="STORE_CONFIRMED",scopeId="DE2")],
+                    storeId="DE2",scopeProof={"storeId":"DE2","sourceRef":"published-store"})
+        out=self.service.search_offers(req,[one,two])
+        self.assertEqual(len(out["observations"]),1)
+        self.assertEqual(out["observations"][0]["payload"]["scope"]["storeId"],"DE1")
+        self.assertIn("OUT_OF_SCOPE",[r["status"] for r in out["coverage"]])
+        with self.assertRaises(DataError):
+            self.service.search_offers({**REQUEST,"storeSelections":{"LIDL":{"storeId":""}}},[one])
+
+    def test_lookup_price_matches_before_result_cap(self):
+        ds=fixture([r(id=str(i)) for i in range(20)])
+        req={**REQUEST,"maxResults":1}
+        out=self.service.lookup_price(req,[ds],"19")
+        self.assertEqual(len(out["observations"]),1)
+        self.assertEqual(out["observations"][0]["payload"]["article"]["retailerArticleId"],"19")
+        self.assertEqual(out["matchedCount"],1)
+        self.assertFalse(out["outputTruncated"])
+
+    def test_output_truncation_is_global_and_reported_without_faking_incomplete_source(self):
+        ds=fixture([r(id=str(i)) for i in range(8)])
+        out=self.service.search_offers({**REQUEST,"maxResults":2},[ds])
+        self.assertEqual(out["matchedCount"],8)
+        self.assertEqual(len(out["observations"]),2)
+        self.assertTrue(out["outputTruncated"])
+        self.assertEqual(out["coverage"][0]["status"],"PARSED_PARTIAL")
+
+    def test_multi_quantity_text_is_not_silently_reduced_to_first_amount(self):
+        self.assertIsNone(parse_quantity("500 g + 200 g gratis"))
+        self.assertIsNone(parse_quantity("1 kg = 3,98 €"))
+        self.assertIsNone(parse_quantity("200 g / 100 g"))
+        self.assertEqual(parse_quantity("3 x 200 g")["amount"],600)
+
+    def test_identical_price_different_observation_instant_retained(self):
+        one=fixture([r()],observedAt="2026-10-31T09:00:00+01:00")
+        two=fixture([r()],observedAt="2026-10-31T18:00:00+01:00")
+        out=self.service.search_offers(REQUEST,[one,two])
+        self.assertEqual(len(out["observations"]),2)
+        self.assertNotEqual(out["observations"][0]["payload"]["observationId"],
+                            out["observations"][1]["payload"]["observationId"])
+
 if __name__=="__main__":
     unittest.main()

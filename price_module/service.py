@@ -57,8 +57,11 @@ def parse_quantity(text: Any) -> dict[str, Any] | None:
     """Only explicit, unambiguous net mass/volume or piece counts; no weight guesses."""
     if not isinstance(text,str) or not text.strip(): return None
     s=text.lower().replace("\u00a0"," ").replace("×","x").replace("‐","-")
-    m=re.search(r"(?<![\d.,])\b(?:(\d+)\s*x\s*)?(\d+(?:[.,]\d{1,3})?)\s*-?\s*(kg|g|ml|l|stück|stueck|stk)(?!\w)",s)
-    if not m:return None
+    pattern=r"(?<![\\d.,])\\b(?:(\\d+)\\s*x\\s*)?(\\d+(?:[.,]\\d{1,3})?)\\s*-?\\s*(kg|g|ml|l|stück|stueck|stk)(?!\\w)"
+    matches=list(re.finditer(pattern,s))
+    if len(matches)!=1:return None
+    m=matches[0]
+    if s[m.end():].lstrip().startswith(("=","/")):return None
     n=int(m.group(1) or 1)
     unit=m.group(3)
     try: value=Decimal(m.group(2).replace(",", "."))
@@ -225,7 +228,7 @@ def resolve_stores(retailer_id: str, records: list[dict[str,Any]], store_id: str
     return result
 
 def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
-             requested_start:str,requested_end:str, regular:bool=False) -> dict[str,Any] | None:
+             requested_start:str,requested_end:str, regular:bool=False, shopping_date:str|None=None) -> dict[str,Any] | None:
     start=_date(row.get("fromDate"))
     end=_date(row.get("untilDate"))
     if start and end and start>end:raise DataError("INVALID_DATE","Offer validity reversed")
@@ -270,7 +273,8 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
     kind_out="LISTED_REGULAR" if regular else row.get("sourcePriceKind") or ("SALE" if kind=="SALE" else "CURRENT_DISPLAYED")
     if kind_out not in ("SALE","CURRENT_DISPLAYED","LISTED_REGULAR","REFERENCE_OLD","ONLINE_LISTED","UNKNOWN"):
         raise DataError("INVALID_PRICE_KIND","Unexpected price kind")
-    identity=json.dumps([retailer,sid,raw_id,name,kind_out,value,start,end,ds.get("sourceUrl")],ensure_ascii=False)
+    identity=json.dumps([retailer,source_scope,sid,raw_id,name,kind_out,value,start,end,
+                         time,ds.get("sourceUrl"),condition],ensure_ascii=False)
     obs_id="PRICE-"+hashlib.sha256(identity.encode()).hexdigest()[:24]
     qty=parse_quantity(row.get("pack"))
     conditional_prices=row.get("conditionalPrices",[])
@@ -282,7 +286,7 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
         normalized_conditions.append(dict(x))
     # A snapshot observed today is not proof of a future checkout price.
     if start is not None and end is not None:
-        temporal="PUBLISHED_WINDOW" if start<=requested_start<=end else "OUTSIDE_TARGET_DATE"
+        temporal="PUBLISHED_WINDOW" if start<=(shopping_date or requested_start)<=end else "OUTSIDE_TARGET_DATE"
     elif start is not None or end is not None:
         temporal="PARTIAL_VALIDITY_UNKNOWN"
     else:
@@ -330,9 +334,33 @@ class PriceService:
         mode=request.get("usageMode","RESEARCH_ONLY")
         if mode not in ("RESEARCH_ONLY","APP_DISPLAY"):
             raise DataError("INVALID_REQUEST","usageMode must be RESEARCH_ONLY or APP_DISPLAY")
+        selections=request.get("storeSelections",{})
+        if not isinstance(selections,dict) or any(r not in _REGISTRY for r in selections):
+            raise DataError("INVALID_REQUEST","Invalid store selection keys")
+        for selection in selections.values():
+            if not isinstance(selection,dict) or not selection:
+                raise DataError("INVALID_REQUEST","Expected storeId and/or regionId")
+            if any(k not in ("storeId","regionId") for k in selection) or any(
+                not isinstance(v,str) or not v.strip() for v in selection.values()
+            ):
+                raise DataError("INVALID_REQUEST","Invalid store or region selection")
+        article_filter=request.get("retailerArticleId")
+        if article_filter is not None and (not isinstance(article_filter,str) or not article_filter.strip()):
+            raise DataError("INVALID_REQUEST","Invalid retailer article ID filter")
         found=[]; errors=[]; coverage=[]; seen=set()
         for retailer in dict.fromkeys(retailers):
-            selected=[d for d in datasets if isinstance(d,dict) and d.get("retailerId")==retailer]
+            store_selection=selections.get(retailer,{})
+            raw_selected=[d for d in datasets if isinstance(d,dict) and d.get("retailerId")==retailer]
+            selected=[]
+            for dataset in raw_selected:
+                mismatch=any(k in dataset and dataset[k] is not None and dataset[k]!=v
+                             for k,v in store_selection.items())
+                if mismatch:
+                    coverage.append(dict(retailerId=retailer,channel=dataset.get("channel"),
+                                         received=0,parsed=0,complete=False,status="OUT_OF_SCOPE",
+                                         rights=_REGISTRY[retailer][3]))
+                else:
+                    selected.append(dataset)
             if not selected:
                 coverage.append(dict(retailerId=retailer,received=0,parsed=0,complete=False,
                                      status="NO_DATA",rights=_REGISTRY[retailer][3]))
@@ -367,17 +395,12 @@ class PriceService:
                     for idx,row in enumerate(rows):
                         if not isinstance(row,dict):raise DataError("SCHEMA_CHANGED","Row is not an object")
                         for regular in ((False,True) if channel=="REGULAR" and retailer=="REWE" else (False,)):
-                            payload=_payload(row,ds,channel,when,idx,begin,end,regular)
+                            payload=_payload(row,ds,channel,when,idx,begin,end,regular,day)
                             if payload is None:continue
                             oid=payload["payload"]["observationId"]
-                            if oid not in seen and (term is None or term.casefold() in payload["payload"]["article"]["label"].casefold()):
+                            if oid not in seen and (term is None or term.casefold() in payload["payload"]["article"]["label"].casefold()) and (article_filter is None or payload["payload"]["article"]["retailerArticleId"]==article_filter):
                                 found.append(payload);seen.add(oid)
                     if received!=parsed:complete=False
-                    if len(found)>=limit:
-                        coverage.append(dict(retailerId=retailer,channel=channel,received=received,parsed=parsed,
-                                             complete=False,status="OUTPUT_LIMIT",rights=_REGISTRY[retailer][3],
-                                             checkedAt=when,sourceUrl=ds.get("sourceUrl")))
-                        break
                     coverage.append(dict(retailerId=retailer,channel=channel,received=received,parsed=parsed,
                                          complete=complete,status="PARSED_PARTIAL" if not complete else "PARSED_PAGE",
                                          rights=_REGISTRY[retailer][3],reportedTotal=summary.get("reportedTotal"),
@@ -389,18 +412,18 @@ class PriceService:
                     errors.append(dict(retailerId=retailer,channel=channel,code=code,message=str(exc)[:250]))
                     coverage.append(dict(retailerId=retailer,channel=channel,received=received,parsed=parsed,
                                          complete=False,status="ERROR",rights=_REGISTRY[retailer][3]))
+        truncated=len(found)>limit
+        warnings=["Source retrieval and redistribution rights are not granted by parser success",
+                  "Observations do not create purchases, receipts or inventory events"]
+        if truncated:warnings.append("OUTPUT_TRUNCATED: matching observations exceed maxResults")
         return {"contractVersion":CONTRACT_VERSION,"observations":found[:limit],
-                "coverage":coverage,"errors":errors,
-                "warnings":["Source retrieval and redistribution rights are not granted by parser success",
-                            "Observations do not create purchases, receipts or inventory events"]}
+                "matchedCount":len(found),"outputTruncated":truncated,
+                "coverage":coverage,"errors":errors,"warnings":warnings}
     def search_offers(self, request, datasets):
         return self.search(request,datasets,"SALE")
     def search_catalog_prices(self,request,datasets):
         return self.search(request,datasets,"REGULAR")
     def lookup_price(self,request,datasets,retailer_article_id):
-        result=self.search(request,datasets,"BOTH")
-        result["observations"]=[v for v in result["observations"]
-                                if v["payload"]["article"]["retailerArticleId"]==retailer_article_id]
-        return result
+        return self.search({**request,"retailerArticleId":retailer_article_id},datasets,"BOTH")
     def get_coverage(self,request,datasets):
         return self.search(request,datasets,"BOTH")["coverage"]
