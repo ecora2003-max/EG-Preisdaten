@@ -1,0 +1,38 @@
+name: EDEKA authorized one-time market offer snapshot to Try
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/edeka_authorized_market_snapshot.py
+      - .github/workflows/edeka-authorized-market-snapshot.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    env:
+      EDEKA_PERMISSION_CONFIRMED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download complete published market offer responses and validate record counts
+        run: python3 tools/edeka_authorized_market_snapshot.py
+      - name: Commit verified raw and normalized data snapshots to Try only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/edeka/2026-10-31
+          if ! git diff --cached --quiet; then
+            git commit -m "Snapshot 2026-10-31 EDEKA market offers and offer-derived products"
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: edeka-market-offers-download-2026-10-31
+          path: data/edeka/2026-10-31
+          retention-days: 7
