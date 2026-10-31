@@ -397,6 +397,14 @@ class PriceService:
             for dataset in raw_selected:
                 mismatch=any(k in dataset and dataset[k] is not None and dataset[k]!=v
                              for k,v in store_selection.items())
+                # A region-bound feed without a proven store->region binding is not
+                # applicable merely because the request named a physical store.
+                if store_selection.get("storeId") and dataset.get("regionId") and not store_selection.get("regionId"):
+                    mismatch=True
+                # The inverse is also unknown: a physical store without a region
+                # reference cannot be silently included in a region-only query.
+                if store_selection.get("regionId") and dataset.get("storeId") and not dataset.get("regionId"):
+                    mismatch=True
                 if mismatch:
                     coverage.append(dict(retailerId=retailer,channel=dataset.get("channel"),
                                          received=0,parsed=0,complete=False,status="OUT_OF_SCOPE",
@@ -443,6 +451,17 @@ class PriceService:
                     # remain flagged partial even if upstream pagination is complete.
                     for idx,row in enumerate(rows):
                         if not isinstance(row,dict):raise DataError("SCHEMA_CHANGED","Row is not an object")
+                        row_scope=row.get("scope")
+                        scope_id=row.get("scopeId")
+                        if (row_scope=="STORE_CONFIRMED" and store_selection.get("storeId")
+                                and scope_id and scope_id!=store_selection["storeId"]):
+                            continue
+                        if (row_scope=="REGION_CONFIRMED" and store_selection.get("regionId")
+                                and scope_id and scope_id!=store_selection["regionId"]):
+                            continue
+                        if (row_scope=="REGION_CONFIRMED" and store_selection.get("storeId")
+                                and not store_selection.get("regionId")):
+                            continue
                         for regular in ((False,True) if channel=="REGULAR" and retailer=="REWE" else (False,)):
                             payload=_payload(row,ds,channel,when,idx,begin,end,regular,day)
                             if payload is None:continue

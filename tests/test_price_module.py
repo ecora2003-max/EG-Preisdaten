@@ -567,5 +567,27 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(by_type["LISTED_REGULAR"]["priceCents"],139)
         self.assertNotIn("SALE",by_type)
 
+
+    def test_region_only_dataset_must_not_leak_into_unmapped_store_selection(self):
+        ds=fixture([r(id="p",scope="REGION_CONFIRMED",scopeId="R2")],
+                   retailer="PENNY",regionId="R2",
+                   scopeProof={"regionId":"R2","sourceRef":"official-selling-region"})
+        req={**REQUEST,"retailerIds":["PENNY"],
+             "storeSelections":{"PENNY":{"storeId":"DE1"}}}
+        out=self.service.search_offers(req,[ds])
+        self.assertEqual(out["observations"],[])
+        self.assertIn("OUT_OF_SCOPE",[c["status"] for c in out["coverage"]])
+        req["storeSelections"]["PENNY"]["regionId"]="R2"
+        out=self.service.search_offers(req,[ds])
+        self.assertEqual(len(out["observations"]),1)
+
+    def test_mixed_store_rows_dont_cross_selected_market_even_when_source_claims_store(self):
+        ds=fixture([r(id="A",scope="STORE_CONFIRMED",scopeId="DE1"),
+                    r(id="B",scope="STORE_CONFIRMED",scopeId="DE2")],
+                   storeId="DE1",scopeProof={"storeId":"DE1","sourceRef":"official-store"})
+        req={**REQUEST,"storeSelections":{"LIDL":{"storeId":"DE1"}}}
+        out=self.service.search_offers(req,[ds])
+        self.assertEqual([x["payload"]["article"]["retailerArticleId"] for x in out["observations"]],["A"])
+
 if __name__=="__main__":
     unittest.main()
