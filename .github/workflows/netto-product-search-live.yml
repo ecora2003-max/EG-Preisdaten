@@ -1,0 +1,26 @@
+name: Netto productSearch anonymous live check
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/netto_product_search_live.py
+      - .github/workflows/netto-product-search-live.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check official hosts for app-declared read-only product search
+        run: python3 tools/netto_product_search_live.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: netto-product-search-live-diagnostics
+          path: results/netto_product_search_live_20261031.json
+          retention-days: 7
