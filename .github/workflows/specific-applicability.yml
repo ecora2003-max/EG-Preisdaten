@@ -1,0 +1,26 @@
+name: Verify offer applies to selected stores
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/specific_applicability_probe.py'
+      - '.github/workflows/specific-applicability.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test official public store-scoping catalogues
+        run: python3 tools/specific_applicability_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verified-store-applicability
+          path: results/specific_applicability.json
+          retention-days: 7
