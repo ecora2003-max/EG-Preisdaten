@@ -164,9 +164,19 @@ if isinstance(penny, list):
     if berlin_store:
         region=berlin_store.get("nextWeekSellingRegion") or berlin_store["sellingRegion"]
         for week in ("2026-44","2026-45"):
-            safe_request("PENNY product offers calendar week "+week,
+            offers_result = safe_request("PENNY product offers calendar week "+week,
                          "https://www.penny.de/.rest/offers/by-category/"+week+"/top-angebote?"+
                          urlencode({"region":region}))
+            if isinstance(offers_result,dict):
+                tiles=offers_result.get("offerTiles")
+                summary_item={"provider":"PENNY product object fields "+week,
+                              "result":"parsed_live_json",
+                              "offerTiles_type":type(tiles).__name__}
+                if isinstance(tiles,list):
+                    summary_item["product_count"]=len(tiles)
+                    summary_item["product_keys"]=list(tiles[0])[:50] if tiles and isinstance(tiles[0],dict) else []
+                    summary_item["first_product_json_excerpt"]=json.dumps(tiles[:1],ensure_ascii=False,default=str)[:1000]
+                tests.append(summary_item)
 
 if isinstance(nord_html,str):
     match=re.search(r'<script[^>]*id=["\x27]__NEXT_DATA__["\x27][^>]*>(.*?)</script>',nord_html,re.S|re.I)
@@ -188,6 +198,10 @@ if isinstance(nord_html,str):
                                            "keys":list(node[0])[:24]})
                     for v in node[:5]:walk(v,path+"[]",depth+1)
             walk(nd)
+            tests.append({"provider":"ALDI Nord pageProps keys",
+                          "result":"embedded_json_parsed",
+                          "page_props_keys":list(nd.get("props",{}).get("pageProps",{}))[:50],
+                          "page_keys":list(nd.get("props",{}).get("pageProps",{}).get("page",{}))[:30] if isinstance(nd.get("props",{}).get("pageProps",{}).get("page",{}),dict) else []})
             tests.append({"provider":"ALDI Nord embedded JSON structure",
                           "result":"embedded_json_parsed","root_keys":list(nd)[:10],
                           "offer_get_paths":api_keys[:8],"candidate_product_lists":candidates[:8]})
@@ -196,12 +210,22 @@ if isinstance(nord_html,str):
                           "result":"parse_error","reason":str(e)[:140]})
 
 if isinstance(kaufland_html,str):
+    def excerpt_around(needle):
+        loc=kaufland_html.find(needle)
+        return kaufland_html[max(0,loc-80):loc+320] if loc>=0 else None
+    tests.append({"provider":"Kaufland embedded offer excerpts",
+                  "result":"observed_html","first_dateFrom_context":excerpt_around('"dateFrom"'),
+                  "first_price_context":excerpt_around('"price"')})
     tests.append({"provider":"Kaufland next-week embedded data signals",
                   "result":"html_metadata_examined",
                   "price_field_mentions":len(re.findall(r'["\x27]price["\x27]\s*:',kaufland_html)),
                   "date_from_mentions":kaufland_html.count("dateFrom"),
                   "kloffers_mentions":kaufland_html.count("kloffers"),
                   "sales_from_mentions":kaufland_html.count("salesFrom")})
+
+# One conservative alternate path-format probe; no app-only authentication headers.
+safe_request("Lidl sample store key without country prefix",
+             "https://offers.lidlplus.com/app/api/v4/DE/7434/offers")
 
 summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),
          "purpose":"read-only snapshot of public retailer offering APIs",
