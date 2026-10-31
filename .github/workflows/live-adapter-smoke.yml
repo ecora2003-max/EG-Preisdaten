@@ -1,0 +1,28 @@
+name: Live offer adapter compatibility smoke
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/live_adapter_smoke.py'
+      - '.github/workflows/live-adapter-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Read-only live official endpoints and validate adapter output
+        run: python3 tools/live_adapter_smoke.py
+      - name: Save schema compatibility result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: retailer-adapter-live-compatibility
+          path: results/live_adapter_smoke.json
+          if-no-files-found: warn
+          retention-days: 7
