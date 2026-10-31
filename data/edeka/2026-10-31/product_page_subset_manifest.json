@@ -1,0 +1,17 @@
+{
+  "checked_utc": "2026-10-31T15:33:46.940856+00:00",
+  "retrieved_from": "https://www.edeka.de/sortiment/{gtin}/",
+  "start_utc": "2026-10-31T15:30:28.636106+00:00",
+  "data_type": "PUBLIC_PRODUCT_PAGE_SUBSET",
+  "all_products_complete": false,
+  "real_prices_present": false,
+  "published_full_search_size": "about 6000 products, not tested as a stable complete count",
+  "reason_not_complete": "Product search pages were HTTP 403 in GitHub Actions; link-graph crawl is partial.",
+  "pages_attempted": 240,
+  "products_parsed": 240,
+  "links_seen": 5449,
+  "queue_remaining": 829,
+  "stopped_due_to": "REACHED_MAX_PAGE_CAP",
+  "errors": [],
+  "public_snapshot_permission": "User reported authorization to download and publish EDEKA catalogues; terms not independently checked."
+}
