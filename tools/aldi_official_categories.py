@@ -32,7 +32,7 @@ try:
             for child in node.values():walk(child,depth+1)
         elif isinstance(node,list):
             for x in node:walk(x,depth+1)
-    for h in top:walk(h.get("sideDrawerNavigation") or [])
+    walk(top)
     cats=sorted(set(names))
     out={"links":len(cats),"examples":cats[:60],
          "leaf_like":len([x for x in cats if x.count("/")>=5]),
