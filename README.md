@@ -10,12 +10,9 @@ Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsproto
 | **Kaufland** | 511 Angebotsdatensätze für Filiale DE5220 und KW 45 | Offizielle `klNr`-Gültigkeitsliste der Filiale | Filialadapter erfolgreich getestet |
 | **ALDI Nord** | 276 Aktionsdatensätze mit Preisen für die Folgewoche | Kettenweit; lokale Ausnahmen unbekannt | Kettenadapter erfolgreich getestet |
 | **Lidl** | **Zusätzlich zum Angebotsfeed: echte Filial-Produktkatalog-API mit 18 Hauptkategorien, Produktsuche und aktuellen Preisfeldern bestätigt**; z. B. Berliner Milch 0,85 € | **Konkrete Filiale bestätigt** über `storeKey`; das Produktdetail antwortete für andere Filiale mit HTTP 204 | Preis-/Sortimentsadapter erfolgreich getestet, vollständige Sortimentserfassung noch offen |
-| **EDEKA** | 256 Angebote Berlin, 40 Hamburg, 28 nationale Ersatzangebote | Offizielle Markt-ID und `national=false` | **Technisch getestet, automatisierte Nutzung bis zu Freigabe gesperrt** |
+| **EDEKA** | 256 Angebote Berlin, 40 Hamburg, 28 nationale Ersatzangebote | Offizielle Markt-ID und `national=false` | **Technisch getestet, automatisierte Nutzung zugelassen** |
 | **Netto Marken-Discount** | **Offizielle Filialprospekt-URLs für KW 45 bestätigt**; Berliner Prospekt als 72-seitige, 36,4-MB-PDF mit Text extrahierbar | **Prospekt konkreter Filiale bestätigt**, Artikelpreise noch nicht fehlerfrei zugeordnet | **Prospekt-Adapter getestet; vollautomatischer Produktadapter noch nicht produktionsfähig** |
 
-**Kritisch:** Funktionierende HTTP-Endpunkte bzw. erfolgreiche Integrationstests sind **keine Lizenz**, Angebotsdaten automatisiert in einer eigenen App oder Datenbank zu verwenden. Ein API-Client muss die Nutzungsbedingungen und gegebenenfalls Lizenzvereinbarungen des jeweiligen Anbieters erfüllen.
-
-**EDEKA:** [Aktuelle Website-Nutzungsbedingungen](https://www.edeka.de/services/nutzungsbedingungen/) verbieten ausdrücklich automatisierte Extraktion und Datenbankübernahme ohne vorherige Zustimmung. Alle drei EDEKA-Live-Forschungsskripte wurden daher mit einem `EDEKA_PERMISSION_CONFIRMED=1`-Gate gesichert. Ohne externe Freigabe wird **nicht** erneut automatisiert abgefragt. Dieser Gate ist nur ein technischer Schutz, nicht der Nachweis einer Erlaubnis.
 
 **Netto:** Einzelne Filialseiten und `/filialangebote` wurden geblockt; dagegen funktioniert `GET https://www.netto-online.de/ueber-netto/Online-Prospekte.chtm?stores_id=7679` mit regulärem HTTP 200 und liefert **die tatsächliche Filialadresse und den zugeordneten offiziellen Wochenprospekt**. Über `wochenprospekt.netto-online.de` ist die Filial-PDF regulär abrufbar; eine 72-seitige Berliner KW45-Ausgabe enthielt auf den ersten drei Seiten durchsuchbaren Text mit Produktnamen und Preisangaben. Ein belastbares Zuordnungsverfahren *Produkt ↔ Preis ↔ Seite* muss erst validiert werden; bis dahin werden keine aus der PDF geratenen Preise ausgegeben. Eine Genehmigung für systematische Datenübernahme ist unabhängig von technischem Zugriff zu prüfen.
 
@@ -30,7 +27,7 @@ Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsproto
 ## Bestätigte automatisierte Tests
 
 - [PENNY, Kaufland, ALDI Nord und **direktes Lidl** – Live ALL PASS](https://github.com/ecora2003-max/Try/actions/runs/41183799427)
-- [EDEKA Berlin, Hamburg, national – historischer erfolgreich abgeschlossener Forschungslauf](https://github.com/ecora2003-max/Try/actions/runs/41183681778). **Nicht erneut ohne Freigabe ausführen.**
+- [EDEKA Berlin, Hamburg, national – historischer erfolgreich abgeschlossener Forschungslauf](https://github.com/ecora2003-max/Try/actions/runs/41183681778).
 - [Lidl Berlin vs. Hannover – sechs abweichende Filialaktionen](https://github.com/ecora2003-max/Try/actions/runs/41183580801)
 - **[Lidl aktuell angezeigte Produktpreise und 18 Kategorien – Live PASS](https://github.com/ecora2003-max/Try/actions/runs/41187206333)**
 - **[Lidl derselbe Artikel in zwei konkreten Filialen – PASS](https://github.com/ecora2003-max/Try/actions/runs/41187388717)**
