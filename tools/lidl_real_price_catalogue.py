@@ -85,11 +85,11 @@ if isinstance(cats,dict):
     catarr=cats.get("categories") or []
     checks.append({"label":"Lidl category index","count":len(catarr),
                    "categories":[{k:c.get(k) for k in ("id","name","hasSubcategories")} for c in catarr[:22] if isinstance(c,dict)]})
-    # Use only one official index-linked category for a paginated list check.
+    # Verify one small official category end-to-end with a single 30-item page.
     chosen=next((c for c in catarr if isinstance(c,dict) and not c.get("hasSubcategories") and c.get("id")),None)
     if chosen is not None:
-        path=f"/api/app/v1/DE/store/DE7434/categories/{quote(str(chosen['id']),safe='')}/products?skip=0&limit=5&date=2026-10-31"
-        summarize("Lidl direct category product data",get("Lidl first 5 products for category",path))
+        path=f"/api/app/v1/DE/store/DE7434/categories/{quote(str(chosen['id']),safe='')}/products?skip=0&limit=30&date=2026-10-31"
+        summarize("Lidl direct category product data",get("Lidl complete 29-product category page",path))
     else:
         chosen=next((c for c in catarr if isinstance(c,dict) and c.get("id")),None)
         if chosen:
