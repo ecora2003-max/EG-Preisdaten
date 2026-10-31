@@ -1,0 +1,18 @@
+# Quellen- und Rechtebewertung (31.10.2026)
+
+Die [8-Händler-Matrix](STATUS.md) beruht auf datierter Forschung aus dem ehemaligen Try, **nicht** auf neuen Live-Abfragen dieses Implementierungslaufs. `LIVE_VERIFIED` heißt: eine begrenzte technische Quelle gab damals reale Daten zurück; **keine** Lizenz, Kassenpreistreue, flächendeckende Abdeckung oder dauerhafte Verfügbarkeit. Die Quellrechte sind getrennt bewertet: `UNVERIFIED` (keine belegte Nutzungsfreigabe), `RESTRICTED` (EDEKA; für fortlaufende Produktivnutzung keine ausreichende Freigabe). Im Produktionsanzeigemodus `APP_DISPLAY` werden beide Kategorien gesperrt.
+
+## Belege pro Quelle
+
+- **Lidl:** [vollständiger API-interner Kategorienbaum 69/69, 2.005 Einträge](../reports/umfang-und-aktualitaet-preisdaten-2026-10-31.md); Angebot und Regalpreis getrennt, konkrete Filial-IDs; mögliche Angebots-/App-Bedingungen, keine Kassenprüfung.
+- **ALDI Nord:** [Kategoriesnapshots und Live-Preise](../reports/gesamter-preiskatalog-aldi-nord-rewe-aldi-sued-2026-10-31.md); kettenweite Angabe, keine einzelne Filialpreisgarantie; dynamische und möglicherweise gecachte aktuelle Preise nicht mit historischen Preisen verwechseln.
+- **ALDI Süd:** [Produktpreis-GET](../reports/rewe-aldi-sued-echte-preisantworten-2026-10-31.md) und [inkonsistente Gesamt-Pagination](../reports/umfang-und-aktualitaet-preisdaten-2026-10-31.md), kein Vollständigkeitsbeweis.
+- **REWE:** [preisunterschiedliche Filial-Suchantworten](../reports/umfang-und-aktualitaet-preisdaten-2026-10-31.md); eigene Angebotszukunft und sortimentsweite Pagination ungeklärt.
+- **PENNY:** [193 bepreiste regionale Angebote](../reports/vollsortiment-preise-angebote-2026-10-31.md), Verkaufregion pro ausgewähltem Markt/Woche. Kein belegter Normalpreiskatalog.
+- **Kaufland:** [511 datierte klNr-Marktangebote](../reports/vollsortiment-preise-angebote-2026-10-31.md), Marktplatz-API ist nicht mit Regalpreisen identisch.
+- **EDEKA:** [Markt- und Produktseiten-Snapshot](../reports/edeka-katalog-snapshot-status-2026-10-31.md); frühere durch Nutzer berichtete begrenzte Freigabe zur Erforschung/Speicherung ist kein geprüfter Nachweis für regelmäßigen Transfer in eine App; automatisierte fortlaufende Verwertung bleibt gesperrt.
+- **Netto Marken-Discount:** [Filial-Angebotskacheln](../reports/netto-filialangebote-produkte-preise-api-pruefung-2026-10-31.md), [Online-Shop-Preise](../reports/netto-onlineproduktpreis-erfolgreich-2026-10-31.md), [nur statischer MPOS-Datentyp](../reports/netto-produktsuche-filialpreise-status-2026-10-31.md). Netto Marken-Discount ist nicht Netto Scottie/Salling.
+
+**Externe Drittquellen** (Open Prices, Open Food Facts, Aggregator-/Prospektdaten): [frühere Open-Data-Recherche](../tools/open_de_prices_coverage.py) enthält gemischte Provenienzen. Historische Community-Preise sind nicht heutige Filialkassenpreise; Quellattribution, Lizenzen, Filialbezug und beobachtetes Datum müssen einzeln geprüft werden. Keine automatische Übernahme, kein vermutetes Weiterverbreitungsrecht.
+
+**Betrieb:** Der neue Adapter macht keine selbstständigen GET-Aufrufe, keinen Zugriff auf Kundensitzungen, keine Umgehung von robots/403/429. `sourceUrl` akzeptiert ausschließlich anonyme HTTPS-Anbieterhosts passend zur Händler-ID. Reine Parse- oder GET-Erfolge sind nicht gleich `PERMITTED`. Einzelne Quellen müssen vor App-Nutzung rechtskonform freigegeben, mit reproduzierbarem schmalem Live-Snapshot geprüft und separat dokumentiert werden.
