@@ -3,7 +3,7 @@ import json
 import unittest
 from decimal import Decimal
 from adapters.retailer_offers import (
-    Scope, Offer, money, penny_store, penny_offers, aldi_nord_next,
+    Scope, Offer, money, penny_store, penny_offers, penny_merge_categories, aldi_nord_next,
     kaufland_offers, lidl_flyer, edeka_offers, netto_status
 )
 
@@ -37,6 +37,17 @@ class RetailerContracts(unittest.TestCase):
         self.assertEqual(offers[0].price_condition,"1.29²")
         self.assertIsNone(offers[0].valid_to)
         self.assertEqual(offers[0].scope,Scope.REGION)
+
+    def test_penny_multi_category_deduplication(self):
+        a={"offerTiles":[{"uuid":"a","title":"Äpfel","price":"1.49"}]}
+        b={"offerTiles":[{"uuid":"a","title":"Äpfel","price":"1.49"},
+                          {"uuid":"b","title":"Tomaten","price":"1.29"}]}
+        offers=penny_merge_categories({"obst-und-gemuese":a,"top-angebote":b},
+                                     region="15A-01-56",week_start="2026-11-02")
+        self.assertEqual(len(offers),2)
+        with self.assertRaises(ValueError):
+            penny_merge_categories({"A":a,"B":{"offerTiles":[{"uuid":"a","title":"Äpfel","price":"2.99"}]}},
+                                  region="15A-01-56",week_start="2026-11-02")
 
     def test_aldi_nord_embedded_next_week_and_no_store_guarantee(self):
         p={"props":{"pageProps":{"apiData":json.dumps([["OFFER_GET",{
