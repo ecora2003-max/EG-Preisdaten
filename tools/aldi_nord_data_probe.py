@@ -33,6 +33,32 @@ try:
                     result["api_data_parsed"]="json"
                 except (ValueError,TypeError):
                     result["api_data_parsed"]="not_json"
+
+            if isinstance(v,list):
+                result["api_data_entries"]=len(v)
+                result["query_types"]=[entry[0] for entry in v[:20] if isinstance(entry,list) and entry]
+                offer_entries=[entry for entry in v if isinstance(entry,list) and len(entry)>1 and entry[0]=="OFFER_GET"]
+                result["offer_get_entries"]=len(offer_entries)
+                if offer_entries:
+                    body=offer_entries[0][1]
+                    result["offer_request"]=body.get("req") if isinstance(body,dict) else None
+                    response=body.get("res") if isinstance(body,dict) else None
+                    result["offer_response_keys"]=list(response)[:25] if isinstance(response,dict) else []
+                    if isinstance(response,dict):
+                        amap=response.get("algoliaDataMap")
+                        if isinstance(amap,dict):
+                            result["algolia_products_count"]=len(amap)
+                            sample=[]
+                            for sku,prod in list(amap.items())[:3]:
+                                if isinstance(prod,dict):
+                                    item={"product_key":sku,"keys":list(prod)[:45]}
+                                    for field in ("name","title","productName","price","priceValue",
+                                                  "priceNew","sellingSize","quantity","unit",
+                                                  "productTitle","subHeadline","headline"):
+                                        if field in prod:item[field]=str(prod[field])[:140]
+                                    sample.append(item)
+                            result["product_samples"]=sample
+
             if isinstance(v,dict):
                 result["api_data_root_keys"]=list(v)[:30]
                 found=[]
