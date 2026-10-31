@@ -4,6 +4,12 @@
 Network diagnostics for a regular HTTP client. This is NOT a license to scrape.
 """
 import json
+
+# Website content terms prohibit automated collection absent explicit permission.
+import os
+if os.environ.get("EDEKA_PERMISSION_CONFIRMED") != "1":
+    print("SKIPPED: EDEKA.de requires prior explicit permission for automated retrieval.")
+    raise SystemExit(0)
 from datetime import datetime,timezone
 from pathlib import Path
 from urllib.parse import urlencode
