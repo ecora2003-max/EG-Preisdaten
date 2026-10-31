@@ -10,7 +10,7 @@
 | [`data/edeka/2026-10-31/offer_products_10003451.json`](../data/edeka/2026-10-31/offer_products_10003451.json) | Normalisierte Artikelnamen, Angebots-IDs, Preise, Basispreis-Texte und Validität für Berlin | **256** Zeilen, ausdrücklich **nur Angebotsartikel** |
 | [`data/edeka/2026-10-31/offers_913988_raw.json`](../data/edeka/2026-10-31/offers_913988_raw.json) | Vollständige offizielle Angebots-API-Antwort für Markt-ID `913988` (Hamburg) | **40 von 40** gemeldeten Angeboten, **40** numerische Preise |
 | [`data/edeka/2026-10-31/offer_products_913988.json`](../data/edeka/2026-10-31/offer_products_913988.json) | Normalisierte Angebotsprodukte und Preise für Hamburg | **40** Zeilen |
-| [`data/edeka/2026-10-31/product_page_subset.json`](../data/edeka/2026-10-31/product_page_subset.json) | Offizielle EDEKA-Produktseiten: Produkt-ID/GTIN, Produktname, Produkt-URL, unbekannter Preis | **240 unterschiedliche Produkte**; **kein** Normalpreis |
+| [`data/edeka/2026-10-31/product_page_subset.json`](../data/edeka/2026-10-31/product_page_subset.json) | Offizielle EDEKA-Produktseiten: Numerische Produktseiten-ID (als GTIN-Kandidat, nicht unabhängig anhand der Packung verifiziert), Produktname, Produkt-URL, unbekannter Preis | **240 unterschiedliche Produkte**; **kein** Normalpreis |
 | [`data/edeka/2026-10-31/manifest.json`](../data/edeka/2026-10-31/manifest.json) | Quellen, Marktauswahl, Zählwerte, Zeitpunkte, SHA-256 der offiziellen Angebotsantworten | Erfasst |
 | [`data/edeka/2026-10-31/product_page_subset_manifest.json`](../data/edeka/2026-10-31/product_page_subset_manifest.json) | Crawl-Grenzen, Fehler, eindeutige Produktzahl, Titelbereinigung | Erfasst |
 
