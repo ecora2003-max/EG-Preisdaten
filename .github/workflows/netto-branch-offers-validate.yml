@@ -1,0 +1,30 @@
+name: Netto validated public branch-offer prices
+on:
+  push:
+    branches: [main]
+    paths:
+      - catalogues/netto_branch_offers.py
+      - tools/netto_branch_offers_live_check.py
+      - .github/workflows/netto-branch-offers-validate.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install free HTML parser
+        run: python3 -m pip install --disable-pip-version-check beautifulsoup4
+      - name: Check product names, displayed prices, item IDs and validity
+        run: python3 tools/netto_branch_offers_live_check.py
+      - name: Save observed official offers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: netto-validated-branch-offers
+          path: results/netto_branch_offer_live_check_20261031.json
+          retention-days: 7
