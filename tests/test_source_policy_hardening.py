@@ -59,7 +59,7 @@ class SourcePolicyHardening(unittest.TestCase):
                     "https://" + HOSTS[retailer] + "/search?x-api-key=synthetic",
                     "https://" + HOSTS[retailer] + "/search#access_token=synthetic",
                     " https://" + HOSTS[retailer] + "/search",
-                    "https://" + HOSTS[retailer] + "/search\\n")
+                    "https://" + HOSTS[retailer] + "/search\n")
             for url in urls:
                 with self.subTest(retailer=retailer, url=url):
                     snapshot = official(retailer, channel="REGULAR", sourceUrl=url)
