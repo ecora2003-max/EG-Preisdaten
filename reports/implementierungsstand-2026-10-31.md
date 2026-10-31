@@ -11,7 +11,7 @@
 | **ALDI Nord** | `__NEXT_DATA__` → `apiData` → `OFFER_GET,week=next` | 276 bepreiste Angebote. `CHAIN_WIDE_REPORTED`. | Keine bestätigte Abbildung von lokalen Filialausnahmen |
 | **Lidl** | `stores.lidlplus.com/api/v4/DE` und `offers.lidlplus.com/app/api/v4/DE/{storeKey}/offers` | Filiale DE7434: 78 Angebotsobjekte, davon 65 direkte `StoreSpecialPriceDiscount` mit Preis und Datum. `STORE_CONFIRMED`. Hannover DE7602 72 Objekte, sechs nur in Berlin. | Weitere Rabattmechaniken nicht als gewöhnliche Einzelpreise interpretieren; Vorschau der Folgewoche ggf. erst später verfügbar |
 | **EDEKA** | `edeka.de/api/marketsearch/markets`; `edeka.de/eh/service/eh/offers?marketId=...` | Berlin-ID 10003451: 256 Angebote, Hamburg-ID 913988: 40, beide `national:false`. Fallback `marketId=1`: 28, `national:true`. Technisch `STORE_CONFIRMED` nur für `national:false`. | **Kein regulärer automatisierter Betrieb ohne ausdrückliche EDEKA-Zustimmung**; EDEKA.de-Nutzungsbedingungen untersagen automatisierte Datenübernahme |
-| **Netto Marken-Discount** | Offizielle Prospektübersicht mit einfachem HTTP 200; Filialseiten mit 403 | Konkrete Filialseiten auch in gewöhnlichem Headless Chrome `Access Denied`. Keine bestätigte Produkt-/Filial-API. | Blockiert; schriftlich autorisierte Datenquelle oder klar als manuell gekennzeichneter Import nötig |
+| **Netto Marken-Discount** | **Offizielle Prospektübersicht mit `stores_id` und eigener Publitas-Prospekt-/PDF-Adresse pro Filiale** | Für Filiale `7679` und `8135` wird die tatsächliche Adresse und der individuelle KW45-Prospekt nachgewiesen. Berliner PDF: 72 Seiten/36,4 MB, Text extrahierbar. | Filialprospekt technisch implementiert, Produkt-Preis-Paare **nicht** validiert; automatischer Warenkorb-Feed noch offen |
 
 Diese Ergebnisse belegen **technische Erreichbarkeit und Parserfunktion**, keine Nutzungsrechte. Ein Betrieb und insbesondere eine öffentliche Weiterverwertung sind separat mit den Händlern abzuklären.
 
@@ -55,12 +55,33 @@ StoreKeys DE7434 (Berlin) und DE7602 (Hannover) lieferten 78 bzw. 72 Aktionen. A
 
 Die API ist technisch arbeitsfähig (Markt-ID, Preisfelder, `national:false`, Start-/Enddatumswerte in Unix-Millisekunden). **Aktuelle [EDEKA.de Website-Inhaltsbedingungen](https://www.edeka.de/services/nutzungsbedingungen/) verbieten jedoch automatisiertes Erfassen, Speichern, Zusammenführen und Wiederverwenden der Webseiteninhalte ohne ausdrückliche vorherige Zustimmung.** Aus HTTP 200 folgt keine Genehmigung. Deshalb sind `tools/edeka_live_adapter.py`, `tools/edeka_netto_basic_http.py` und `tools/edeka_netto_market_source.py` gegen unbeabsichtigte Aufrufe geschützt (ohne `EDEKA_PERMISSION_CONFIRMED=1` keine neue Anfrage). Ein produktiver Entwickler muss eine gültige Erlaubnis/vertragliche API-Nutzung klären.
 
-### Netto Marken-Discount: verbleibender technischer Zugangsblocker
+### Netto Marken-Discount: Filialprospekt-Zuordnung **erfolgreich**, Preiszuordnung weiterhin offen
 
-Offizielle Einzel-Filialangebote existieren, aber aus GitHub Actions blockiert die Filial-URL mit 403; normaler Headless Chrome wird aktiv mit „Access Denied“ beantwortet. Eine Intershop-Filialfinder-API ist in Drittcodes dokumentiert, aber **kein zuverlässig erreichbarer, freigegebener filialspezifischer Angebotsfeed**. Kein Browser-Fingerprinting/Stealth, kein CAPTCHA-Bypass und kein Übernehmen fremder API-Credentials implementiert. Marktguru/KaufDA sind keine pauschal zulässigen Ersatzdatenquellen für eine Drittanbieter-App.
+Die statischen Einzel-Filialseiten und `/filialangebote` liefern teilweise HTTP 403 bzw. in einem normalen Headless Chrome eine `Access Denied`-Seite. **Die offizielle Filialprospektübersicht ist dagegen direkt erreichbar**:
+
+`GET https://www.netto-online.de/ueber-netto/Online-Prospekte.chtm?stores_id=7679`
+
+Die öffentliche Antwort (HTTP 200) enthält eine eindeutige Filialadresse und den regulären Filial-Wochenprospekt als Link:
+
+`https://wochenprospekt.netto-online.de/hz45_besb/?storeid=7679`
+
+Für Kaiserslautern mit ID `8135` lautet der nachgewiesene KW45-Prospekt-Link:
+
+`https://wochenprospekt.netto-online.de/hz45_wrse/?storeid=8135`
+
+Diese beiden Filialen benutzen unterschiedliche Prospektkennungen. Der Viewer gibt für jede Filiale eine **regulär abrufbare PDF von `view.publitas.com`** aus, ohne Login und ohne Browser-Stealth. Ein zeitlich und mengenmäßig begrenzter Test der Berliner PDF ergab:
+
+- **72 Seiten**, **36.411.054 Byte**;
+- `pdftotext -layout` konnte lesbaren Text extrahieren, darunter Angebotszeitraum 02.–07.11.2026 und Produktnamen;
+- die ersten drei Seiten enthielten **80 preisähnliche Zahlenfolgen**, jedoch auch Streichpreise, Grundpreise und Mengeneinheiten;
+- deshalb ist die fehlerfreie Verbindung *Produktname ↔ korrekter Aktionspreis ↔ Gültigkeit* **noch nicht erwiesen**.
+
+**Neuer implementierter Parser:** `netto_store_prospects(page_html, store_id)` in [`adapters/retailer_offers.py`](../adapters/retailer_offers.py) prüft den ausgewählten Markt anhand der offiziellen Adresse und validiert eine Prospekt-URL nur, wenn die `storeid` im Link genau übereinstimmt und der Host `wochenprospekt.netto-online.de` ist. Er setzt explizit `offers_parsed=false`; keine fälschlich versprochenen Einzelpreise. [Offline-Test](../tests/test_retailer_offers.py) und [Live-Test für Berlin/Kaiserslautern – PASS](https://github.com/ecora2003-max/Try/actions/runs/41184627158). [PDF-Texttest – PASS](https://github.com/ecora2003-max/Try/actions/runs/41184427978). [Blockierter Filialproduktseiten-Check](https://github.com/ecora2003-max/Try/actions/runs/41184674088).
+
+Die PDFs wurden nur im flüchtigen GitHub-Runner verarbeitet und nicht im öffentlichen Repository gespeichert. Rechte für eine reguläre automatisierte Übernahme der Prospektinhalte in die eigene App müssen vor Produktivbetrieb gesondert geklärt werden; Zugriffsmöglichkeiten alleine erteilen keine Lizenz.
 
 ## 4. Nächste Implementierungsschritte in der Android-App
 
 [Parser und Angebotsdatentyp](../adapters/retailer_offers.py) und [Vertragstests](../tests/test_retailer_offers.py) sind in Python als Referenz implementiert, **noch nicht nach Kotlin portiert**. Zu implementieren bleiben: Nutzer-Filialauswahl und persistierte Store-/Regionskennungen, eine kontrollierte Abfrage-/Cache-Schicht, fehlertoleranter JSON-Import, Preis-/Packungsnormalisierung, Unterscheidung App-Preis/Kassenpreis und tagesgenauer Gültigkeit, UI für verbleibende Angebotsunsicherheit und Datenschutz/Lizenzen.
 
-**Weder EDEKA noch Netto sind ohne weitere Klärung betriebsbereit**. Technisch erreichbare Daten sind nicht automatisch legal in eigene Produkte übertragbar. Eine vollständige, verlässliche Sechs-Händler-Produktion kann deshalb derzeit nicht seriös als abgeschlossen bezeichnet werden.
+**EDEKA bleibt aus Nutzungsrechtsgründen gesperrt; Netto besitzt einen technisch verifizierten Filial-Prospektadapter, jedoch noch keinen verlässlichen Produkt-Preis-Parser.** Technisch erreichbare Daten sind nicht automatisch legal in eigene Produkte übertragbar. Eine vollständige, verlässliche Sechs-Händler-Produktion kann deshalb derzeit nicht seriös als abgeschlossen bezeichnet werden.
