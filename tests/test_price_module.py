@@ -1,3 +1,4 @@
+from decimal import Decimal
 """Offline contract, provider, negative and bridge tests. No network or user data."""
 import copy
 import json
@@ -279,10 +280,14 @@ class ModuleTests(unittest.TestCase):
         netto=source("NETTO_MD","REGULAR",netto_html,
                      "https://www.netto-online.de/produkt/haferflocken",
                      contentType="text/html")
+        # Preserve the historical independent HTML parser, but never expose
+        # an intentionally out-of-scope REGULAR channel through the facade.
+        from catalogues.netto_online import prices_from_product_html
+        research=prices_from_product_html(netto_html,netto["sourceUrl"])
+        self.assertEqual(research[0].price_eur,Decimal("1.89"))
         result=self.service.search_catalog_prices({**REQUEST,"retailerIds":["NETTO_MD"]},[netto])
-        self.assertEqual(result["observations"][0]["payload"]["priceKind"],"ONLINE_LISTED")
-        self.assertEqual(result["observations"][0]["payload"]["scope"]["scopeType"],"ONLINE")
-        self.assertEqual(result["observations"][0]["payload"]["priceCents"],189)
+        self.assertEqual(result["observations"],[])
+        self.assertEqual(result["errors"][0]["code"],"CAPABILITY_NOT_ALLOWED")
 
 
     def test_lidl_two_pages_complete_only_when_contiguous(self):
@@ -778,6 +783,65 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(len(allowed["observations"]),1)
         self.assertEqual(allowed["observations"][0]["payload"]["source"]["origin"],
                          "synthetic-fixture")
+
+
+    def test_adr016_capability_policy_is_exact_architecture_snapshot(self):
+        policy=json.loads(Path("price_module/retailer_capabilities.v1.json").read_text())
+        self.assertEqual(policy["policyVersion"],"1.0.1")
+        self.assertEqual(policy["category"],"PROJECT_FUNCTIONAL_CAPABILITY_NOT_LEGAL_PERMISSION")
+        reg=provider_registry()
+        self.assertEqual(set(policy["retailerCapabilities"]),set(reg))
+        targeted={"ALDI_NORD","ALDI_SUED","REWE","LIDL"}
+        offers=set(reg)
+        self.assertEqual({r for r in reg if reg[r]["targetedProductPriceQuery"]},targeted)
+        self.assertEqual({r for r in reg if reg[r]["publishedOfferCollection"]},offers)
+        self.assertTrue(all(not x["dataMayBeRedistributed"] for x in reg.values()))
+
+    def test_adr016_blocks_all_four_out_of_scope_product_price_channels(self):
+        forbidden={"PENNY","KAUFLAND","EDEKA","NETTO_MD"}
+        for retailer in forbidden:
+            with self.subTest(retailer=retailer):
+                regular=fixture([r(id="observed")],retailer=retailer,channel="REGULAR")
+                req={**REQUEST,"retailerIds":[retailer]}
+                result=self.service.search_catalog_prices(req,[regular])
+                self.assertEqual(result["observations"],[])
+                self.assertEqual(result["errors"][0]["code"],"CAPABILITY_NOT_ALLOWED")
+                self.assertEqual(result["coverage"][0]["status"],"POLICY_DENIED")
+                self.assertEqual(result["coverage"][0]["policyVersion"],"1.0.1")
+                self.assertEqual(self.service.lookup_price(req,[regular],"observed")["observations"],[])
+                empty=self.service.search_catalog_prices(req,[])
+                self.assertEqual(empty["errors"][0]["code"],"CAPABILITY_NOT_ALLOWED")
+
+    def test_adr016_separates_offer_collection_and_targeted_catalogue_in_mixed_search(self):
+        datasets=[]
+        for retailer in provider_registry():
+            datasets.append(fixture([r(id="sale",label="Bohnen")],retailer=retailer,channel="SALE"))
+            datasets.append(fixture([r(id="regular",label="Bohnen")],retailer=retailer,channel="REGULAR"))
+        req={**REQUEST,"retailerIds":list(provider_registry()),"query":"Bohnen"}
+        out=self.service.search(req,datasets)
+        self.assertEqual(len(out["observations"]),12) # 8 published offers + 4 scoped catalogues
+        self.assertEqual(len([e for e in out["errors"] if e["code"]=="CAPABILITY_NOT_ALLOWED"]),4)
+        allowed_regular={"ALDI_NORD","ALDI_SUED","REWE","LIDL"}
+        self.assertEqual({x["payload"]["scope"]["retailerId"] for x in out["observations"]
+                          if x["payload"]["priceKind"]=="CURRENT_DISPLAYED"},allowed_regular)
+        for retailer in provider_registry():
+            result=self.service.search_offers({**REQUEST,"retailerIds":[retailer]},
+                                              [fixture([r()],retailer=retailer)])
+            self.assertEqual(len(result["observations"]),1,retailer)
+
+    def test_adr016_policy_gate_precedes_source_rights_and_fixture_mislabel(self):
+        for retailer in ("PENNY","KAUFLAND","EDEKA","NETTO_MD"):
+            dataset=fixture([r()],retailer=retailer,channel="REGULAR")
+            app=self.service.search_catalog_prices(
+                {**REQUEST,"retailerIds":[retailer],"usageMode":"APP_DISPLAY"},[dataset])
+            self.assertEqual(app["errors"][0]["code"],"CAPABILITY_NOT_ALLOWED")
+            self.assertEqual(app["observations"],[])
+        # Not-yet-authorized real offers are functional but still blocked.
+        source_offer=source("EDEKA","SALE",{"national":False,"docs":[]},
+                            "https://www.edeka.de/api/angebote",storeId="D1")
+        app=self.service.search_offers(
+            {**REQUEST,"retailerIds":["EDEKA"],"usageMode":"APP_DISPLAY"},[source_offer])
+        self.assertEqual(app["errors"][0]["code"],"RIGHTS_NOT_CLEARED")
 
 if __name__=="__main__":
     unittest.main()

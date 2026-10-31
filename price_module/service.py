@@ -9,12 +9,19 @@ import json
 import re
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
+from importlib.resources import files
 from urllib.parse import urlsplit, parse_qsl
 from typing import Any
 
 VERSION = "0.1.0"
 CONTRACT_VERSION = "1.0.0-draft"
 _IDS = ("ALDI_NORD", "ALDI_SUED", "LIDL", "REWE", "EDEKA", "NETTO_MD", "PENNY", "KAUFLAND")
+# Read-only, versioned snapshot of the architecture owner's ADR-016 decision.
+# Policy allows a FUNCTION to be developed, not access/reuse of any supplier data.
+_CAPABILITY_POLICY = json.loads(files("price_module").joinpath("retailer_capabilities.v1.json").read_text(encoding="utf-8"))
+_CAPABILITIES = _CAPABILITY_POLICY["retailerCapabilities"]
+if set(_CAPABILITIES)!=set(_IDS):
+    raise RuntimeError("Architecture retailer policy and provider registry diverged")
 # Reports are dated observations, NOT a newly verified licence or a live uptime guarantee.
 _REGISTRY = {
     "ALDI_NORD": ("LIVE_VERIFIED", "LIVE_VERIFIED", "CHAIN_WIDE_REPORTED", "UNVERIFIED", ("aldi-nord.de",)),
@@ -34,6 +41,9 @@ class DataError(ValueError):
 def provider_registry() -> dict[str, dict[str, Any]]:
     return {k: dict(offers=v[0], catalogue=v[1], bestKnownScope=v[2],
                     rights=v[3], lastResearchTest="2026-10-31",
+                    policyVersion=_CAPABILITY_POLICY["policyVersion"],
+                    targetedProductPriceQuery=_CAPABILITIES[k]["targetedProductPriceQuery"],
+                    publishedOfferCollection=_CAPABILITIES[k]["publishedOfferCollection"],
                     dataMayBeRedistributed=(v[3]=="PERMITTED"))
             for k,v in _REGISTRY.items()}
 
@@ -466,6 +476,15 @@ class PriceService:
             raise DataError("INVALID_REQUEST","FoodType ID must be a nonempty identifier")
         found=[]; errors=[]; coverage=[]; seen=set()
         for retailer in dict.fromkeys(retailers):
+            rights=_REGISTRY[retailer][3]
+            capabilities=_CAPABILITIES[retailer]
+            if kind=="REGULAR" and not capabilities["targetedProductPriceQuery"]:
+                errors.append(dict(retailerId=retailer,channel="REGULAR",code="CAPABILITY_NOT_ALLOWED",
+                    message="ADR-016: targeted product prices not enabled for this retailer"))
+                coverage.append(dict(retailerId=retailer,channel="REGULAR",received=0,parsed=0,
+                                     complete=False,status="POLICY_DENIED",rights=rights,
+                                     policyVersion=_CAPABILITY_POLICY["policyVersion"]))
+                continue
             store_selection=selections.get(retailer,{})
             raw_selected=[d for d in datasets if isinstance(d,dict) and d.get("retailerId")==retailer]
             selected=[]
@@ -492,6 +511,15 @@ class PriceService:
             for ds in selected:
                 channel=ds.get("channel")
                 if channel not in ("SALE","REGULAR") or kind!="BOTH" and kind!=channel:continue
+                allowed=(capabilities["publishedOfferCollection"] if channel=="SALE"
+                         else capabilities["targetedProductPriceQuery"])
+                if not allowed:
+                    errors.append(dict(retailerId=retailer,channel=channel,code="CAPABILITY_NOT_ALLOWED",
+                        message="ADR-016: this retailer's requested price function is excluded"))
+                    coverage.append(dict(retailerId=retailer,channel=channel,received=0,parsed=0,
+                        complete=False,status="POLICY_DENIED",rights=rights,
+                        policyVersion=_CAPABILITY_POLICY["policyVersion"]))
+                    continue
                 received=0;parsed=0;complete=False
                 prior_len=len(found); seen_before=seen.copy()
                 try:
