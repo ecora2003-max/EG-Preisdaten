@@ -42,6 +42,9 @@ for url in urls:
         # Prevent dumping potential credentials or sensitive request IDs
         row["public_error_info"]={k:str(obj[k])[:180] for k in ("error","code","message","status","title","detail")
                                   if k in obj and isinstance(obj[k],(str,int))}
+        if isinstance(obj.get("errors"),dict):
+            row["validation_fields"]={str(k)[:80]:[str(x)[:120] for x in v[:3]] if isinstance(v,list) else str(v)[:120]
+                                     for k,v in obj["errors"].items()}
     except Exception:
         row["response_type"]="non-JSON"
     results.append(row)
