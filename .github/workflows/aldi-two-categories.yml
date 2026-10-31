@@ -1,0 +1,24 @@
+name: ALDI Nord two regular categories price coverage
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_two_category_prices.py
+      - .github/workflows/aldi-two-categories.yml
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/aldi_two_category_prices.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-two-category-price-coverage
+          path: results/aldi_two_category_prices.json
+          retention-days: 7
