@@ -46,3 +46,7 @@ python3 -m unittest discover -s tests -v
 ```
 
 Die eingebundenen Feldparsers sind Referenzcode. Die Original-Android-App im separaten Repository wurde nicht geändert. Alle Beispiele gelten für den jeweiligen Testzeitpunkt; Wochenend- und Vorschauangebote sind nicht identisch.
+
+## Wichtige Händleridentität
+
+**Netto Marken-Discount** (`netto-online.de`, EDEKA-Gruppe) ist **nicht** der gleichnamige Netto mit Scottie-Hund (`netto.de`, Salling Group). App-/Preisscanner-Daten und APIs dieser Ketten dürfen nicht vermischt werden. [Neue Recherche und EDEKA-Shop-Zugriffstest](reports/preiskatalog-recherche-2026-10-31-zusatz.md).
