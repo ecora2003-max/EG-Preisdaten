@@ -51,6 +51,9 @@ def main():
    raw=fetch(ean)
    parser=ProductParser();parser.feed(raw)
    name=html.unescape(re.sub(r"\s+"," "," ".join(parser.h1))).strip()
+   # The retailer uses site-dialog headings before its actual product heading.
+   site_chrome="Mein EDEKA: Praktische Infos und Angebote Durchsuche EDEKA.de "
+   if name.startswith(site_chrome):name=name[len(site_chrome):].strip()
    if not name and parser.og_title:name=html.unescape(parser.og_title).strip()
    if name:
     items.append({"product_page_id":ean,"gtin":ean,
