@@ -17,7 +17,7 @@ python3 -m unittest discover -s tests -v
 python3 -m price_module < examples/synthetic-price-query.json
 ```
 
-**CI [95/95 Offline-Tests erfolgreich](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41227740061), getesteter Code `13dcac61ba8a` und 23 Paritätsfälle `6a45e460a3e8`.** Alle acht Anbieter werden weiterhin nur als quellenbelegte Teilabdeckung behandelt; vollständige Nutzungsrechte und Android-Einbau fehlen.
+**CI [97/97 Offline-Tests erfolgreich](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41227950088), geprüfter Code `c78dcb393e8a`, 24 Portierungsvektoren `46e40ed97f06`.** ADR-016-Funktionsmatrix und ADR-014-Rechtsgates sind im Offline-Preisadapter implementiert. Live-Datenrechte, reale Quellenabdeckung und Android-Integration sind weiterhin offen.
 
 Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsprotokolle für eine spätere Integration in die Android-App. Es ist **keine fertig veröffentlichbare Händlerdatenplattform**.
 
