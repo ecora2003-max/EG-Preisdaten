@@ -9,7 +9,7 @@ Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsproto
 | **PENNY** | 193 preislich auswertbare Angebotsdatensätze aus 12 Kategorien für KW 45 | Angebotsregion der konkreten Filiale | Schema + regionaler Adapter erfolgreich getestet |
 | **Kaufland** | 511 Angebotsdatensätze für Filiale DE5220 und KW 45 | Offizielle `klNr`-Gültigkeitsliste der Filiale | Filialadapter erfolgreich getestet |
 | **ALDI Nord** | 276 Aktionsdatensätze mit Preisen für die Folgewoche | Kettenweit; lokale Ausnahmen unbekannt | Kettenadapter erfolgreich getestet |
-| **Lidl** | 65 Einzel-Aktionspreise aus 78 Angeboten der Filiale DE7434 | **Konkrete Filiale bestätigt** über `storeKey` | Filialadapter erfolgreich getestet |
+| **Lidl** | **Zusätzlich zum Angebotsfeed: echte Filial-Produktkatalog-API mit 18 Hauptkategorien, Produktsuche und aktuellen Preisfeldern bestätigt**; z. B. Berliner Milch 0,85 € | **Konkrete Filiale bestätigt** über `storeKey`; das Produktdetail antwortete für andere Filiale mit HTTP 204 | Preis-/Sortimentsadapter erfolgreich getestet, vollständige Sortimentserfassung noch offen |
 | **EDEKA** | 256 Angebote Berlin, 40 Hamburg, 28 nationale Ersatzangebote | Offizielle Markt-ID und `national=false` | **Technisch getestet, automatisierte Nutzung bis zu Freigabe gesperrt** |
 | **Netto Marken-Discount** | **Offizielle Filialprospekt-URLs für KW 45 bestätigt**; Berliner Prospekt als 72-seitige, 36,4-MB-PDF mit Text extrahierbar | **Prospekt konkreter Filiale bestätigt**, Artikelpreise noch nicht fehlerfrei zugeordnet | **Prospekt-Adapter getestet; vollautomatischer Produktadapter noch nicht produktionsfähig** |
 
@@ -32,6 +32,9 @@ Dieses Repository enthält **Python-Referenzadapter**, Tests und Forschungsproto
 - [PENNY, Kaufland, ALDI Nord und **direktes Lidl** – Live ALL PASS](https://github.com/ecora2003-max/Try/actions/runs/41183799427)
 - [EDEKA Berlin, Hamburg, national – historischer erfolgreich abgeschlossener Forschungslauf](https://github.com/ecora2003-max/Try/actions/runs/41183681778). **Nicht erneut ohne Freigabe ausführen.**
 - [Lidl Berlin vs. Hannover – sechs abweichende Filialaktionen](https://github.com/ecora2003-max/Try/actions/runs/41183580801)
+- **[Lidl aktuell angezeigte Produktpreise und 18 Kategorien – Live PASS](https://github.com/ecora2003-max/Try/actions/runs/41187206333)**
+- **[Lidl derselbe Artikel in zwei konkreten Filialen – PASS](https://github.com/ecora2003-max/Try/actions/runs/41187388717)**
+- [Forschungsbericht: tatsächliche Filialpreiskataloge](reports/tatsaechliche-filialpreiskataloge-2026-10-31.md)
 - [Netto: offizielle Filialprospekt-Verknüpfung für zwei Filialen – PASS](https://github.com/ecora2003-max/Try/actions/runs/41184627158)
 - [Netto: Filial-PDF 72 Seiten, textlesbar – PASS](https://github.com/ecora2003-max/Try/actions/runs/41184427978)
 - [Netto: Filialproduktseite weiterhin geblockt](https://github.com/ecora2003-max/Try/actions/runs/41184674088)
