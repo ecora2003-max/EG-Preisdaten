@@ -11,7 +11,10 @@ UA="Ernaehrungsgedaechtnis-Research/2.0 (bounded normal price catalogue live tes
 root="https://www.aldi-nord.de"
 urls=[
  root+"/sortiment/milchprodukte/joghurt-quark-milchdesserts.html",
- root+"/sortiment/milchprodukte/milch-milchgetraenke.html"
+ root+"/sortiment/milchprodukte/milch-milchgetraenke.html",
+ root+"/sortiment/fleisch-wurst/schwein.html",
+ root+"/sortiment/obst-gemuese/tk-obst-gemuese.html",
+ root+"/sortiment/fleisch-wurst/wurstaufschnitt-streichwurst.html"
 ]
 with urlopen(Request(root+"/robots.txt",headers={"User-Agent":UA}),timeout=15) as r:
     rp=RobotFileParser();rp.parse(r.read(250000).decode("utf8","replace").splitlines())
