@@ -28,7 +28,7 @@ def analyze(java):
     getter_names=sorted(set(re.findall(r'\b(?:get|is)([A-Z][A-Za-z0-9]{1,45})\s*\(',java)))
     method_types=[]
     for line in raw_lines:
-        if any(tag in line for tag in ("productSearch(", "getResult()", "getContent()", "getMessage()", "getPrice()", "getDefaultBasePath()", "baseUrl(", "createService(", "getBaseUrl()","Retrofit.Builder","ProductAPIApi.class")):
+        if any(tag in line for tag in ("productSearch(", "getResult()", "getContent()", "getMessage()", "getPrice()", "getCurrentPrice()", "getBasePrice()", "getAmount()", "getDeposit()", "getDefaultBasePath()", "baseUrl(", "createService(", "getBaseUrl()","Retrofit.Builder","ProductAPIApi.class")):
             # whitelist structural method signatures; suppress raw code expressions
             text=line.strip()
             if len(text)>240 or BAD_RE.search(text):continue
