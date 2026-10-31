@@ -76,3 +76,7 @@ Die eingebundenen Feldparsers sind Referenzcode. Die Original-Android-App im sep
 ## Geprüfte Vollständigkeit und Aktualität (31.10.2026)
 
 [**Messbericht für Lidl, ALDI Nord, REWE und ALDI Süd**](reports/umfang-und-aktualitaet-preisdaten-2026-10-31.md): Lidl 69/69 vollständig paginierte Kategorien mit 2.005/2.005 Preisfeldern; ALDI Nord 82/82 Preise in zwei vollständigen Kategorien; REWE 72/72 Preise in sechs Suchantworten, aber Pagination `limit`/`offset` in der Probe ohne Wirkung; ALDI Süd meldet 3.538 Artikel, komplette Abfrage jedoch an HTTP 403 gescheitert. Kein Händler hat im Test eine verifizierte Garantie für die zeitliche Übereinstimmung mit dem Kassenpreis oder eine dokumentierte Preisänderungs-Latenz geliefert.
+
+## 31.10.2026 – Gesamter Preiskatalog: ALDI Nord, REWE, ALDI Süd
+
+[**Messbericht mit Live-Tests, Lücken und echten Pagination-Gegenproben**](reports/gesamter-preiskatalog-aldi-nord-rewe-aldi-sued-2026-10-31.md). **ALDI Nord:** 174 vollständig geladene Sortimentslisten, 1.781 verschiedene IDs; 8 von 3.706 Listeneinträgen ohne Preis, 2.307 Produktseiten in offizieller Sitemap. **REWE stationär:** stets 12 identische IDs pro Suchbegriff; getestete Pagination keine Sortimentsiteration. **ALDI Süd:** 3.537 bepreiste IDs in 60er-Seiten und 3.549 in 48er-Seiten bei gemeldetem `totalCount=3.538`; API-Seiten abrufbar, strenge 100%-Vollständigkeit nicht gesichert. Alle Änderungen ausschließlich in `Try`.
