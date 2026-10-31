@@ -1,0 +1,25 @@
+name: ALDI Nord sitemap product count
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_nord_sitemap_structure.py
+      - .github/workflows/aldi-nord-sitemap-structure.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compare sitemap URLs and product category listing count
+        run: python3 tools/aldi_nord_sitemap_structure.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aldi-nord-sitemap-coverage
+          path: results/full_catalogue_access_20261031/aldi_nord_sitemap_structure.json
+          retention-days: 7
