@@ -1,0 +1,24 @@
+name: GK retailer scan-go master data public documentation test
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/gk_official_selfscan_docs.py
+      - .github/workflows/gk-scango-docs.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/gk_official_selfscan_docs.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gk-real-store-prices-documentation
+          path: results/gk_official_selfscan_docs.json
+          retention-days: 7
