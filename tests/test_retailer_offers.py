@@ -1,0 +1,94 @@
+"""Offline contract tests: no network and no third-party dependencies."""
+import json
+import unittest
+from decimal import Decimal
+from adapters.retailer_offers import (
+    Scope, Offer, money, penny_store, penny_offers, aldi_nord_next,
+    kaufland_offers, lidl_flyer, edeka_offers, netto_status
+)
+
+
+class RetailerContracts(unittest.TestCase):
+    def test_money_decimal_and_comma(self):
+        self.assertEqual(money("1.69"), Decimal("1.69"))
+        self.assertEqual(money("1,49"), Decimal("1.49"))
+        self.assertEqual(money({"amount":1.29}), Decimal("1.29"))
+        self.assertEqual(money("1.234,56"), Decimal("1234.56"))
+        self.assertIsNone(money("1.29²"))
+        self.assertIsNone(money("ab 0.99"))
+        self.assertIsNone(money("-1.00"))
+
+    def test_penny_resolves_week_region_correctly(self):
+        markets=[{"wwIdent":"A1","sellingRegion":"REG-OLD","nextWeekSellingRegion":"REG-NEW"},
+                 {"wwIdent":"B2","sellingRegion":"OTHER","nextWeekSellingRegion":""}]
+        self.assertEqual(penny_store(markets,"A1",week="current")["region"],"REG-OLD")
+        self.assertEqual(penny_store(markets,"A1",week="next")["region"],"REG-NEW")
+        with self.assertRaises(ValueError):penny_store(markets,"B2",week="next")
+        with self.assertRaises(ValueError):penny_store(markets,"Z",week="next")
+
+    def test_penny_app_price_separate(self):
+        offers=penny_offers({"offerTiles":[
+            {"uuid":"a","title":"LEERDAMMER Käse","price":"1.49","benefitPrice":"1.29²","quantity":"je 140 g"},
+            {"uuid":"a","title":"duplicate","price":"99.99"},
+            {"uuid":"bad","title":"Mystery","price":None},
+        ]},region="15A-01-56",week_start="2026-11-02")
+        self.assertEqual(len(offers),1)
+        self.assertEqual(offers[0].price_eur,Decimal("1.49"))
+        self.assertEqual(offers[0].price_condition,"1.29²")
+        self.assertEqual(offers[0].valid_to,"2026-11-08")
+        self.assertEqual(offers[0].scope,Scope.REGION)
+
+    def test_aldi_nord_embedded_next_week_and_no_store_guarantee(self):
+        p={"props":{"pageProps":{"apiData":json.dumps([["OFFER_GET",{
+            "req":{"locale":"de","week":"next"},
+            "res":{"algoliaDataMap":{"100":{"objectID":"100","name":"Erdnüsse",
+                 "currentPrice":1.49,"salesUnit":"200 g"},"200":{"name":"NotPriced"}}}
+        }]])}}}
+        v=aldi_nord_next(p)
+        self.assertEqual(len(v),1)
+        self.assertEqual(v[0].title,"Erdnüsse")
+        self.assertEqual(v[0].scope,Scope.CHAIN)
+        self.assertIsNone(v[0].scope_id)
+
+    def test_aldi_nord_wrong_week_rejected(self):
+        with self.assertRaises(ValueError):aldi_nord_next([["OFFER_GET",{"req":{"week":"current"},"res":{}}]])
+
+    def test_kaufland_intersects_actual_store_list(self):
+        payload={"cycles":[{"categories":[{"offers":[
+            {"klNr":"A","title":"Tofu","price":1.99,"unit":"200 g","salesFrom":"2026-11-02","salesTo":"2026-11-07"},
+            {"klNr":"B","title":"Apfel","price":0.99,"salesFrom":"2026-11-02","salesTo":"2026-11-07"},
+            {"klNr":"C","title":"Too late","price":4.99,"salesFrom":"2026-11-09","salesTo":"2026-11-14"},
+        ]}]}]}
+        listing=[{"klNr":"A","dateFrom":"2026-11-02","dateTo":"2026-11-07"},
+                 {"klNr":"C","dateFrom":"2026-11-02","dateTo":"2026-11-07"}]
+        offers=kaufland_offers(payload,listing,store_id="DE5220",first_day="2026-11-02",last_day="2026-11-08")
+        self.assertEqual([o.title for o in offers],["Tofu"])
+        self.assertEqual(offers[0].scope,Scope.STORE)
+        with self.assertRaises(ValueError):kaufland_offers(payload,listing,store_id="Berlin",first_day="2026-11-02",last_day="2026-11-08")
+
+    def test_kaufland_embedded_html_supported(self):
+        raw='<html><script>const foo={"offerData":{"cycles":[{"categories":[{"offers":[{"klNr":"1","title":"Linsen","price":1.29}]}]}]}};</script></html>'
+        a=kaufland_offers(raw,[{"klNr":"1","dateFrom":"2026-11-02","dateTo":"2026-11-07"}],
+                          store_id="DE4620",first_day="2026-11-02",last_day="2026-11-08")
+        self.assertEqual(len(a),1)
+        self.assertEqual(a[0].scope_id,"DE4620")
+
+    def test_lidl_flyer_must_not_pretend_product_is_store_verified(self):
+        raw={"flyer":{"offerStartDate":"2026-11-02","offerEndDate":"2026-11-07",
+                      "regions":[{"code":"0"}],"products":{"P1":{"title":"LUPILU Overall","price":"19.99"}}}}
+        a=lidl_flyer(raw,expected_start="2026-11-02",confirmed_region_code="0")
+        self.assertEqual(len(a),1)
+        self.assertEqual(a[0].scope,Scope.UNVERIFIED)
+        with self.assertRaises(ValueError):lidl_flyer(raw,expected_start="2026-11-09")
+
+    def test_edeka_documented_schema_is_not_live_verified(self):
+        a=edeka_offers({"docs":[{"titel":"Tofu","preis":"2,29","gueltig_von":"2026-11-02","gueltig_bis":"2026-11-07"}]},market_id="1234")
+        self.assertEqual(len(a),1)
+        self.assertEqual(a[0].scope,Scope.UNVERIFIED)
+
+    def test_netto_fails_closed(self):
+        self.assertEqual(netto_status()["status"],"NOT_IMPLEMENTATION_READY")
+
+
+if __name__=="__main__":
+    unittest.main()
