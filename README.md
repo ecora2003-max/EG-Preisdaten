@@ -62,3 +62,13 @@ Die eingebundenen Feldparsers sind Referenzcode. Die Original-Android-App im sep
 ## Erweiterte APK-Recherche (31.10.2026)
 
 **[Abschlussbericht: sieben vollständige DEX-Retrofit-Scans + Open-Source-Abgleich](reports/vollstaendige-retrofit-endpunktsuche-2026-10-31.md)** · [GitHub-Actions-Lauf: 7/7 erfolgreich](https://github.com/ecora2003-max/Try/actions/runs/41193283187). Die Auswertung extrahierte bisher übersehene ALDI-SÜD-Produktrouten, konkretisierte Nettos filialbezogene `productSearch(searchString, storeId)`, bestätigte Kauflands K-SCAN-Produktdownload und identifizierte über [`chukfinley/bismark`](https://github.com/chukfinley/bismark) eine REWE-Website-Schnittstelle für stationäre Filialpreise. **Alle Befunde sind statische bzw. fremddokumentierte Hinweise; keine neue Live-Preisvalidierung oder Nutzungsfreigabe.**
+
+## Neu: eigene Live-Preisnachweise für REWE und ALDI Süd (31.10.2026)
+
+[**Bericht mit drei realen, stark begrenzten GitHub-Actions-Tests**](reports/rewe-aldi-sued-echte-preisantworten-2026-10-31.md):
+
+- **REWE stationär**: `www.rewe.de/api/stationary-product-search/products?query=Haferflocken&wwIdent=840174` lieferte HTTP 200 und 12 bepreiste Artikel. **Zwei-Markt-Test:** 11 gleiche Produkt-IDs; **5 davon mit unterschiedlichen Preisen** zwischen `wwIdent=840174` und `831002`. Damit sind reale Filialpreisunterschiede am Endpoint empirisch bestätigt. [Lauf](https://github.com/ecora2003-max/Try/actions/runs/41195181867).
+- **ALDI Süd**: `api.aldi-sued.de/v3/product-search`, `servicePoint=B384`, `serviceType=walk-in` lieferte HTTP 200, Preisfelder in Cent. **Ungefilterte Einzelseite** mit `limit=12` meldete `totalCount=3538`, alle **12/12** Artikel auf Seite 1 mit numerischem Preis. Die übrigen 3.526 Artikel **wurden nicht abgerufen oder geprüft**. [Lauf](https://github.com/ecora2003-max/Try/actions/runs/41195314409).
+- [Rein offline nutzbarer Preisnormalisierer](adapters/stationary_price_catalogues.py) mit [erfolgreichen Tests](https://github.com/ecora2003-max/Try/actions/runs/41195124182).
+
+**Datenrechte und Abdeckung offen:** Kein Nachweis einer Lizenz für laufende systematische Datenbankübernahme, keine Vollsortimentabdeckung oder Kassenbon-Validierung, kein produktiver Adapter. Alle neuen Tests sind einmalige, robots-respektierende, anonyme GET-Abfragen ohne Schutzumgehung. Ausschließlich `Try` wurde geändert.
