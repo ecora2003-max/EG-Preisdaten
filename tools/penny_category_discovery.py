@@ -9,7 +9,7 @@ ua="Ernaehrungsgedaechtnis-Research/0.5 (one-shot category discovery)"
 host="https://www.penny.de"
 with urlopen(Request(host+"/robots.txt",headers={"User-Agent":ua}),timeout=15) as f:
     rp=RobotFileParser();rp.parse(f.read(300000).decode("utf-8","replace").splitlines())
-slugs=["top-angebote","obst-gemuese","kuehlregal","fleisch-wurst","drogerie-haushalt","suessigkeiten-snacks","getraenke","weitere-angebote","obst-und-gemuese"]
+slugs=["fleisch-und-wurst","drogerie-und-haushalt","suessigkeiten-und-snacks","penny-ready","puda","best-moments","pflanzen","xxl-lebensmittel-fuer-alle","milprima","kuehlregal"]
 result=[]
 for slug in slugs:
     url=host+"/.rest/offers/by-category/2026-45/"+slug+"?"+urlencode({"region":"15A-01-56"})
