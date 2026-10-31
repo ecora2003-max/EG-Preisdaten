@@ -55,7 +55,7 @@ def cents(value: Any) -> int | None:
 
 def parse_quantity(text: Any) -> dict[str, Any] | None:
     """Only explicit, unambiguous net mass/volume or piece counts; no weight guesses."""
-    if not isinstance(text,str) or not text.strip(): return None
+    if not isinstance(text,str) or not text.strip() or len(text)>256:return None
     s=text.lower().replace("\u00a0"," ").replace("×","x").replace("‐","-")
     pattern=r"(?<![\d.,])\b(?:(\d+)\s*x\s*)?(\d+(?:[.,]\d{1,3})?)\s*-?\s*(kg|g|ml|l|stück|stueck|stk)(?!\w)"
     matches=list(re.finditer(pattern,s))
@@ -68,7 +68,7 @@ def parse_quantity(text: Any) -> dict[str, Any] | None:
     except InvalidOperation:return None
     if unit in ("kg","l"):value*=1000
     total=value*n
-    if n<=0 or total<=0 or total!=total.to_integral_value():return None
+    if n<=0 or n>1000 or total<=0 or total>1_000_000_000 or total!=total.to_integral_value():return None
     normalized="g" if unit in ("kg","g") else "ml" if unit in ("l","ml") else "piece"
     if normalized=="piece" and n>1: return None # ambiguous '2x3 Stück' pack format
     out={"amount":int(total),"unit":normalized,"basis":"PIECE" if normalized=="piece" else "NET",
@@ -264,12 +264,22 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
     ):
         raise DataError("INVALID_ID","FoodType ID must remain source-verified")
     retailer=ds["retailerId"]
+    for key in ("brand","advertisedUnitPrice","referenceOldText","advertisedBenefitText"):
+        if row.get(key) is not None and not isinstance(row[key],str):
+            raise DataError("INVALID_FIELD",f"{key} must be a string or null")
+    raw_id=row.get("id")
+    if raw_id is not None and (type(raw_id) not in (str,int) or isinstance(raw_id,bool)):
+        raise DataError("INVALID_ID","Retailer article identifier is malformed")
     source_scope=row.get("scope") or "UNKNOWN"
     if source_scope not in ("STORE_CONFIRMED","REGION_CONFIRMED","CHAIN_WIDE_REPORTED","ONLINE","UNKNOWN"):
         raise DataError("INVALID_SCOPE","Unexpected scope")
     scope={"retailerId":retailer,"scopeType":source_scope}
     sid=row.get("scopeId")
+    if sid is not None and (not isinstance(sid,str) or not sid.strip()):
+        raise DataError("INVALID_SCOPE","Scope identifier must be nonempty text")
     proof=ds.get("scopeProof") or {}
+    if not isinstance(proof,dict):
+        raise DataError("INVALID_SCOPE","Scope provenance is not an object")
     # A caller-provided market ID alone is not evidence of scope; require explicit
     # provenance binding, checked against exact market/region in parsed response.
     if source_scope=="STORE_CONFIRMED":
@@ -294,7 +304,6 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
     else:dep=cents(row.get("deposit"))
     # Explicit unknowns remain null; do not convert missing deposit to zero.
     name=row["label"].strip()
-    raw_id=row.get("id") if row.get("id") is not None else None
     condition=row.get("conditions") or []
     if not isinstance(condition,list) or any(not isinstance(v,str) for v in condition):
         raise DataError("INVALID_CONDITION","Conditions must be strings")
@@ -386,6 +395,8 @@ def _payload(row: dict[str,Any], ds:dict[str,Any], kind:str, time:str, idx:int,
 class PriceService:
     """All functions are synchronous pure snapshot transforms. No network requests."""
     def search(self, request:dict[str,Any], datasets:list[dict[str,Any]], kind:str="BOTH")->dict[str,Any]:
+        if not isinstance(request,dict) or not isinstance(datasets,list):
+            raise DataError("INVALID_REQUEST","Request object and dataset list required")
         if kind not in ("SALE","REGULAR","BOTH"):raise DataError("INVALID_REQUEST","Invalid price selection")
         day=_date(request.get("shoppingDate"))
         if not day:raise DataError("INVALID_DATE","shoppingDate required")
@@ -393,7 +404,9 @@ class PriceService:
         end=_date(request.get("windowEnd")) or day
         if begin>end:raise DataError("INVALID_DATE","Invalid request window")
         retailers=request.get("retailerIds")
-        if not isinstance(retailers,list) or not retailers or any(x not in _REGISTRY for x in retailers):
+        if not isinstance(retailers,list) or not retailers or any(
+            not isinstance(x,str) or x not in _REGISTRY for x in retailers
+        ):
             raise DataError("INVALID_RETAILER","Select at least one known retailer")
         limit=request.get("maxResults",100)
         if type(limit) is not int or not 1<=limit<=1000:raise DataError("INVALID_REQUEST","maxResults must be 1..1000")
@@ -472,7 +485,8 @@ class PriceService:
                     elif ds.get("format")!="synthetic-fixture":
                         raise DataError("INVALID_FIXTURE","Fixture bypass requires synthetic-fixture format")
                     when=_time(ds.get("observedAt"))
-                    if not ds.get("origin"):raise DataError("INVALID_SOURCE","Origin is required")
+                    if not isinstance(ds.get("origin"),str) or not ds["origin"].strip():
+                        raise DataError("INVALID_SOURCE","Nonempty source origin is required")
                     if ds.get("contentType") not in (None,"application/json","text/html"):
                         raise DataError("INVALID_CONTENT_TYPE","Unexpected content type")
                     if ds.get("contentType")=="text/html" and not (retailer=="ALDI_NORD" and channel=="REGULAR" or retailer=="NETTO_MD"):
@@ -513,7 +527,8 @@ class PriceService:
                                          checkedAt=when,sourceUrl=ds.get("sourceUrl"),
                                          sourceWarnings=summary.get("sourceWarnings",[]),
                                          sourceStatus=summary.get("sourceStatus")))
-                except (DataError, ValueError, TypeError, KeyError, ImportError, json.JSONDecodeError) as exc:
+                except (DataError, ValueError, TypeError, KeyError, AttributeError,
+                        OverflowError, ImportError, json.JSONDecodeError) as exc:
                     # Atomic dataset import: never leak half-parsed output after schema failure.
                     found=found[:prior_len];seen=seen_before
                     code=exc.code if isinstance(exc,DataError) else "SCHEMA_CHANGED"

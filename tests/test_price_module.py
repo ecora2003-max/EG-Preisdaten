@@ -638,5 +638,34 @@ class ModuleTests(unittest.TestCase):
         self.assertEqual(out["observations"],[])
         self.assertEqual(out["errors"][0]["code"],"INVALID_QUANTITY")
 
+
+    def test_malformed_metadata_rejects_entire_snapshot_before_schema_violation(self):
+        samples=[r(id="first"),r(id="second",brand=123)]
+        out=self.service.search_offers(REQUEST,[fixture(samples)])
+        self.assertEqual(out["errors"][0]["code"],"INVALID_FIELD")
+        self.assertEqual(out["observations"],[])
+        samples=[r(id="first"),r(id=["bad"])]
+        out=self.service.search_offers(REQUEST,[fixture(samples)])
+        self.assertEqual(out["errors"][0]["code"],"INVALID_ID")
+        self.assertEqual(out["observations"],[])
+        ds=fixture([r()],scopeProof="not-an-object")
+        out=self.service.search_offers(REQUEST,[ds])
+        self.assertEqual(out["errors"][0]["code"],"INVALID_SCOPE")
+
+    def test_malformed_request_and_origin_fail_without_uncaught_exceptions(self):
+        for request in (None,{},{"shoppingDate":DAY,"retailerIds":[{"bad":1}]}):
+            with self.assertRaises(DataError):
+                self.service.search_offers(request,[])
+        with self.assertRaises(DataError):
+            self.service.search_offers(REQUEST,{"bad":"dataset"})
+        ds=fixture([r()],origin=99)
+        self.assertEqual(self.service.search_offers(REQUEST,[ds])["errors"][0]["code"],
+                         "INVALID_SOURCE")
+
+    def test_extreme_pack_text_is_unknown_not_resource_intensive_or_guessed(self):
+        self.assertIsNone(parse_quantity("9"*260+" kg"))
+        self.assertIsNone(parse_quantity("1001 x 200 g"))
+        self.assertIsNone(parse_quantity("999999999 kg"))
+
 if __name__=="__main__":
     unittest.main()
