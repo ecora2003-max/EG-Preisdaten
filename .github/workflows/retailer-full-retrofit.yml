@@ -1,0 +1,38 @@
+name: Full read-only Retrofit endpoint enumeration
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/retailer_full_retrofit_readonly.py
+      - .github/workflows/retailer-full-retrofit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  extract:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        app: [aldi_sued, rewe, edeka, netto_marken_discount, penny, penny_scan_go, kaufland]
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install static DEX parser
+        run: python3 -m pip install 'androguard>=4.1,<5'
+      - name: Enumerate all declared Retrofit interfaces, product GET routes only
+        run: python3 tools/retailer_full_retrofit_readonly.py --app "${{ matrix.app }}"
+      - name: Upload sanitized result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrofit-annotation-${{ matrix.app }}
+          path: results/retailer_retrofit_annotations/${{ matrix.app }}.json
+          retention-days: 7
+          if-no-files-found: warn
