@@ -1,0 +1,25 @@
+name: Regular assortment product API follow-up
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/full_catalogue_followup.py
+      - .github/workflows/full-catalogue-followup.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  read-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/full_catalogue_followup.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: regular-catalogue-followup
+          path: results/full_catalogue_followup.json
+          retention-days: 7
