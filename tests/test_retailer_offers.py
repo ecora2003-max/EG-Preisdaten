@@ -4,7 +4,7 @@ import unittest
 from decimal import Decimal
 from adapters.retailer_offers import (
     Scope, Offer, money, penny_store, penny_offers, penny_merge_categories, aldi_nord_next,
-    kaufland_offers, lidl_flyer, edeka_offers, netto_status
+    kaufland_offers, lidl_flyer, lidl_store_offers, edeka_offers, netto_status
 )
 
 
@@ -92,6 +92,26 @@ class RetailerContracts(unittest.TestCase):
         self.assertEqual(len(a),1)
         self.assertEqual(a[0].scope,Scope.UNVERIFIED)
         with self.assertRaises(ValueError):lidl_flyer(raw,expected_start="2026-11-09")
+
+    def test_lidl_store_specific_shelf_prices_and_excludes_online(self):
+        common={"startValidityDate":"2026-10-29T00:00:01+00:00",
+                "endValidityDate":"2026-10-31T23:59:59+00:00"}
+        p={"totalOffers":3,"offers":[
+            dict(common,id="a",title="Mövenpick Eis",category="Store",
+                 offerType="StoreSpecialPriceDiscount",packaging="850 ml",
+                 priceBox={"largePartNumeric":1.49,"smallPartNumeric":3.99}),
+            dict(common,id="b",title="Online-Schrank",category="Online",
+                 offerType="OnlineShopSpecialPriceDiscount",priceBox={"largePartNumeric":99.0}),
+            dict(common,id="c",title="3 für 2",category="Store",
+                 offerType="StoreXforYDiscount",priceBox={"largePartNumeric":2.00})
+        ]}
+        offers=lidl_store_offers(p,store_key="DE7434")
+        self.assertEqual(len(offers),1)
+        self.assertEqual(offers[0].price_eur,Decimal("1.49"))
+        self.assertEqual(offers[0].scope,Scope.STORE)
+        self.assertEqual(offers[0].scope_id,"DE7434")
+        with self.assertRaises(ValueError):
+            lidl_store_offers(p,store_key="7434")
 
     def test_edeka_documented_schema_is_not_live_verified(self):
         a=edeka_offers({"docs":[{"titel":"Tofu","preis":"2,29","gueltig_von":"2026-11-02","gueltig_bis":"2026-11-07"}]},market_id="1234")
