@@ -1,0 +1,26 @@
+name: One ALDI Süd catalogue count page
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_sued_catalogue_one_page.py
+      - .github/workflows/aldi-one-catalogue-page.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: One read-only anonymous page (12 products maximum)
+        run: python3 tools/aldi_sued_catalogue_one_page.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-single-catalogue-page
+          path: results/aldi_sued_single_catalogue_page.json
+          retention-days: 7
