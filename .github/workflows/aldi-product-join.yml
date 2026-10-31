@@ -1,0 +1,24 @@
+name: ALDI Nord regular vs promotion product matching
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aldi_catalogue_offers_join.py
+      - .github/workflows/aldi-product-join.yml
+permissions:
+  contents: read
+jobs:
+  join:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 tools/aldi_catalogue_offers_join.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aldi-regular-discount-join
+          path: results/aldi_catalogue_offers_join.json
+          retention-days: 7
