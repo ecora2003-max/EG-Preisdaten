@@ -82,3 +82,7 @@ python3 -m price_module < examples/synthetic-price-query.json
 ```
 
 Letztes CI: [70/70 Tests #41220291373](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220291373).
+
+### Identitätssuche (Code `079c7638effe`)
+
+Zusätzlich zu `query` (case-insensitive Name) und `retailerArticleId` akzeptiert `SearchRequest` die optionalen Filter `gtin` (8/12/13/14-stellige Kennung mit gültiger Prüfziffer, exakter Treffer) sowie `foodTypeId` (nur **bereits quellenbestätigter ID-Wert**). Keine automatische Artikel-/FoodType-Zuordnung; ein Quell-Snapshot ohne belegten `foodTypeId` kann nicht per `foodTypeId` gefunden werden. Ungültiger GTIN-Filter führt zu `INVALID_GTIN`, unzulässiger FoodType zu `INVALID_REQUEST`, ungültige Quell-ID zu `INVALID_ID`. Alle diese Filter greifen **vor** `maxResults`. [72 Offline-Tests](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220508128).

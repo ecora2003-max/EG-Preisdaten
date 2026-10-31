@@ -1,7 +1,7 @@
 # Preisdaten – Wiederaufnahmestand (31.10.2026)
 
 **Grad:** `PARTIAL_READY / OFFLINE_VERIFIED` (Fachkern); **nicht** `READY_FOR_INTEGRATION` für produktive Händler-Livefeeds und nicht `INTEGRATED`. Das maßgebliche Ziel steht in `docs/ACCEPTANCE.md`.
-**Letzter vollständig geprüfter Code-Commit:** `b201eed8cd9b5ab5de0db54cfa1cefd43727f234`. GitHub Actions [#41220291373](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220291373): **70/70 Offline-Tests PASS**, CLI und Kompilierung PASS.
+**Letzter vollständig geprüfter Code-Commit:** `079c7638effee3f0729391ae173ca2dd11d538f9`. GitHub Actions [#41220508128](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220508128): **72/72 Offline-Tests PASS**, CLI und Kompilierung PASS.
 **Architekturvertrag:** `1.0.0-draft`, gelesen `d22862739bd0e3ef8451ce029e54f7c33ee53e40`; lokale Vertragsschema- und Beispiel-Fixures übernommen.
 **Haupt-App:** nur gelesen, `6ba419ed2875c1988f45afee65e2708e7895cacf`; kein anderer Repo-Write.
 **Historische Forschung:** ehemals `Try`, via GitHub-Redirect identisch mit `EG-Preisdaten`. Forschungsberichte bleiben erhalten.
@@ -25,14 +25,14 @@ Weitere Details: [Quellen- und Rechtsmatrix](SOURCES.md), alte `reports/` und [T
 
 ## Aktueller Entwicklungsmeilenstein – Commit `b201eed8cd9b5ab5de0db54cfa1cefd43727f234`
 
-- **70/70 Tests grün**, inkl. 8-Händler-Offlinematrix, Architektur-JSON-Schema, alle bisherigen Händlerparser, Netto-Live-HTML-Fixures, negative Fehler- und Scope-Szenarien.
+- **72/72 Tests grün**, inkl. 8-Händler-Offlinematrix, Architektur-JSON-Schema, alle bisherigen Händlerparser, Netto-Live-HTML-Fixures, negative Fehler- und Scope-Szenarien.
 - Preisarten fachlich sauber getrennt: Lidl Plus und Netto App als **gesonderte konditionale Preisbelege ohne bestätigte Zugangsvoraussetzungen**, PENNY-Fußnotenpreis als Originaltext; Streich-/Referenzpreise keine früheren real bezahlten Preise.
 - Der Fachkern erfasst Einzelpreise, Quellen-Grundpreisbelege, Pfand, bekannte Mengen und *unsichere* Mengen. Eine Netto-Grundpreisanzeige `1 kg = …` wird **nicht** fälschlich als Packungsgewicht 1 kg gedeutet.
 - `storeSelections` und Reihenfilter verhindern Übernahme fremder Märkte/Verkaufsregionen; unterschiedliche Beobachtungszeitpunkte bleiben getrennte Beobachtungen. `shoppingDate` (nicht der Fensteranfang) ist für `targetDateStatus` ausschlaggebend.
 - Ausgegeben: `matchedCount`, `outputTruncated`, Quellenfehler und abgelehnte Tiles; kein Scheinnachweis für Gesamtmarkt.
 - Explizite Transportfehler `TIMEOUT/NETWORK_ERROR/TLS_ERROR/CANCELLED`, gesperrte/fehlerhafte HTTP- und Schema-Antworten; URLs mit Zugangsdaten oder tokenartigen Queryparametern werden abgelehnt.
 - Gepinnte reproduzierbare CI-Dependency-Liste `requirements-dev.lock`; Lauf benötigt keinen externen kostenpflichtigen Dienst und keine Credentials.
-- Offen: fehlende Nutzungsrechtsfreigaben und mehrere Händler-Livepfade; App-Komplettintegration und Kotlin-Portierung verbleiben ausschließlich bei Codex. **Kein `READY_FOR_INTEGRATION` für produktive Live-Daten**.
+- Offen: fehlende Nutzungsrechtsfreigaben und mehrere Händler-Livepfade; App-Komplettintegration und Kotlin-Portierung verbleiben ausschließlich bei Codex. **Kein `READY_FOR_INTEGRATION` für produktive Live-Daten**. Neu: explizite `gtin`- und `foodTypeId`-Filter ohne geratene Zuordnung.
 
 ## Neu implementiert
 
@@ -65,6 +65,8 @@ Zusätzliche Code- und CI-Meilensteine:
 | `3735f21` | [#41220003723](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220003723) | PASS 65: historischer Referenzpreis getrennt, gepinnte Abhängigkeiten |
 | `143d38b` | [#41220184464](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220184464) | PASS 68: Grundpreis-Quellbelege, credentialfreie URLs |
 | `b201eed` | [#41220291373](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220291373) | **PASS 70/70: Filial- und Regionssperren** |
+
+| `079c763` | [#41220508128](https://github.com/ecora2003-max/EG-Preisdaten/actions/runs/41220508128) | **PASS 72/72: GTIN-Prüfziffer und explizite FoodType-Filter** |
 
 **Keine neuen Live-GET-Abrufe in diesen Code-/Unit-Testläufen.** Historische Live-Nachweise liegen in den alten Research-Berichten und Actions; sie wurden nicht als neue Beobachtung deklariert. Die JSON-Schema-Tests wurden mit `jsonschema` Draft 2020-12 und Formatchecker tatsächlich ausgeführt; `requirements-dev.txt` installiert zusätzlich BeautifulSoup für den älteren Netto-Parser.
 
