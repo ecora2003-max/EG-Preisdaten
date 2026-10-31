@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """One-shot EDEKA market coverage and Netto store-page structure diagnostics."""
 import json,re,hashlib,time
+
+# Website content terms prohibit automated collection absent explicit permission.
+import os
+if os.environ.get("EDEKA_PERMISSION_CONFIRMED") != "1":
+    print("SKIPPED: EDEKA.de requires prior explicit permission for automated retrieval.")
+    raise SystemExit(0)
 from urllib.request import urlopen,Request
 from urllib.error import HTTPError
 from urllib.parse import urlencode,urlparse
