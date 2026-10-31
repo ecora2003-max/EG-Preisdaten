@@ -1,0 +1,27 @@
+name: ALDI Süd page-size diagnostic
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/check_aldi_sued_pagination_diagnostic.py
+      - .github/workflows/aldi-page-size-diagnostic.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compare prior working ALDI request and page size
+        run: python3 tools/check_aldi_sued_pagination_diagnostic.py
+      - name: Publish diagnostic metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aldi-sued-page-size-results
+          path: results/completeness_freshness/aldi_sued_diagnostic.json
+          retention-days: 7
