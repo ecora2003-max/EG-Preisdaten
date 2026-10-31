@@ -323,7 +323,7 @@ def lidl_store_offers(payload: Mapping[str, Any], *, store_key: str) -> list[Off
         # percentage, multi-buy or conditional promotions and need own parsers.
         if item.get("offerType") != "StoreSpecialPriceDiscount":
             continue
-        if item.get("category") != "Store":
+        if item.get("category") != "Store" or item.get("redemptionChannel","Store") != "Store":
             continue
         box=item.get("priceBox")
         if not isinstance(box,dict):
@@ -385,8 +385,8 @@ def edeka_offers(payload: Mapping[str,Any], *, market_id: str) -> list[Offer]:
     overrides. `national=true` must never be reported as store-confirmed.
     """
     docs=payload.get("docs")
-    if not market_id or not isinstance(docs,list):
-        raise ValueError("EDEKA market ID and docs response required")
+    if not re.fullmatch(r"[0-9]+",str(market_id)) or not isinstance(docs,list):
+        raise ValueError("EDEKA numeric market ID and docs response required")
     national=payload.get("national")
     if not isinstance(national,bool):
         scope=Scope.UNVERIFIED
